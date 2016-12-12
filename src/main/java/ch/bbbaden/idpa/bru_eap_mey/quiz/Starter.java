@@ -15,7 +15,7 @@ public class Starter extends Application {
 	}
 	
 	/**
-	 * Die Startmethode.
+	 * Die Startmethode des Wirtschaftsquiz.
 	 * 
 	 * @param args
 	 *        die Programmargumente
