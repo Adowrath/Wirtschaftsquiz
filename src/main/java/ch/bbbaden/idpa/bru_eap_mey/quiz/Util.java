@@ -16,9 +16,12 @@ public class Util {
 	 * <br>
 	 * Diese Schritte sind unterteilt in:
 	 * <ul>
-	 * <li>Einfügen eines Zeichens (tor &rArr; tor<strong>n</strong>),</li>
-	 * <li>Entfernen eines Zeichens (<strong>f</strong>ate &rArr; ate), <em>oder</em></li>
-	 * <li>Ersetzen eines Zeichens (<strong>B</strong>ug &rArr; <strong>Z</strong>ug)</li>
+	 * <li>Einfügen eines Zeichens (tor &rArr;
+	 * tor<strong>n</strong>),</li>
+	 * <li>Entfernen eines Zeichens (<strong>f</strong>ate &rArr;
+	 * ate), <em>oder</em></li>
+	 * <li>Ersetzen eines Zeichens (<strong>B</strong>ug &rArr;
+	 * <strong>Z</strong>ug)</li>
 	 * </ul>
 	 * , wobei jeder der Schritte einzeln gleich gewichtet wird.
 	 * 
