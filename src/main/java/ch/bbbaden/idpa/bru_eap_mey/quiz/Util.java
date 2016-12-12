@@ -1,7 +1,38 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz;
 
+/**
+ * Eine Reihe verschiedener Utility Methoden.
+ */
 public class Util {
 	
+	/**
+	 * Die sogenannte <a href=
+	 * "http://de.wikipedia.org/wiki/Levenshtein-Distanz">Levenshtein-Distanz</a>
+	 * ist ein Mass der Verschiedenheit zweier gegebenen
+	 * Zeichenketten.
+	 * <br>
+	 * Diese Verschiedenheit wird in <em>Schritten</em> gemessen, die
+	 * nötig sind, um eine Kette in eine andere umzuwandeln.
+	 * <br>
+	 * Diese Schritte sind unterteilt in:
+	 * <ul>
+	 * <li>Einfügen eines Zeichens (tor &rArr; tor<strong>n</strong>),</li>
+	 * <li>Entfernen eines Zeichens (<strong>f</strong>ate &rArr; ate), <em>oder</em></li>
+	 * <li>Ersetzen eines Zeichens (<strong>B</strong>ug &rArr; <strong>Z</strong>ug)</li>
+	 * </ul>
+	 * , wobei jeder der Schritte einzeln gleich gewichtet wird.
+	 * 
+	 * @param lhs
+	 *        der erste String
+	 * @param rhs
+	 *        der zweite String
+	 * @return
+	 * 		die Distanz zwischen {@code lhs} und {@code rhs}
+	 * 
+	 * @see <a href=
+	 *      "https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java">Wikibooks-Implementation
+	 *      (Source)</a>
+	 */
 	public static int levenshteinDistance(CharSequence lhs, CharSequence rhs) {
 		int len0 = lhs.length() + 1;
 		int len1 = rhs.length() + 1;
