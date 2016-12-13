@@ -1,5 +1,11 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
+import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.levenshteinDistance;
+
+
+import org.eclipse.jdt.annotation.NonNull;
+
+
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 
 /**
@@ -11,34 +17,58 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
  */
 public class FreehandQuestion extends Question<String> {
 	
+	/**
+	 * Die Antwort dieser Frage.
+	 */
+	private String answer;
+	
+	/**
+	 * Erstellt eine neue Freihandfrage.
+	 * 
+	 * @param que
+	 *        der Text der Frage
+	 * @param answ
+	 *        die Antwort
+	 */
+	public FreehandQuestion(String que, String answ) {
+		super(que);
+		this.answer = answ;
+	}
+	
 	@Override
-	public boolean check(String answer) {
-		// TODO - implement
-		throw new UnsupportedOperationException("FreehandQuestion.check() not yet implemented");
+	public boolean check(String answ) {
+		return levenshteinDistance(this.answer, answ) <= this.answer.length()
+				/ 5;
 	}
 	
 	@Override
 	public String getAnswer() {
-		// TODO - implement
-		throw new UnsupportedOperationException("FreehandQuestion.getAnswer() not yet implemented");
+		return this.answer;
 	}
 	
 	@Override
-	public String[] getAnswers() {
-		// TODO - implement
-		throw new UnsupportedOperationException("FreehandQuestion.getAnswers() not yet implemented");
-	}
-	
-	@Override
-	public String getQuestion() {
-		// TODO - implement
-		throw new UnsupportedOperationException("FreehandQuestion.getQuestion() not yet implemented");
+	public @NonNull String[] getAnswers() {
+		return new @NonNull String[] {this.answer};
 	}
 	
 	@Override
 	public String getFilename() {
-		// TODO - implement
-		throw new UnsupportedOperationException("FreehandQuestion.getFilename() not yet implemented");
+		return "freehandQuestion.fxml";
+	}
+	
+	@Override
+	public int getAnswerCount() {
+		return 1;
+	}
+	
+	@Override
+	public void setAnswers(@NonNull String[] answers) {
+		this.answer = answers[0];
+	}
+	
+	@Override
+	public @NonNull String[] getAnswerFieldLabels() {
+		return new @NonNull String[] {"Antwort"};
 	}
 	
 }
