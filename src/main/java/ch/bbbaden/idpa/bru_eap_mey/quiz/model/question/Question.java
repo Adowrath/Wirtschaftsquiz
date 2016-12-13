@@ -1,5 +1,7 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Die Standardklasse für alle Fragen.
  * 
@@ -7,6 +9,21 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
  *        der Datentyp der Antwort
  */
 public abstract class Question<AnswerType> {
+	
+	/**
+	 * Der Text dieser Frage.
+	 */
+	private String question;
+	
+	/**
+	 * Erstellt eine neue Frage.
+	 * 
+	 * @param que
+	 *        der Text der Frage
+	 */
+	public Question(String que) {
+		this.question = que;
+	}
 	
 	/**
 	 * Überprüft die Antwort und gibt, wenn sie korrekt war,
@@ -29,12 +46,45 @@ public abstract class Question<AnswerType> {
 	public abstract AnswerType getAnswer();
 	
 	/**
+	 * Wird für die Bearbeitungs-GUI verwendet und gibt die Anzahl an
+	 * änderbaren Antworten an.<br>
+	 * <strong>Muss</strong> mit der Länge von {@link #getAnswers()},
+	 * {@link #getAnswerFieldLabels()} und der Länge der akzeptierten
+	 * Parameter für {@link #setAnswers(String...)} übereinstimmen!
+	 * 
+	 * @return
+	 * 		die Anzahl der Antworten
+	 */
+	public abstract int getAnswerCount();
+	
+	/**
 	 * Alle Antworten als ihre anzuzeigenden Strings.
 	 * 
 	 * @return
 	 * 		ein Array aller möglichen Antworten
 	 */
-	public abstract String[] getAnswers();
+	public abstract @NonNull String[] getAnswers();
+	
+	/**
+	 * Ersetzt die Texte der Antworten. Die Länge von {@code answers}
+	 * muss mit dem Rückgabewert von {@link #getAnswerCount()}
+	 * übereinstimmen.
+	 * 
+	 * @param answers
+	 *        die neuen Antworten
+	 * 
+	 * @see #getAnswerCount()
+	 */
+	public abstract void setAnswers(@NonNull String[] answers);
+	
+	/**
+	 * Die Antwortfeldlabels werden für die Übersicht benötigt, in der
+	 * man die Frage bearbeitet.
+	 * 
+	 * @return
+	 * 		ein Array aller Antwortfeldnamen
+	 */
+	public abstract @NonNull String[] getAnswerFieldLabels();
 	
 	/**
 	 * Die Frage, die angezeigt wird und zu der die Antwort gefunden
@@ -43,7 +93,19 @@ public abstract class Question<AnswerType> {
 	 * @return
 	 * 		die Frage
 	 */
-	public abstract String getQuestion();
+	public final String getQuestion() {
+		return this.question;
+	}
+	
+	/**
+	 * Überschreibt den Fragentext.
+	 * 
+	 * @param nQuestion
+	 *        der neue Text
+	 */
+	public final void setQuestion(String nQuestion) {
+		this.question = nQuestion;
+	}
 	
 	/**
 	 * Der Dateiname der FXML-Datei, die für das View geladen werden
