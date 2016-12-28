@@ -2,6 +2,9 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+
+import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
+
 /**
  * Eine binäre Frage - auch als Wahr/Falsch oder Ja/Nein-Frage bekannt
  * - ist dadurch gekennzeichnet, dass sich eine Frage nur mit Ja oder
@@ -27,13 +30,16 @@ public class BinaryQuestion extends Question<Boolean> {
 	 * 
 	 * @param que
 	 *        der Text der neuen Frage
+	 * @param cat
+	 *        die Kategorie der Frage
 	 * @param cAnswer
 	 *        die korrekte Antwort
 	 * @param wAnswer
 	 *        die falsche Antwort
 	 */
-	public BinaryQuestion(String que, String cAnswer, String wAnswer) {
-		super(que);
+	public BinaryQuestion(	String que, Category cat, String cAnswer,
+							String wAnswer) {
+		super(que, cat);
 		this.correctAnswer = cAnswer;
 		this.wrongAnswer = wAnswer;
 	}

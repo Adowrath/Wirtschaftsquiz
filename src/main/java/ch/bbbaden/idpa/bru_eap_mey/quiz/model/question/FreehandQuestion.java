@@ -7,6 +7,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
+import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 /**
  * Die "Freihand"-Frage ist eine Frage, bei der keine
@@ -27,11 +28,13 @@ public class FreehandQuestion extends Question<String> {
 	 * 
 	 * @param que
 	 *        der Text der Frage
+	 * @param cat
+	 *        die Kategorie der Frage
 	 * @param answ
 	 *        die Antwort
 	 */
-	public FreehandQuestion(String que, String answ) {
-		super(que);
+	public FreehandQuestion(String que, Category cat, String answ) {
+		super(que, cat);
 		this.answer = answ;
 	}
 	

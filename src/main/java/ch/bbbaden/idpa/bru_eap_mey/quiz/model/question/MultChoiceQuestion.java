@@ -2,6 +2,9 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+
+import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
+
 /**
  * Eine Multiple Choice-Frage zeichnet sich dadurch aus, dass eine
  * Liste von Antwortmöglichkeiten gegeben wird, von denen nur eine
@@ -36,6 +39,8 @@ public class MultChoiceQuestion extends Question<Integer> {
 	 * 
 	 * @param que
 	 *        der Text der Frage
+	 * @param cat
+	 *        die Kategorie der Frage
 	 * @param cAnsw
 	 *        die richtige Antwort
 	 * @param wAnsw1
@@ -45,9 +50,9 @@ public class MultChoiceQuestion extends Question<Integer> {
 	 * @param wAnsw3
 	 *        die dritte falsche Antwort
 	 */
-	public MultChoiceQuestion(	String que, String cAnsw, String wAnsw1,
-								String wAnsw2, String wAnsw3) {
-		super(que);
+	public MultChoiceQuestion(	String que, Category cat, String cAnsw,
+								String wAnsw1, String wAnsw2, String wAnsw3) {
+		super(que, cat);
 		this.correctAnswer = cAnsw;
 		this.wrongAnswer1 = wAnsw1;
 		this.wrongAnswer2 = wAnsw2;
