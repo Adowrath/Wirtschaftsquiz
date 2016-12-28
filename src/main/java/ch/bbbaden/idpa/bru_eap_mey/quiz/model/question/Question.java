@@ -2,6 +2,9 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+
+import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
+
 /**
  * Die Standardklasse für alle Fragen.
  * 
@@ -16,13 +19,21 @@ public abstract class Question<AnswerType> {
 	private String question;
 	
 	/**
+	 * Die Kategorie dieser Frage.
+	 */
+	private Category category;
+	
+	/**
 	 * Erstellt eine neue Frage.
 	 * 
 	 * @param que
 	 *        der Text der Frage
+	 * @param cat
+	 *        die Kategorie der Frage
 	 */
-	public Question(String que) {
+	public Question(String que, Category cat) {
 		this.question = que;
+		this.category = cat;
 	}
 	
 	/**
@@ -105,6 +116,28 @@ public abstract class Question<AnswerType> {
 	 */
 	public final void setQuestion(String nQuestion) {
 		this.question = nQuestion;
+	}
+	
+	/**
+	 * Die Kategorie dieser Frage.
+	 * 
+	 * @return
+	 * 		die Kategorie
+	 */
+	public final Category getCategory() {
+		return this.category;
+	}
+	
+	/**
+	 * Entfernt die Frage aus ihrer aktuellen Kategorie und trägt sie
+	 * in die angegebene ein.
+	 * 
+	 * @param newCategory
+	 *        die neue Kategorie der Frage
+	 */
+	public final void changeCategory(Category newCategory) {
+		this.category.removeQuestion(this);
+		(this.category = newCategory).addQuestion(this);
 	}
 	
 	/**
