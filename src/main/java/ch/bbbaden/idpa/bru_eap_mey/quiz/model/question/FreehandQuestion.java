@@ -4,6 +4,7 @@ import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.levenshteinDistance;
 
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
@@ -33,7 +34,7 @@ public class FreehandQuestion extends Question<String> {
 	 * @param answ
 	 *        die Antwort
 	 */
-	public FreehandQuestion(String que, Category cat, String answ) {
+	public FreehandQuestion(String que, @Nullable Category cat, String answ) {
 		super(que, cat);
 		this.answer = answ;
 	}

@@ -2,6 +2,7 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -82,7 +83,8 @@ public class Category {
 					List<Question<?>> nQuestions) {
 		this.name = nName;
 		this.description = nDescription;
-		this.questions = nQuestions;
+		this.questions = new LinkedList<>();
+		nQuestions.forEach(question -> question.changeCategory(Category.this));
 	}
 	
 	/**

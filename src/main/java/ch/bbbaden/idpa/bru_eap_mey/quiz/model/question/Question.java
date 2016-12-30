@@ -1,6 +1,10 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
+
+import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
@@ -21,7 +25,7 @@ public abstract class Question<AnswerType> {
 	/**
 	 * Die Kategorie dieser Frage.
 	 */
-	private Category category;
+	private @Nullable Category category;
 	
 	/**
 	 * Erstellt eine neue Frage.
@@ -31,7 +35,7 @@ public abstract class Question<AnswerType> {
 	 * @param cat
 	 *        die Kategorie der Frage
 	 */
-	public Question(String que, Category cat) {
+	public Question(String que, @Nullable Category cat) {
 		this.question = que;
 		this.category = cat;
 	}
@@ -124,7 +128,7 @@ public abstract class Question<AnswerType> {
 	 * @return
 	 * 		die Kategorie
 	 */
-	public final Category getCategory() {
+	public final @Nullable Category getCategory() {
 		return this.category;
 	}
 	
@@ -136,8 +140,11 @@ public abstract class Question<AnswerType> {
 	 *        die neue Kategorie der Frage
 	 */
 	public final void changeCategory(Category newCategory) {
-		this.category.removeQuestion(this);
-		(this.category = newCategory).addQuestion(this);
+		if(this.category != null) {
+			this.category.removeQuestion(this);
+		}
+		newCategory.addQuestion(this);
+		this.category = newCategory;
 	}
 	
 	/**
