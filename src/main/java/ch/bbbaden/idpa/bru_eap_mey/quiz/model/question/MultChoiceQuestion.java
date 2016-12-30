@@ -1,6 +1,7 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
@@ -50,7 +51,7 @@ public class MultChoiceQuestion extends Question<Integer> {
 	 * @param wAnsw3
 	 *        die dritte falsche Antwort
 	 */
-	public MultChoiceQuestion(	String que, Category cat, String cAnsw,
+	public MultChoiceQuestion(	String que, @Nullable Category cat, String cAnsw,
 								String wAnsw1, String wAnsw2, String wAnsw3) {
 		super(que, cat);
 		this.correctAnswer = cAnsw;

@@ -1,6 +1,7 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
@@ -37,7 +38,7 @@ public class BinaryQuestion extends Question<Boolean> {
 	 * @param wAnswer
 	 *        die falsche Antwort
 	 */
-	public BinaryQuestion(	String que, Category cat, String cAnswer,
+	public BinaryQuestion(	String que, @Nullable Category cat, String cAnswer,
 							String wAnswer) {
 		super(que, cat);
 		this.correctAnswer = cAnswer;
