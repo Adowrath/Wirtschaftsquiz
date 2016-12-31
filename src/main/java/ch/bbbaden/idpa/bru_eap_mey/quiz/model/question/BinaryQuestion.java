@@ -6,6 +6,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
+
+import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
+
 /**
  * Eine binäre Frage - auch als Wahr/Falsch oder Ja/Nein-Frage bekannt
  * - ist dadurch gekennzeichnet, dass sich eine Frage nur mit Ja oder
