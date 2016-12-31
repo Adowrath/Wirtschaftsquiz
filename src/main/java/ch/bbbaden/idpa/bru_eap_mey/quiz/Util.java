@@ -1,9 +1,12 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz;
 
+import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +14,8 @@ import java.util.stream.Collectors;
 
 
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -38,6 +43,44 @@ public class Util {
 	private static final String defaultText = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 			+ System.getProperty("line.separator") + "<game>"
 			+ System.getProperty("line.separator") + "</game>";
+	
+	/**
+	 * Gibt nicht abgefangene Fehlermeldungen auf den Error-Stream aus
+	 * und öffnet ein JOptionPane mit der Fehlermeldung.
+	 * <br>
+	 * Sollte nicht direkt aufgerufen werden.
+	 * <br>
+	 * Zusammenklamüsert aus
+	 * <a href="http://stackoverflow.com/a/1149712/5236247">einer</a>
+	 * und einer <a href=
+	 * "http://stackoverflow.com/a/14011536/5236247">anderen</a>
+	 * SO-Antwort.
+	 * 
+	 * @param t
+	 *        der Thread, in dem der Throwable auftrat
+	 * @param e
+	 *        der Throwable
+	 */
+	public static final void showUncaughtError(Thread t, Throwable e) {
+		e.printStackTrace();
+		
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		
+		JTextArea jta = new JTextArea(errors.toString());
+		JScrollPane jsp = new JScrollPane(jta) {
+			
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(480, 320);
+			}
+		};
+		JOptionPane.showMessageDialog(	null, jsp,
+										"Error in Thread " + t.toString(),
+										JOptionPane.ERROR_MESSAGE);
+	}
 	
 	/**
 	 * Lädt Spieldaten in die zwei gegebenen Listen.

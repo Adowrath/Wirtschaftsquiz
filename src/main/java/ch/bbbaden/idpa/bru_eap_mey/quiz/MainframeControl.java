@@ -3,9 +3,9 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz;
 import java.io.IOException;
 
 
-import javax.swing.JOptionPane;
-
-
+import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.BinaryController;
+import ch.bbbaden.idpa.bru_eap_mey.quiz.model.QuizModel;
+import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.BinaryQuestion;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 /**
  * Die Hauptklasse des Wirtschaftsquizzes
  */
-public class Starter extends Application {
+public class MainframeControl extends Application {
 	
 	
 	@Override
@@ -49,13 +49,8 @@ public class Starter extends Application {
 	 *        die Programmargumente
 	 */
 	public static void main(String[] args) {
-		// Ein Handhaber für Standardausnahmefehler, der ein kleines
-		// Fenster anzeigt.
-		Thread.setDefaultUncaughtExceptionHandler((Thread t, Throwable e) -> {
-			JOptionPane.showMessageDialog(	null, e.getLocalizedMessage(),
-											"Ein Fehler ist aufgetreten!",
-											JOptionPane.ERROR_MESSAGE);
-		});
+		Thread.setDefaultUncaughtExceptionHandler(Util::showUncaughtError);
+		
 		launch(args);
 	}
 	
