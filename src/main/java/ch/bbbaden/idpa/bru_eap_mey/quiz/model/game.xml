@@ -6,7 +6,7 @@
 		<question type="binary">
 			<text>Is English a germanic language?</text>
 			<trueAnswer>Yes</trueAnswer>
-			<wrongAnswer>No</wrongAnswer>
+			<falseAnswer>No</falseAnswer>
 		</question>
 	</category>
 </game>
