@@ -36,13 +36,13 @@ public class FreehandQuestion extends Question<String> {
 	 */
 	public FreehandQuestion(String que, @Nullable Category cat, String answ) {
 		super(que, cat);
-		this.answer = answ;
+		this.answer = answ.trim();
 	}
 	
 	@Override
 	public boolean check(String answ) {
-		return levenshteinDistance(this.answer, answ) <= this.answer.length()
-				/ 5;
+		return levenshteinDistance(this.answer.toLowerCase(), answ.trim()
+				.toLowerCase()) <= this.answer.length() / 5;
 	}
 	
 	@Override
