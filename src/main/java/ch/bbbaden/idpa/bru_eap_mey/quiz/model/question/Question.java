@@ -6,9 +6,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
-
-import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
-
 /**
  * Die Standardklasse für alle Fragen.
  * 

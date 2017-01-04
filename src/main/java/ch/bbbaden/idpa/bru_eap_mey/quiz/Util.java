@@ -62,12 +62,13 @@ public class Util {
 	 *        der Throwable
 	 */
 	public static final void showUncaughtError(Thread t, Throwable e) {
-		e.printStackTrace();
-		
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
+		String stackTrace = errors.toString();
 		
-		JTextArea jta = new JTextArea(errors.toString());
+		System.err.print(stackTrace);
+		
+		JTextArea jta = new JTextArea(stackTrace);
 		JScrollPane jsp = new JScrollPane(jta) {
 			
 			private static final long serialVersionUID = 1L;
