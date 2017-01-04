@@ -61,7 +61,7 @@ public class Util {
 	 * @param e
 	 *        der Throwable
 	 */
-	public static final void showUncaughtError(Thread t, Throwable e) {
+	public static void showUncaughtError(Thread t, Throwable e) {
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
 		String stackTrace = errors.toString();
@@ -81,6 +81,65 @@ public class Util {
 		JOptionPane.showMessageDialog(	null, jsp,
 										"Error in Thread " + t.toString(),
 										JOptionPane.ERROR_MESSAGE);
+	}
+	
+	/**
+	 * Gibt ein gemischtes Array von Array-Indezes von 0 bis 3 zurück.
+	 * Verwendet ein Sortiernetzwerk (Sortiernetzwerke beim mischen?
+	 * Finde die Source leider nicht mehr, aber es funktioniert
+	 * einwandfrei)
+	 * 
+	 * @return
+	 * 		ein gemischtes Array von 0 bis 3
+	 */
+	public static int[] randomShuffleOf4() {
+		int[] nums = new int[4];
+		for(int i = 0; i < 4; ++i) {
+			int value = (int) (Math.random() * 1_000_000);
+			for(int j = 0; j < i; ++j) {
+				if(value == nums[j]) {
+					value = (int) (Math.random() * 1_000_000);
+					j--;
+				}
+			}
+			nums[i] = value;
+		}
+		int[] sort = {0, 1, 2, 3};
+		boolean swap = false;
+		int temp;
+		
+		swap = nums[sort[0]] > nums[sort[2]];
+		if(swap) {
+			temp = sort[0];
+			sort[0] = sort[2];
+			sort[2] = temp;
+		}
+		swap = nums[sort[1]] > nums[sort[3]];
+		if(swap) {
+			temp = sort[1];
+			sort[1] = sort[3];
+			sort[3] = temp;
+		}
+		swap = nums[sort[0]] > nums[sort[1]];
+		if(swap) {
+			temp = sort[0];
+			sort[0] = sort[1];
+			sort[1] = temp;
+		}
+		swap = nums[sort[2]] > nums[sort[3]];
+		if(swap) {
+			temp = sort[2];
+			sort[2] = sort[3];
+			sort[3] = temp;
+		}
+		swap = nums[sort[1]] > nums[sort[2]];
+		if(swap) {
+			temp = sort[1];
+			sort[1] = sort[2];
+			sort[2] = temp;
+		}
+		
+		return sort;
 	}
 	
 	/**
