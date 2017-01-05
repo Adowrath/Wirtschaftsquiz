@@ -165,6 +165,14 @@ public abstract class Question<AnswerType> {
 	public abstract String getFilename();
 	
 	/**
+	 * Legt die Frage in ein JDOM-Element ab.
+	 * 
+	 * @return
+	 * 		das JDOM-Element
+	 */
+	public abstract Element save();
+	
+	/**
 	 * Alle registrierten Fragetypen.
 	 */
 	private static final Map<String, Function<Element, @Nullable Question<?>>> registeredTypes = new HashMap<>();
@@ -173,7 +181,9 @@ public abstract class Question<AnswerType> {
 	 * 
 	 * 
 	 * @param type
-	 *        der Typ der Frage, wird für das XML verwendet.
+	 *        der Typ der Frage, wird für das XML verwendet. Sollte
+	 *        mit dem Typ, der bei {@link #save()} als Attribut
+	 *        festgelegt wird, übereinstimmen.
 	 * @param func
 	 *        die Funktion, welche die Frage zurückgibt
 	 */

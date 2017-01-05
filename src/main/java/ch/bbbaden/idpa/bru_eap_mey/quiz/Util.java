@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +28,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
@@ -264,6 +267,44 @@ public class Util {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * Speichert die gegebenen Kategorien (inklusive der beinhaltenen
+	 * Fragen) in die gegebene Datei.
+	 * 
+	 * @param gameFile
+	 *        die Datei, in die geschrieben wird.
+	 * @param categoryList
+	 *        die Liste der Kategorien
+	 */
+	public static void saveData(File gameFile, List<Category> categoryList) {
+		try {
+			
+			Element game = new Element("game");
+			Document doc = new Document(game);
+			game.addContent(categoryList.stream()
+					.map(cat -> new Element("category")
+							.addContent(new Element("name")
+									.setText(cat.getName()))
+							.addContent(new Element("description")
+									.setText(cat.getDescription()))
+							.addContent(cat.getQuestions().stream()
+									.map(Question::save)
+									.collect(Collectors.toList())))
+					.collect(Collectors.toList()));
+			
+			
+			XMLOutputter xmlOutput = new XMLOutputter(Format.getPrettyFormat());
+			
+			try(Writer fw = new FileWriter(gameFile)) {
+				xmlOutput.output(doc, fw);
+			}
+			
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	
 	/**
 	 * Die sogenannte <a href=

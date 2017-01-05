@@ -73,6 +73,16 @@ public class QuizModel {
 	}
 	
 	/**
+	 * Speichert die Daten in die gegebene Datei.
+	 * 
+	 * @param file
+	 *        die Datei, in welche geschrieben werden soll
+	 */
+	public void saveToFile(File file) {
+		Util.saveData(file, this.availableCategories);
+	}
+	
+	/**
 	 * Überprüft die momentane Frage und initiiert das Laden der
 	 * nächsten.
 	 * 

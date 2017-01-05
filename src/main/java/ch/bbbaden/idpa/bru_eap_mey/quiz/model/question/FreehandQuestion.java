@@ -81,6 +81,14 @@ public class FreehandQuestion extends Question<String> {
 		return new @NonNull String[] {"Antwort"};
 	}
 	
+	@Override
+	public Element save() {
+		return new Element("question").setAttribute("type", "freehand")
+				.addContent(new Element("text").setText(this.getQuestion()))
+				.addContent(new Element("answer")
+							.setText(this.answer));
+	}
+	
 	/**
 	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
 	 * Fehler wird

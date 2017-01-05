@@ -90,6 +90,16 @@ public class BinaryQuestion extends Question<Boolean> {
 		return new @NonNull String[] {"Richtige Antwort", "Falsche Antwort"};
 	}
 	
+	@Override
+	public Element save() {
+		return new Element("question").setAttribute("type", "binary")
+				.addContent(new Element("text").setText(this.getQuestion()))
+				.addContent(new Element("trueAnswer")
+						.setText(this.correctAnswer))
+				.addContent(new Element("falseAnswer")
+						.setText(this.wrongAnswer));
+	}
+	
 	/**
 	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
 	 * Fehler wird

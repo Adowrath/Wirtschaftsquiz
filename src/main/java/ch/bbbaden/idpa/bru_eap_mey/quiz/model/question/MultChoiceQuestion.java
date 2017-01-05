@@ -109,6 +109,20 @@ public class MultChoiceQuestion extends Question<Integer> {
 				"Falsche Antwort 2", "Falsche Antwort 3"};
 	}
 	
+	@Override
+	public Element save() {
+		return new Element("question").setAttribute("type", "multipleChoice")
+				.addContent(new Element("text").setText(this.getQuestion()))
+				.addContent(new Element("correctAnswer")
+						.setText(this.correctAnswer))
+				.addContent(new Element("wrongAnswer1")
+						.setText(this.wrongAnswer1))
+				.addContent(new Element("wrongAnswer2")
+						.setText(this.wrongAnswer2))
+				.addContent(new Element("wrongAnswer3")
+						.setText(this.wrongAnswer3));
+	}
+	
 	/**
 	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
 	 * Fehler wird
@@ -174,5 +188,4 @@ public class MultChoiceQuestion extends Question<Integer> {
 										wrongAnswer2Element.getText(),
 										wrongAnswer3Element.getText());
 	}
-	
 }
