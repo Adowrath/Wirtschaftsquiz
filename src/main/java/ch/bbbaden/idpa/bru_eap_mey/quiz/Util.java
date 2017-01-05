@@ -23,7 +23,6 @@ import javax.swing.SwingConstants;
 
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -31,9 +30,6 @@ import org.jdom2.input.SAXBuilder;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
-import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.BinaryQuestion;
-import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.FreehandQuestion;
-import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.MultChoiceQuestion;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 
 /**
@@ -198,16 +194,11 @@ public class Util {
 	 *        eine Liste der Fragen. Sollte leer sein, da neue
 	 *        Elemente hinzugefügt werden.
 	 */
-	public static void loadData(@Nullable URL gameFile,
+	public static void loadData(URL gameFile,
 								List<Category> categoryList,
 								List<Question<?>> questionList) {
 		try {
-			if(gameFile == null) {
-				System.err.println("Spieldatei nicht gefunden.");
-				return;
-			}
 			File f = new File(gameFile.getFile());
-			System.out.println(f.getAbsolutePath());
 			if(!f.exists()) {
 				try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
 					bw.write(defaultText);
@@ -251,7 +242,7 @@ public class Util {
 				element.getChildren("question").forEach(el -> {
 					assert el != null;
 					
-					Question<?> loadedQuestion = loadQuestion(el);
+					Question<?> loadedQuestion = Question.loadFromElement(el);
 					
 					if(loadedQuestion == null)
 						return;
@@ -351,136 +342,6 @@ public class Util {
 		return cost[len0 - 1];
 	}
 	
-	/**
-	 * Lädt eine Frage aus einem {@link Element JDOM-Element}. Bei
-	 * einem Fehler wird {@code null} zurückgegeben oder das Programm
-	 * beendet, abhängig von der Wahl des Benutzers.
-	 * 
-	 * @param qElement
-	 *        das Element, welches die Frage enthält
-	 * @return
-	 * 		eine {@link Question Frage}, oder {@code null} wenn ein
-	 *         Fehler im Element bestand, bspw. unbekannter Fragentyp
-	 *         usw.
-	 * @see #showParseError(String, String, Object...)
-	 */
-	private static @Nullable Question<?> loadQuestion(Element qElement) {
-		Attribute typeAttribute = qElement.getAttribute("type");
-		Element textElement = qElement.getChild("text");
-		
-		if(typeAttribute == null) {
-			showParseError(	"Falsch formatierte Frage",
-							"Eine Frage hat keinen Fragentyp. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
-			return null;
-		}
-		if(textElement == null) {
-			showParseError(	"Falsch formatierte Frage",
-							"Eine Frage hat keinen Fragentext. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
-			return null;
-		}
-		String type = typeAttribute.getValue();
-		
-		switch(type) {
-			case "binary":
-				Element trueAnswerElement = qElement.getChild("trueAnswer");
-				Element falseAnswerElement = qElement.getChild("falseAnswer");
-				if(trueAnswerElement == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine binäre Frage hat keine richtige Antwort. "
-											+ "Wenn die Daten gespeichert werden, "
-											+ "wird diese Frage nicht gespeichert "
-											+ "und damit effektiv gelöscht. "
-											+ "Fortfahren?");
-					return null;
-				}
-				if(falseAnswerElement == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine binäre Frage hat keine falsche Antwort. "
-											+ "Wenn die Daten gespeichert werden, "
-											+ "wird diese Frage nicht gespeichert "
-											+ "und damit effektiv gelöscht. "
-											+ "Fortfahren?");
-					return null;
-				}
-				return new BinaryQuestion(	textElement.getText(), null,
-											trueAnswerElement.getText(),
-											falseAnswerElement.getText());
-			case "freehand":
-				Element answerElement = qElement.getChild("answer");
-				if(answerElement == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine Freihandfrage hat keine Antwort. "
-											+ "Wenn die Daten gespeichert werden, wird "
-											+ "diese Frage nicht gespeichert und damit "
-											+ "effektiv gelöscht. Fortfahren?");
-					return null;
-				}
-				return new FreehandQuestion(textElement.getText(), null,
-											answerElement.getText());
-			case "multipleChoice":
-				Element correctAnswerElement = qElement
-						.getChild("correctAnswer");
-				Element wrongAnswer1Element = qElement.getChild("wrongAnswer1");
-				Element wrongAnswer2Element = qElement.getChild("wrongAnswer2");
-				Element wrongAnswer3Element = qElement.getChild("wrongAnswer3");
-				if(correctAnswerElement == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine Multiple Choice-Frage hat keine korrekte Antwort. "
-											+ "Wenn die Daten gespeichert werden, wird "
-											+ "diese Frage nicht gespeichert und damit "
-											+ "effektiv gelöscht. Fortfahren?");
-					return null;
-				}
-				if(wrongAnswer1Element == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine Multiple Choice-Frage hat keine erste falsche Antwort. "
-											+ "Wenn die Daten gespeichert werden, wird "
-											+ "diese Frage nicht gespeichert und damit "
-											+ "effektiv gelöscht. Fortfahren?");
-					return null;
-				}
-				if(wrongAnswer2Element == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine Multiple Choice-Frage hat keine zweite falsche Antwort. "
-											+ "Wenn die Daten gespeichert werden, wird "
-											+ "diese Frage nicht gespeichert und damit "
-											+ "effektiv gelöscht. Fortfahren?");
-					return null;
-				}
-				if(wrongAnswer3Element == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine Multiple Choice-Frage hat keine dritte falsche Antwort. "
-											+ "Wenn die Daten gespeichert werden, wird "
-											+ "diese Frage nicht gespeichert und damit "
-											+ "effektiv gelöscht. Fortfahren?");
-					return null;
-				}
-				return new MultChoiceQuestion(	textElement.getText(), null,
-												correctAnswerElement.getText(),
-												wrongAnswer1Element.getText(),
-												wrongAnswer2Element.getText(),
-												wrongAnswer3Element.getText());
-			default:
-				showParseError(	"Falsch formatierte Frage",
-								"Eine Frage hat einen unbekannten "
-										+ "Fragetyp: \"%s\". Wenn die Daten "
-										+ "gespeichert werden, wird diese "
-										+ "Frage nicht gespeichert "
-										+ "und damit effektiv gelöscht. "
-										+ "Fortfahren?",
-								type);
-				
-				return null;
-		}
-	}
 	
 	/**
 	 * Öffnet einen Dialog mit der Fehlermeldung. Wenn auf "Nein"
@@ -495,7 +356,7 @@ public class Util {
 	 *        Argumente für {@link String#format(String, Object...)},
 	 *        werden mit {@code message} verbunden.
 	 */
-	private static void showParseError(	String windowTitle,
+	public static void showParseError(	String windowTitle,
 										String message,
 										Object... formatArgs) {
 		int c = JOptionPane

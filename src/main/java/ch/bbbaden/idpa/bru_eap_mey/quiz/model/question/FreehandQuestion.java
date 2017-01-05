@@ -1,10 +1,12 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.levenshteinDistance;
+import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showParseError;
 
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.jdom2.Element;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
@@ -18,6 +20,10 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  * Levenshtein-Algorithmus} überprüft.
  */
 public class FreehandQuestion extends Question<String> {
+	
+	static {
+		Question.register("freehand", FreehandQuestion::load);
+	}
 	
 	/**
 	 * Die Antwort dieser Frage.
@@ -75,4 +81,39 @@ public class FreehandQuestion extends Question<String> {
 		return new @NonNull String[] {"Antwort"};
 	}
 	
+	/**
+	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
+	 * Fehler wird
+	 * {@link Util#showParseError(String, String, Object...)}
+	 * aufgerufen.
+	 * 
+	 * @param el
+	 *        das JDOM-Element
+	 * @return
+	 * 		die Frage, oder {@code null} bei einem Fehler.
+	 */
+	public static @Nullable FreehandQuestion load(Element el) {
+		Element textElement = el.getChild("text");
+		Element answerElement = el.getChild("answer");
+		
+		if(textElement == null) {
+			showParseError(	"Falsch formatierte Frage",
+							"Eine Frage hat keinen Fragentext. "
+									+ "Wenn die Daten gespeichert werden, "
+									+ "wird diese Frage nicht gespeichert "
+									+ "und damit effektiv gelöscht. "
+									+ "Fortfahren?");
+			return null;
+		}
+		if(answerElement == null) {
+			showParseError(	"Falsch formatierte Frage",
+							"Eine Freihandfrage hat keine Antwort. "
+									+ "Wenn die Daten gespeichert werden, wird "
+									+ "diese Frage nicht gespeichert und damit "
+									+ "effektiv gelöscht. Fortfahren?");
+			return null;
+		}
+		return new FreehandQuestion(textElement.getText(), null,
+									answerElement.getText());
+	}
 }

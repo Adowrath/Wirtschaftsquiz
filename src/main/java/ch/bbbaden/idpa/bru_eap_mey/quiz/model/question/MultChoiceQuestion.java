@@ -1,9 +1,14 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
+import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showParseError;
+
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.jdom2.Element;
 
 
+import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 /**
@@ -14,6 +19,10 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  * Hier besitzt jede Frage 4 Antwortmöglichkeiten.
  */
 public class MultChoiceQuestion extends Question<Integer> {
+	
+	static {
+		Question.register("multipleChoice", MultChoiceQuestion::load);
+	}
 	
 	/**
 	 * Die korrekte Antwort.
@@ -98,6 +107,72 @@ public class MultChoiceQuestion extends Question<Integer> {
 	public @NonNull String[] getAnswerFieldLabels() {
 		return new @NonNull String[] {"Korrekte Antwort", "Falsche Antwort 1",
 				"Falsche Antwort 2", "Falsche Antwort 3"};
+	}
+	
+	/**
+	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
+	 * Fehler wird
+	 * {@link Util#showParseError(String, String, Object...)}
+	 * aufgerufen.
+	 * 
+	 * @param el
+	 *        das JDOM-Element
+	 * @return
+	 * 		die Frage, oder {@code null} bei einem Fehler.
+	 */
+	public static @Nullable MultChoiceQuestion load(Element el) {
+		Element textElement = el.getChild("text");
+		Element correctAnswerElement = el.getChild("correctAnswer");
+		Element wrongAnswer1Element = el.getChild("wrongAnswer1");
+		Element wrongAnswer2Element = el.getChild("wrongAnswer2");
+		Element wrongAnswer3Element = el.getChild("wrongAnswer3");
+		
+		if(textElement == null) {
+			showParseError(	"Falsch formatierte Frage",
+							"Eine Frage hat keinen Fragentext. "
+									+ "Wenn die Daten gespeichert werden, "
+									+ "wird diese Frage nicht gespeichert "
+									+ "und damit effektiv gelöscht. "
+									+ "Fortfahren?");
+			return null;
+		}
+		if(correctAnswerElement == null) {
+			showParseError(	"Falsch formatierte Frage",
+							"Eine Multiple Choice-Frage hat keine korrekte Antwort. "
+									+ "Wenn die Daten gespeichert werden, wird "
+									+ "diese Frage nicht gespeichert und damit "
+									+ "effektiv gelöscht. Fortfahren?");
+			return null;
+		}
+		if(wrongAnswer1Element == null) {
+			showParseError(	"Falsch formatierte Frage",
+							"Eine Multiple Choice-Frage hat keine erste falsche Antwort. "
+									+ "Wenn die Daten gespeichert werden, wird "
+									+ "diese Frage nicht gespeichert und damit "
+									+ "effektiv gelöscht. Fortfahren?");
+			return null;
+		}
+		if(wrongAnswer2Element == null) {
+			showParseError(	"Falsch formatierte Frage",
+							"Eine Multiple Choice-Frage hat keine zweite falsche Antwort. "
+									+ "Wenn die Daten gespeichert werden, wird "
+									+ "diese Frage nicht gespeichert und damit "
+									+ "effektiv gelöscht. Fortfahren?");
+			return null;
+		}
+		if(wrongAnswer3Element == null) {
+			showParseError(	"Falsch formatierte Frage",
+							"Eine Multiple Choice-Frage hat keine dritte falsche Antwort. "
+									+ "Wenn die Daten gespeichert werden, wird "
+									+ "diese Frage nicht gespeichert und damit "
+									+ "effektiv gelöscht. Fortfahren?");
+			return null;
+		}
+		return new MultChoiceQuestion(	textElement.getText(), null,
+										correctAnswerElement.getText(),
+										wrongAnswer1Element.getText(),
+										wrongAnswer2Element.getText(),
+										wrongAnswer3Element.getText());
 	}
 	
 }

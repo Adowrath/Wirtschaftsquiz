@@ -1,5 +1,8 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -35,8 +38,38 @@ public class QuizModel {
 	 * @see Util#loadData(java.net.URL, List, List)
 	 */
 	public void loadData() {
-		Util.loadData(	QuizModel.class.getResource("game.xml"),
-						this.availableCategories, this.availableQuestions);
+		try {
+			Class.forName("ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.FreehandQuestion");
+			Class.forName("ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.MultChoiceQuestion");
+			Class.forName("ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.BinaryQuestion");
+		} catch(ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+		
+		URL gameFile = QuizModel.class.getResource("game.xml");
+		if(gameFile == null)
+			throw new IllegalStateException("game.xml wurde nicht gefunden - Datei gelöscht?");
+		Util.loadData(	gameFile, this.availableCategories,
+						this.availableQuestions);
+	}
+	
+	/**
+	 * Lädt die Daten für das Spiel aus der angegebenen Datei.
+	 * 
+	 * @param file
+	 *        die Datei
+	 * 
+	 * @see Util#loadData(java.net.URL, List, List)
+	 */
+	public void loadData(File file) {
+		this.availableCategories.clear();
+		this.availableQuestions.clear();
+		try {
+			Util.loadData(	file.toURI().toURL(), this.availableCategories,
+							this.availableQuestions);
+		} catch(MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**
