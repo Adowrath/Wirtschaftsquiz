@@ -1,5 +1,6 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,9 +14,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -62,14 +66,15 @@ public class Util {
 	 *        der Throwable
 	 */
 	public static void showUncaughtError(Thread t, Throwable e) {
+		
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
 		String stackTrace = errors.toString();
 		
 		System.err.print(stackTrace);
 		
-		JTextArea jta = new JTextArea(stackTrace);
-		JScrollPane jsp = new JScrollPane(jta) {
+		JTextArea errorArea = new JTextArea(stackTrace);
+		JScrollPane errorPane = new JScrollPane(errorArea) {
 			
 			private static final long serialVersionUID = 1L;
 			
@@ -78,9 +83,48 @@ public class Util {
 				return new Dimension(480, 320);
 			}
 		};
-		JOptionPane.showMessageDialog(	null, jsp,
-										"Error in Thread " + t.toString(),
+		String s = fuzzyFindMessage(e);
+		JLabel errorMessage = new JLabel(s, SwingConstants.CENTER);
+		
+		JPanel jp = new JPanel(new BorderLayout(0, 10));
+		jp.add(errorMessage, BorderLayout.PAGE_START);
+		jp.add(errorPane, BorderLayout.CENTER);
+		
+		JOptionPane.showMessageDialog(	null, jp,
+										String.format(	"Error in Thread \"%s\"",
+														t),
 										JOptionPane.ERROR_MESSAGE);
+	}
+	
+	/**
+	 * Sucht anhand etwas fuzzy definierter Regeln nach der
+	 * "Top-Most" Fehler-Nachricht
+	 * 
+	 * @param t
+	 *        das Trowable-Objekt
+	 * @return
+	 * 		die Nachricht, wenn eine gefunden wurde. Ansonsten
+	 *         die allerletzte Message.
+	 */
+	@SuppressWarnings("all")
+	private static @Nullable String fuzzyFindMessage(@Nullable Throwable t) {
+		if(t == null)
+			return "Kein Fehler";
+		String s = "";
+		do {
+			try {
+				s = t.getMessage();
+				if(s != null && !s.isEmpty()) {
+					s = s.trim();
+					Class.forName(s, false, null);
+				}
+				t = t.getCause();
+			} catch(ClassNotFoundException e) {
+				e.getClass(); // Einfach damit Eclipse nicht meckert.
+				break;
+			}
+		} while(t != null);
+		return s;
 	}
 	
 	/**
