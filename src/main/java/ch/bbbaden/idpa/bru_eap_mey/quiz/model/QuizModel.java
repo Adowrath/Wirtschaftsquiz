@@ -1,6 +1,7 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -12,9 +13,12 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 
 
+import ch.bbbaden.idpa.bru_eap_mey.quiz.MainframeControl;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
+import javafx.animation.PauseTransition;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Das Hauptmodel für das gesamte Wirtschaftsquiz.
@@ -121,8 +125,14 @@ public class QuizModel {
 	/**
 	 * Startet das Spiel mit den gegebenen Kategorien
 	 */
-	public void startGame() {
-		// TODO
+	public void startGame() { // TODO
+		this.currentQuestions.addAll(this.availableQuestions);
+		try {
+			this.getStage().setScene(MainframeControl
+					.loadQuestion(this, this.currentQuestions.getFirst()));
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**
@@ -144,7 +154,22 @@ public class QuizModel {
 			if(!question.check(t)) {
 				this.currentQuestions.addLast(question);
 			}
-			System.err.println("Next question should be prepared."); // TODO
+			PauseTransition delay = new PauseTransition(Duration.seconds(5));
+			delay.setOnFinished(event -> {
+				try {
+					if(this.currentQuestions.isEmpty()) {
+						this.openMainPage();
+					} else {
+						this.getStage().setScene(MainframeControl
+								.loadQuestion(this, this.currentQuestions
+										.getFirst()));
+					}
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
+			});
+			delay.play();
+			
 			return question;
 		} catch(ClassCastException e) {
 			throw new IllegalStateException("Fragetyp und Antworttyp waren nicht passend.",
@@ -153,23 +178,43 @@ public class QuizModel {
 	}
 	
 	/**
-	 * Bricht eine Runde vorzeitig ab.
+	 * Bricht eine Runde ab.
 	 */
 	public void cancelRound() {
-		// TODO
+		this.currentQuestions.clear();
+		this.openMainPage();
+	}
+	
+	/**
+	 * Öffnet die Hauptansicht.
+	 */
+	public void openMainPage() {
+		try {
+			this.getStage().setScene(MainframeControl.mainPage(this));
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**
 	 * Öffnet den Kategorieneditor.
 	 */
 	public void openCategoryEditor() {
-		// TODO
+		try {
+			this.getStage().setScene(MainframeControl.mainPage(this));
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**
 	 * Öffnet den Kategorieneditor.
 	 */
 	public void openQuestionEditor() {
-		// TODO
+		try {
+			this.getStage().setScene(MainframeControl.mainPage(this));
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
