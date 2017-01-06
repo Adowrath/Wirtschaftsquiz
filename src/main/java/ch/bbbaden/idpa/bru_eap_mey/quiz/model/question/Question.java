@@ -1,13 +1,24 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.jdom2.Element;
 
 
+import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 /**
  * Die Standardklasse für alle Fragen.
+ * <br>
+ * Jede Sub-Klasse muss sich statisch bei
+ * {@link #register(String, Function)} registrieren, ansonsten
+ * funktioniert der Ladevorgang nicht!
  * 
  * @param <AnswerType>
  *        der Datentyp der Antwort
@@ -153,4 +164,72 @@ public abstract class Question<AnswerType> {
 	 */
 	public abstract String getFilename();
 	
+	/**
+	 * Legt die Frage in ein JDOM-Element ab.
+	 * 
+	 * @return
+	 * 		das JDOM-Element
+	 */
+	public abstract Element save();
+	
+	/**
+	 * Alle registrierten Fragetypen.
+	 */
+	private static final Map<String, Function<Element, @Nullable Question<?>>> registeredTypes = new HashMap<>();
+	
+	/**
+	 * 
+	 * 
+	 * @param type
+	 *        der Typ der Frage, wird für das XML verwendet. Sollte
+	 *        mit dem Typ, der bei {@link #save()} als Attribut
+	 *        festgelegt wird, übereinstimmen.
+	 * @param func
+	 *        die Funktion, welche die Frage zurückgibt
+	 */
+	public static void register(String type,
+								Function<Element, @Nullable Question<?>> func) {
+		if(registeredTypes.containsKey(type))
+			throw new IllegalArgumentException(type
+					+ " wurde bereits einmal registriert.");
+		registeredTypes.put(type, func);
+	}
+	
+	/**
+	 * Versucht, eine Frage aus dem Element zu laden. Wenn es niht
+	 * möglich ist, bspw. weil der Fragetyp nicht bekannt ist, wird
+	 * {@link Util#showErrorExitOnNoOrClose(String, String, Object...)}
+	 * aufgerufen und null zurückgegeben.
+	 * 
+	 * @param el
+	 *        das JDOM-Element
+	 * @return
+	 * 		die geladene Frage, oder bei einem Fehler null
+	 */
+	public static final @Nullable Question<?> loadFromElement(Element el) {
+		String type = el.getAttributeValue("type");
+		if(type == null) {
+			Util.showErrorExitOnNoOrClose("Falsch formatierte Frage",
+								"Eine Frage hat keinen Fragentyp. "
+										+ "Wenn die Daten gespeichert werden, "
+										+ "wird diese Frage nicht gespeichert "
+										+ "und damit effektiv gelöscht. "
+										+ "Fortfahren?");
+		}
+		
+		Function<Element, @Nullable Question<?>> func = registeredTypes
+				.get(type);
+		if(func == null) {
+			Util.showErrorExitOnNoOrClose("Falsch formatierte Frage",
+								"Eine Frage hat einen unbekannten "
+										+ "Fragetyp: \"%s\". Wenn die Daten "
+										+ "gespeichert werden, wird diese "
+										+ "Frage nicht gespeichert "
+										+ "und damit effektiv gelöscht. "
+										+ "Fortfahren?",
+								type);
+			return null;
+		}
+		return func.apply(el);
+	}
 }

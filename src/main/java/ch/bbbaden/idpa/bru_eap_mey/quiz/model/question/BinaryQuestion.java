@@ -1,9 +1,14 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
+import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showErrorExitOnNoOrClose;
+
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.jdom2.Element;
 
 
+import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 /**
@@ -15,6 +20,10 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  * <strong>Wahr</strong>.
  */
 public class BinaryQuestion extends Question<Boolean> {
+	
+	static {
+		Question.register("binary", BinaryQuestion::load);
+	}
 	
 	/**
 	 * Der Text der korrekten Antwort.
@@ -81,4 +90,61 @@ public class BinaryQuestion extends Question<Boolean> {
 		return new @NonNull String[] {"Richtige Antwort", "Falsche Antwort"};
 	}
 	
+	@Override
+	public Element save() {
+		return new Element("question").setAttribute("type", "binary")
+				.addContent(new Element("text").setText(this.getQuestion()))
+				.addContent(new Element("trueAnswer")
+						.setText(this.correctAnswer))
+				.addContent(new Element("falseAnswer")
+						.setText(this.wrongAnswer));
+	}
+	
+	/**
+	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
+	 * Fehler wird
+	 * {@link Util#showErrorExitOnNoOrClose(String, String, Object...)}
+	 * aufgerufen.
+	 * 
+	 * @param el
+	 *        das JDOM-Element
+	 * @return
+	 * 		die Frage, oder {@code null} bei einem Fehler.
+	 */
+	public static @Nullable BinaryQuestion load(Element el) {
+		Element textElement = el.getChild("text");
+		Element trueAnswerElement = el.getChild("trueAnswer");
+		Element falseAnswerElement = el.getChild("falseAnswer");
+		
+		if(textElement == null) {
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
+							"Eine Frage hat keinen Fragentext. "
+									+ "Wenn die Daten gespeichert werden, "
+									+ "wird diese Frage nicht gespeichert "
+									+ "und damit effektiv gelöscht. "
+									+ "Fortfahren?");
+			return null;
+		}
+		if(trueAnswerElement == null) {
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
+							"Eine binäre Frage hat keine richtige Antwort. "
+									+ "Wenn die Daten gespeichert werden, "
+									+ "wird diese Frage nicht gespeichert "
+									+ "und damit effektiv gelöscht. "
+									+ "Fortfahren?");
+			return null;
+		}
+		if(falseAnswerElement == null) {
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
+							"Eine binäre Frage hat keine falsche Antwort. "
+									+ "Wenn die Daten gespeichert werden, "
+									+ "wird diese Frage nicht gespeichert "
+									+ "und damit effektiv gelöscht. "
+									+ "Fortfahren?");
+			return null;
+		}
+		return new BinaryQuestion(	textElement.getText(), null,
+									trueAnswerElement.getText(),
+									falseAnswerElement.getText());
+	}
 }

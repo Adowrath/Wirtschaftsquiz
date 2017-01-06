@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="190.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.MainController">
+	<children>
+		<MenuBar>
+			<menus>
+				<Menu text="_Datei">
+					<items>
+						<MenuItem onAction="#saveData" text="_Speichern" />
+						<MenuItem onAction="#loadData" text="_Laden" />
+					</items>
+				</Menu>
+				<Menu text="_Bearbeiten">
+					<items>
+						<MenuItem onAction="#editCategories" text="_Kategorien bearbeiten" />
+						<MenuItem onAction="#editQuestions" text="_Fragen bearbeiten" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+		<ScrollPane styleClass="edge-to-edge" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="140.0" prefWidth="470.0" VBox.vgrow="ALWAYS">
+			<content>
+				<FlowPane fx:id="theFlow" alignment="TOP_CENTER" prefHeight="140.0" prefWidth="470.0" rowValignment="TOP" columnHalignment="CENTER" />
+			</content>
+		</ScrollPane>
+		<HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+			<children>
+				<Button mnemonicParsing="false" text="Spiel starten" onAction="#startGame" />
+			</children>
+		</HBox>
+	</children>
+</VBox>

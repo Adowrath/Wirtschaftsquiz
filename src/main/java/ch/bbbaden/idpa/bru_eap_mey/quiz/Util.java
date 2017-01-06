@@ -1,5 +1,6 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,29 +8,31 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
-import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.BinaryQuestion;
-import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.FreehandQuestion;
-import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.MultChoiceQuestion;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 
 /**
@@ -62,14 +65,15 @@ public class Util {
 	 *        der Throwable
 	 */
 	public static void showUncaughtError(Thread t, Throwable e) {
+		
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
 		String stackTrace = errors.toString();
 		
 		System.err.print(stackTrace);
 		
-		JTextArea jta = new JTextArea(stackTrace);
-		JScrollPane jsp = new JScrollPane(jta) {
+		JTextArea errorArea = new JTextArea(stackTrace);
+		JScrollPane errorPane = new JScrollPane(errorArea) {
 			
 			private static final long serialVersionUID = 1L;
 			
@@ -78,9 +82,48 @@ public class Util {
 				return new Dimension(480, 320);
 			}
 		};
-		JOptionPane.showMessageDialog(	null, jsp,
-										"Error in Thread " + t.toString(),
+		String s = fuzzyFindMessage(e);
+		JLabel errorMessage = new JLabel(s, SwingConstants.CENTER);
+		
+		JPanel jp = new JPanel(new BorderLayout(0, 10));
+		jp.add(errorMessage, BorderLayout.PAGE_START);
+		jp.add(errorPane, BorderLayout.CENTER);
+		
+		JOptionPane.showMessageDialog(	null, jp,
+										String.format(	"Error in Thread \"%s\"",
+														t),
 										JOptionPane.ERROR_MESSAGE);
+	}
+	
+	/**
+	 * Sucht anhand etwas fuzzy definierter Regeln nach der
+	 * "Top-Most" Fehler-Nachricht
+	 * 
+	 * @param t
+	 *        das Trowable-Objekt
+	 * @return
+	 * 		die Nachricht, wenn eine gefunden wurde. Ansonsten
+	 *         die allerletzte Message.
+	 */
+	@SuppressWarnings("all")
+	private static @Nullable String fuzzyFindMessage(@Nullable Throwable t) {
+		if(t == null)
+			return "Kein Fehler";
+		String s = "";
+		do {
+			try {
+				s = t.getMessage();
+				if(s != null && !s.isEmpty()) {
+					s = s.trim();
+					Class.forName(s, false, null);
+				}
+				t = t.getCause();
+			} catch(ClassNotFoundException e) {
+				e.getClass(); // Einfach damit Eclipse nicht meckert.
+				break;
+			}
+		} while(t != null);
+		return s;
 	}
 	
 	/**
@@ -154,16 +197,11 @@ public class Util {
 	 *        eine Liste der Fragen. Sollte leer sein, da neue
 	 *        Elemente hinzugefügt werden.
 	 */
-	public static void loadData(@Nullable URL gameFile,
+	public static void loadData(URL gameFile,
 								List<Category> categoryList,
 								List<Question<?>> questionList) {
 		try {
-			if(gameFile == null) {
-				System.err.println("Spieldatei nicht gefunden.");
-				return;
-			}
 			File f = new File(gameFile.getFile());
-			System.out.println(f.getAbsolutePath());
 			if(!f.exists()) {
 				try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
 					bw.write(defaultText);
@@ -184,21 +222,21 @@ public class Util {
 				Element descElement = element.getChild("description");
 				
 				if(nameElement == null) {
-					showParseError(	"Falsch formatierte Kategorie",
-									"Eine Kategorie hat keinen Namen. "
-											+ "Wenn die Daten gespeichert werden, "
-											+ "wird diese Kategorie mitsamt Fragen "
-											+ "nicht gespeichert und damit effektiv "
-											+ "gelöscht. Fortfahren?");
+					showErrorExitOnNoOrClose(	"Falsch formatierte Kategorie",
+												"Eine Kategorie hat keinen Namen. "
+														+ "Wenn die Daten gespeichert werden, "
+														+ "wird diese Kategorie mitsamt Fragen "
+														+ "nicht gespeichert und damit effektiv "
+														+ "gelöscht. Fortfahren?");
 					return null;
 				}
 				if(descElement == null) {
-					showParseError(	"Falsch formatierte Kategorie",
-									"Eine Kategorie hat keine Beschreibung. "
-											+ "Wenn die Daten gespeichert werden, "
-											+ "wird diese Kategorie mitsamt Fragen "
-											+ "nicht gespeichert und damit effektiv "
-											+ "gelöscht. Fortfahren?");
+					showErrorExitOnNoOrClose(	"Falsch formatierte Kategorie",
+												"Eine Kategorie hat keine Beschreibung. "
+														+ "Wenn die Daten gespeichert werden, "
+														+ "wird diese Kategorie mitsamt Fragen "
+														+ "nicht gespeichert und damit effektiv "
+														+ "gelöscht. Fortfahren?");
 					return null;
 				}
 				
@@ -207,7 +245,7 @@ public class Util {
 				element.getChildren("question").forEach(el -> {
 					assert el != null;
 					
-					Question<?> loadedQuestion = loadQuestion(el);
+					Question<?> loadedQuestion = Question.loadFromElement(el);
 					
 					if(loadedQuestion == null)
 						return;
@@ -229,6 +267,44 @@ public class Util {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * Speichert die gegebenen Kategorien (inklusive der beinhaltenen
+	 * Fragen) in die gegebene Datei.
+	 * 
+	 * @param gameFile
+	 *        die Datei, in die geschrieben wird.
+	 * @param categoryList
+	 *        die Liste der Kategorien
+	 */
+	public static void saveData(File gameFile, List<Category> categoryList) {
+		try {
+			
+			Element game = new Element("game");
+			Document doc = new Document(game);
+			game.addContent(categoryList.stream()
+					.map(cat -> new Element("category")
+							.addContent(new Element("name")
+									.setText(cat.getName()))
+							.addContent(new Element("description")
+									.setText(cat.getDescription()))
+							.addContent(cat.getQuestions().stream()
+									.map(Question::save)
+									.collect(Collectors.toList())))
+					.collect(Collectors.toList()));
+			
+			
+			XMLOutputter xmlOutput = new XMLOutputter(Format.getPrettyFormat());
+			
+			try(Writer fw = new FileWriter(gameFile)) {
+				xmlOutput.output(doc, fw);
+			}
+			
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	
 	/**
 	 * Die sogenannte <a href=
@@ -307,136 +383,6 @@ public class Util {
 		return cost[len0 - 1];
 	}
 	
-	/**
-	 * Lädt eine Frage aus einem {@link Element JDOM-Element}. Bei
-	 * einem Fehler wird {@code null} zurückgegeben oder das Programm
-	 * beendet, abhängig von der Wahl des Benutzers.
-	 * 
-	 * @param qElement
-	 *        das Element, welches die Frage enthält
-	 * @return
-	 * 		eine {@link Question Frage}, oder {@code null} wenn ein
-	 *         Fehler im Element bestand, bspw. unbekannter Fragentyp
-	 *         usw.
-	 * @see #showParseError(String, String, Object...)
-	 */
-	private static @Nullable Question<?> loadQuestion(Element qElement) {
-		Attribute typeAttribute = qElement.getAttribute("type");
-		Element textElement = qElement.getChild("text");
-		
-		if(typeAttribute == null) {
-			showParseError(	"Falsch formatierte Frage",
-							"Eine Frage hat keinen Fragentyp. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
-			return null;
-		}
-		if(textElement == null) {
-			showParseError(	"Falsch formatierte Frage",
-							"Eine Frage hat keinen Fragentext. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
-			return null;
-		}
-		String type = typeAttribute.getValue();
-		
-		switch(type) {
-			case "binary":
-				Element trueAnswerElement = qElement.getChild("trueAnswer");
-				Element falseAnswerElement = qElement.getChild("falseAnswer");
-				if(trueAnswerElement == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine binäre Frage hat keine richtige Antwort. "
-											+ "Wenn die Daten gespeichert werden, "
-											+ "wird diese Frage nicht gespeichert "
-											+ "und damit effektiv gelöscht. "
-											+ "Fortfahren?");
-					return null;
-				}
-				if(falseAnswerElement == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine binäre Frage hat keine falsche Antwort. "
-											+ "Wenn die Daten gespeichert werden, "
-											+ "wird diese Frage nicht gespeichert "
-											+ "und damit effektiv gelöscht. "
-											+ "Fortfahren?");
-					return null;
-				}
-				return new BinaryQuestion(	textElement.getText(), null,
-											trueAnswerElement.getText(),
-											falseAnswerElement.getText());
-			case "freehand":
-				Element answerElement = qElement.getChild("answer");
-				if(answerElement == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine Freihandfrage hat keine Antwort. "
-											+ "Wenn die Daten gespeichert werden, wird "
-											+ "diese Frage nicht gespeichert und damit "
-											+ "effektiv gelöscht. Fortfahren?");
-					return null;
-				}
-				return new FreehandQuestion(textElement.getText(), null,
-											answerElement.getText());
-			case "multipleChoice":
-				Element correctAnswerElement = qElement
-						.getChild("correctAnswer");
-				Element wrongAnswer1Element = qElement.getChild("wrongAnswer1");
-				Element wrongAnswer2Element = qElement.getChild("wrongAnswer2");
-				Element wrongAnswer3Element = qElement.getChild("wrongAnswer3");
-				if(correctAnswerElement == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine Multiple Choice-Frage hat keine korrekte Antwort. "
-											+ "Wenn die Daten gespeichert werden, wird "
-											+ "diese Frage nicht gespeichert und damit "
-											+ "effektiv gelöscht. Fortfahren?");
-					return null;
-				}
-				if(wrongAnswer1Element == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine Multiple Choice-Frage hat keine erste falsche Antwort. "
-											+ "Wenn die Daten gespeichert werden, wird "
-											+ "diese Frage nicht gespeichert und damit "
-											+ "effektiv gelöscht. Fortfahren?");
-					return null;
-				}
-				if(wrongAnswer2Element == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine Multiple Choice-Frage hat keine zweite falsche Antwort. "
-											+ "Wenn die Daten gespeichert werden, wird "
-											+ "diese Frage nicht gespeichert und damit "
-											+ "effektiv gelöscht. Fortfahren?");
-					return null;
-				}
-				if(wrongAnswer3Element == null) {
-					showParseError(	"Falsch formatierte Frage",
-									"Eine Multiple Choice-Frage hat keine dritte falsche Antwort. "
-											+ "Wenn die Daten gespeichert werden, wird "
-											+ "diese Frage nicht gespeichert und damit "
-											+ "effektiv gelöscht. Fortfahren?");
-					return null;
-				}
-				return new MultChoiceQuestion(	textElement.getText(), null,
-												correctAnswerElement.getText(),
-												wrongAnswer1Element.getText(),
-												wrongAnswer2Element.getText(),
-												wrongAnswer3Element.getText());
-			default:
-				showParseError(	"Falsch formatierte Frage",
-								"Eine Frage hat einen unbekannten "
-										+ "Fragetyp: \"%s\". Wenn die Daten "
-										+ "gespeichert werden, wird diese "
-										+ "Frage nicht gespeichert "
-										+ "und damit effektiv gelöscht. "
-										+ "Fortfahren?",
-								type);
-				
-				return null;
-		}
-	}
 	
 	/**
 	 * Öffnet einen Dialog mit der Fehlermeldung. Wenn auf "Nein"
@@ -451,9 +397,9 @@ public class Util {
 	 *        Argumente für {@link String#format(String, Object...)},
 	 *        werden mit {@code message} verbunden.
 	 */
-	private static void showParseError(	String windowTitle,
-										String message,
-										Object... formatArgs) {
+	public static void showErrorExitOnNoOrClose(String windowTitle,
+												String message,
+												Object... formatArgs) {
 		int c = JOptionPane
 				.showOptionDialog(	null, String.format(message, formatArgs),
 									windowTitle, JOptionPane.YES_NO_OPTION,
