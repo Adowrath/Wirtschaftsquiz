@@ -1,6 +1,6 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
-import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showParseError;
+import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showErrorExitOnNoOrClose;
 
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -103,7 +103,7 @@ public class BinaryQuestion extends Question<Boolean> {
 	/**
 	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
 	 * Fehler wird
-	 * {@link Util#showParseError(String, String, Object...)}
+	 * {@link Util#showErrorExitOnNoOrClose(String, String, Object...)}
 	 * aufgerufen.
 	 * 
 	 * @param el
@@ -117,7 +117,7 @@ public class BinaryQuestion extends Question<Boolean> {
 		Element falseAnswerElement = el.getChild("falseAnswer");
 		
 		if(textElement == null) {
-			showParseError(	"Falsch formatierte Frage",
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
 							"Eine Frage hat keinen Fragentext. "
 									+ "Wenn die Daten gespeichert werden, "
 									+ "wird diese Frage nicht gespeichert "
@@ -126,7 +126,7 @@ public class BinaryQuestion extends Question<Boolean> {
 			return null;
 		}
 		if(trueAnswerElement == null) {
-			showParseError(	"Falsch formatierte Frage",
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
 							"Eine binäre Frage hat keine richtige Antwort. "
 									+ "Wenn die Daten gespeichert werden, "
 									+ "wird diese Frage nicht gespeichert "
@@ -135,7 +135,7 @@ public class BinaryQuestion extends Question<Boolean> {
 			return null;
 		}
 		if(falseAnswerElement == null) {
-			showParseError(	"Falsch formatierte Frage",
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
 							"Eine binäre Frage hat keine falsche Antwort. "
 									+ "Wenn die Daten gespeichert werden, "
 									+ "wird diese Frage nicht gespeichert "

@@ -222,21 +222,21 @@ public class Util {
 				Element descElement = element.getChild("description");
 				
 				if(nameElement == null) {
-					showParseError(	"Falsch formatierte Kategorie",
-									"Eine Kategorie hat keinen Namen. "
-											+ "Wenn die Daten gespeichert werden, "
-											+ "wird diese Kategorie mitsamt Fragen "
-											+ "nicht gespeichert und damit effektiv "
-											+ "gelöscht. Fortfahren?");
+					showErrorExitOnNoOrClose(	"Falsch formatierte Kategorie",
+												"Eine Kategorie hat keinen Namen. "
+														+ "Wenn die Daten gespeichert werden, "
+														+ "wird diese Kategorie mitsamt Fragen "
+														+ "nicht gespeichert und damit effektiv "
+														+ "gelöscht. Fortfahren?");
 					return null;
 				}
 				if(descElement == null) {
-					showParseError(	"Falsch formatierte Kategorie",
-									"Eine Kategorie hat keine Beschreibung. "
-											+ "Wenn die Daten gespeichert werden, "
-											+ "wird diese Kategorie mitsamt Fragen "
-											+ "nicht gespeichert und damit effektiv "
-											+ "gelöscht. Fortfahren?");
+					showErrorExitOnNoOrClose(	"Falsch formatierte Kategorie",
+												"Eine Kategorie hat keine Beschreibung. "
+														+ "Wenn die Daten gespeichert werden, "
+														+ "wird diese Kategorie mitsamt Fragen "
+														+ "nicht gespeichert und damit effektiv "
+														+ "gelöscht. Fortfahren?");
 					return null;
 				}
 				
@@ -397,9 +397,9 @@ public class Util {
 	 *        Argumente für {@link String#format(String, Object...)},
 	 *        werden mit {@code message} verbunden.
 	 */
-	public static void showParseError(	String windowTitle,
-										String message,
-										Object... formatArgs) {
+	public static void showErrorExitOnNoOrClose(String windowTitle,
+												String message,
+												Object... formatArgs) {
 		int c = JOptionPane
 				.showOptionDialog(	null, String.format(message, formatArgs),
 									windowTitle, JOptionPane.YES_NO_OPTION,

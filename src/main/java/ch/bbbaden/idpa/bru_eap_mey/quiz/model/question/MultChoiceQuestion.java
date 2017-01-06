@@ -1,6 +1,6 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
-import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showParseError;
+import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showErrorExitOnNoOrClose;
 
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -126,7 +126,7 @@ public class MultChoiceQuestion extends Question<Integer> {
 	/**
 	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
 	 * Fehler wird
-	 * {@link Util#showParseError(String, String, Object...)}
+	 * {@link Util#showErrorExitOnNoOrClose(String, String, Object...)}
 	 * aufgerufen.
 	 * 
 	 * @param el
@@ -142,7 +142,7 @@ public class MultChoiceQuestion extends Question<Integer> {
 		Element wrongAnswer3Element = el.getChild("wrongAnswer3");
 		
 		if(textElement == null) {
-			showParseError(	"Falsch formatierte Frage",
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
 							"Eine Frage hat keinen Fragentext. "
 									+ "Wenn die Daten gespeichert werden, "
 									+ "wird diese Frage nicht gespeichert "
@@ -151,7 +151,7 @@ public class MultChoiceQuestion extends Question<Integer> {
 			return null;
 		}
 		if(correctAnswerElement == null) {
-			showParseError(	"Falsch formatierte Frage",
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
 							"Eine Multiple Choice-Frage hat keine korrekte Antwort. "
 									+ "Wenn die Daten gespeichert werden, wird "
 									+ "diese Frage nicht gespeichert und damit "
@@ -159,7 +159,7 @@ public class MultChoiceQuestion extends Question<Integer> {
 			return null;
 		}
 		if(wrongAnswer1Element == null) {
-			showParseError(	"Falsch formatierte Frage",
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
 							"Eine Multiple Choice-Frage hat keine erste falsche Antwort. "
 									+ "Wenn die Daten gespeichert werden, wird "
 									+ "diese Frage nicht gespeichert und damit "
@@ -167,7 +167,7 @@ public class MultChoiceQuestion extends Question<Integer> {
 			return null;
 		}
 		if(wrongAnswer2Element == null) {
-			showParseError(	"Falsch formatierte Frage",
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
 							"Eine Multiple Choice-Frage hat keine zweite falsche Antwort. "
 									+ "Wenn die Daten gespeichert werden, wird "
 									+ "diese Frage nicht gespeichert und damit "
@@ -175,7 +175,7 @@ public class MultChoiceQuestion extends Question<Integer> {
 			return null;
 		}
 		if(wrongAnswer3Element == null) {
-			showParseError(	"Falsch formatierte Frage",
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
 							"Eine Multiple Choice-Frage hat keine dritte falsche Antwort. "
 									+ "Wenn die Daten gespeichert werden, wird "
 									+ "diese Frage nicht gespeichert und damit "

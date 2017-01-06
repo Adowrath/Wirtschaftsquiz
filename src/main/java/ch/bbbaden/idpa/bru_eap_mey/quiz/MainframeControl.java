@@ -1,6 +1,7 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz;
 
 import java.io.IOException;
+import java.net.URL;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.MainController;
@@ -27,14 +28,19 @@ public class MainframeControl extends Application {
 			
 			QuizModel qm = new QuizModel();
 			qm.loadData();
+			qm.setStage(primaryStage);
 			MainController con = loader.getController();
 			con.setModel(qm);
 			
 			Scene scene = new Scene(root, root.getPrefWidth(),
 									root.getPrefHeight());
 			
+			loadCSS(scene);
+			
 			primaryStage.setScene(scene);
 			primaryStage.sizeToScene();
+			primaryStage.setResizable(false);
+			primaryStage.setTitle("Wirtschaftsquiz");
 			
 			primaryStage.show();
 		} catch(IOException e) {
@@ -44,21 +50,45 @@ public class MainframeControl extends Application {
 	}
 	
 	/**
+	 * Lädt das CSS, wenn vorhanden, in die Szene.
+	 * 
+	 * @param sc
+	 *        die Szene
+	 */
+	private static void loadCSS(Scene sc) {
+		URL url = MainframeControl.class.getResource("app.css");
+		if(url != null) {
+			sc.getStylesheets().add(url.toExternalForm());
+		} else {
+			Util.showErrorExitOnNoOrClose(	"Stylesheet nicht gefunden",
+											"Das Stylesheet der Applikation (app.css) "
+											+ "wurde nicht gefunden. Möglicherweise "
+											+ "wurde es verschoben oder gelöscht?\r\n"
+											+ "Wollen Sie den Fehler ignorieren?");
+		}
+	}
+	
+	/**
 	 * Lädt die Szene der Hauptansicht.
 	 * 
+	 * @param qm
+	 *        das QuizModel
 	 * @return
 	 * 		die Szene, welche die Hauptansicht darstellt
 	 * @throws IOException
 	 *         falls die FXML-Datei nicht gefunden wurde
 	 */
-	public static Scene mainPage() throws IOException {
+	public static Scene mainPage(QuizModel qm) throws IOException {
 		FXMLLoader loader = new FXMLLoader(MainframeControl.class
 				.getResource("main.fxml"));
 		Region root = loader.<Region> load();
+		MainController mc = loader.getController();
+		mc.setModel(qm);
 		
 		Scene scene = new Scene(root, root.getPrefWidth(),
 								root.getPrefHeight());
 		
+		loadCSS(scene);
 		
 		return scene;
 	}
@@ -91,6 +121,8 @@ public class MainframeControl extends Application {
 		
 		Scene scene = new Scene(root, root.getPrefWidth(),
 								root.getPrefHeight());
+		
+		loadCSS(scene);
 		
 		return scene;
 	}

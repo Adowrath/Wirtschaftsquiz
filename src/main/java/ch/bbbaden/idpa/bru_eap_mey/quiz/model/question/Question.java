@@ -198,7 +198,7 @@ public abstract class Question<AnswerType> {
 	/**
 	 * Versucht, eine Frage aus dem Element zu laden. Wenn es niht
 	 * möglich ist, bspw. weil der Fragetyp nicht bekannt ist, wird
-	 * {@link Util#showParseError(String, String, Object...)}
+	 * {@link Util#showErrorExitOnNoOrClose(String, String, Object...)}
 	 * aufgerufen und null zurückgegeben.
 	 * 
 	 * @param el
@@ -209,7 +209,7 @@ public abstract class Question<AnswerType> {
 	public static final @Nullable Question<?> loadFromElement(Element el) {
 		String type = el.getAttributeValue("type");
 		if(type == null) {
-			Util.showParseError("Falsch formatierte Frage",
+			Util.showErrorExitOnNoOrClose("Falsch formatierte Frage",
 								"Eine Frage hat keinen Fragentyp. "
 										+ "Wenn die Daten gespeichert werden, "
 										+ "wird diese Frage nicht gespeichert "
@@ -220,7 +220,7 @@ public abstract class Question<AnswerType> {
 		Function<Element, @Nullable Question<?>> func = registeredTypes
 				.get(type);
 		if(func == null) {
-			Util.showParseError("Falsch formatierte Frage",
+			Util.showErrorExitOnNoOrClose("Falsch formatierte Frage",
 								"Eine Frage hat einen unbekannten "
 										+ "Fragetyp: \"%s\". Wenn die Daten "
 										+ "gespeichert werden, wird diese "

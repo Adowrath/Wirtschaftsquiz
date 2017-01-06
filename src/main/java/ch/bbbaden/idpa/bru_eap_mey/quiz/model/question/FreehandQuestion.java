@@ -1,7 +1,7 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.levenshteinDistance;
-import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showParseError;
+import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showErrorExitOnNoOrClose;
 
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -92,7 +92,7 @@ public class FreehandQuestion extends Question<String> {
 	/**
 	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
 	 * Fehler wird
-	 * {@link Util#showParseError(String, String, Object...)}
+	 * {@link Util#showErrorExitOnNoOrClose(String, String, Object...)}
 	 * aufgerufen.
 	 * 
 	 * @param el
@@ -105,7 +105,7 @@ public class FreehandQuestion extends Question<String> {
 		Element answerElement = el.getChild("answer");
 		
 		if(textElement == null) {
-			showParseError(	"Falsch formatierte Frage",
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
 							"Eine Frage hat keinen Fragentext. "
 									+ "Wenn die Daten gespeichert werden, "
 									+ "wird diese Frage nicht gespeichert "
@@ -114,7 +114,7 @@ public class FreehandQuestion extends Question<String> {
 			return null;
 		}
 		if(answerElement == null) {
-			showParseError(	"Falsch formatierte Frage",
+			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
 							"Eine Freihandfrage hat keine Antwort. "
 									+ "Wenn die Daten gespeichert werden, wird "
 									+ "diese Frage nicht gespeichert und damit "

@@ -9,8 +9,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 
+import org.eclipse.jdt.annotation.Nullable;
+
+
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
+import javafx.stage.Stage;
 
 /**
  * Das Hauptmodel für das gesamte Wirtschaftsquiz.
@@ -31,6 +35,38 @@ public class QuizModel {
 	 * Alle momentanen Fragen.
 	 */
 	private Deque<Question<?>> currentQuestions = new LinkedList<>();
+	
+	/**
+	 * Die Stage der Applikation.
+	 */
+	private @Nullable Stage stage;
+	
+	/**
+	 * Setzt die Stage.
+	 * 
+	 * @param st
+	 *        die Stage
+	 */
+	public void setStage(Stage st) {
+		this.stage = st;
+	}
+	
+	/**
+	 * @return
+	 * 		die Stage
+	 */
+	public Stage getStage() {
+		assert this.stage != null;
+		return this.stage;
+	}
+	
+	/**
+	 * @return
+	 * 		die Liste aller Kategorien.
+	 */
+	public List<Category> getCategories() {
+		return this.availableCategories;
+	}
 	
 	/**
 	 * Lädt die Daten für das Spiel aus der Standarddatei.
@@ -83,6 +119,13 @@ public class QuizModel {
 	}
 	
 	/**
+	 * Startet das Spiel mit den gegebenen Kategorien
+	 */
+	public void startGame() {
+		// TODO
+	}
+	
+	/**
 	 * Überprüft die momentane Frage und initiiert das Laden der
 	 * nächsten.
 	 * 
@@ -113,6 +156,20 @@ public class QuizModel {
 	 * Bricht eine Runde vorzeitig ab.
 	 */
 	public void cancelRound() {
+		// TODO
+	}
+	
+	/**
+	 * Öffnet den Kategorieneditor.
+	 */
+	public void openCategoryEditor() {
+		// TODO
+	}
+	
+	/**
+	 * Öffnet den Kategorieneditor.
+	 */
+	public void openQuestionEditor() {
 		// TODO
 	}
 }
