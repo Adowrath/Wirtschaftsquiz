@@ -9,6 +9,8 @@ import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_BOUND;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -87,7 +89,12 @@ public class MainController {
 		
 		children.clear();
 		for(Category cat : categories) { // Füge alle Buttons hinzu
-			ToggleButton tb = new ToggleButton(cat.getName());
+			ToggleButton tb = new ToggleButton(String
+					.format("%s (%d)", cat.getName(),
+							Integer.valueOf(cat.getQuestions().size())));
+			if(cat.getQuestions().size() == 0) {
+				tb.setDisable(true);
+			}
 			tb.setTooltip(new Tooltip(cat.getDescription()));
 			
 			buffer.add(tb);
@@ -134,7 +141,11 @@ public class MainController {
 	 * Startet das Spiel mit den ausgewählten Kategorien
 	 */
 	public void startGame() {
-		this.getModel().startGame();
+		List<Node> cNodes = this.theFlow.getChildren();
+		List<Category> categories = this.getModel().getCategories();
+		this.getModel().startGame(IntStream.range(0, categories.size())
+				.filter(i -> ((ToggleButton) cNodes.get(i)).isSelected())
+				.mapToObj(categories::get).collect(Collectors.toList()));
 	}
 	
 	/**

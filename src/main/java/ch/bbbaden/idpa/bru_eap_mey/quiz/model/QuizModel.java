@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -124,9 +125,16 @@ public class QuizModel {
 	
 	/**
 	 * Startet das Spiel mit den gegebenen Kategorien
+	 * 
+	 * @param selectedCategories
+	 *        alle gewählten Kategorien.
 	 */
-	public void startGame() { // TODO
-		this.currentQuestions.addAll(this.availableQuestions);
+	public void startGame(List<Category> selectedCategories) {
+		if(selectedCategories.size() == 0)
+			return;
+		this.currentQuestions.addAll(selectedCategories.stream()
+				.flatMap(c -> c.getQuestions().stream())
+				.collect(Collectors.toList()));
 		try {
 			this.getStage().setScene(MainframeControl
 					.loadQuestion(this, this.currentQuestions.getFirst()));
