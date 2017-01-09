@@ -3,7 +3,6 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -18,6 +17,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.MainframeControl;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 import javafx.animation.PauseTransition;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -86,41 +86,58 @@ public class QuizModel {
 		} catch(ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-		
-		URL gameFile = QuizModel.class.getResource("game.xml");
-		if(gameFile == null)
-			throw new IllegalStateException("game.xml wurde nicht gefunden - Datei gelöscht?");
-		Util.loadData(	gameFile, this.availableCategories,
-						this.availableQuestions);
-	}
-	
-	/**
-	 * Lädt die Daten für das Spiel aus der angegebenen Datei.
-	 * 
-	 * @param file
-	 *        die Datei
-	 * 
-	 * @see Util#loadData(java.net.URL, List, List)
-	 */
-	public void loadData(File file) {
-		this.availableCategories.clear();
-		this.availableQuestions.clear();
-		try {
-			Util.loadData(	file.toURI().toURL(), this.availableCategories,
-							this.availableQuestions);
-		} catch(MalformedURLException e) {
-			throw new RuntimeException(e);
+		if(!this.loadDataDialog()) {
+			System.exit(1);
 		}
 	}
 	
 	/**
-	 * Speichert die Daten in die gegebene Datei.
+	 * Lädt die Daten für das Spiel aus der in einem Dialog
+	 * ausgewählten Datei.
 	 * 
-	 * @param file
-	 *        die Datei, in welche geschrieben werden soll
+	 * @return
+	 * 		{@code true}, wenn die Daten geladen wurden, sonst
+	 *         {@code false}
+	 * @see Util#loadData(java.net.URL, List, List)
 	 */
-	public void saveToFile(File file) {
-		Util.saveData(file, this.availableCategories);
+	public boolean loadDataDialog() {
+		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters()
+				.addAll(new FileChooser.ExtensionFilter("XML-Dateien", "*.xml"),
+						new FileChooser.ExtensionFilter("Alle Dateien", "*.*"));
+		fc.setTitle("Spieldaten auswählen");
+		fc.setInitialDirectory(new File("."));
+		File file = fc.showOpenDialog(this.getStage());
+		if(file != null) {
+			this.availableCategories.clear();
+			this.availableQuestions.clear();
+			try {
+				Util.loadData(	file.toURI().toURL(), this.availableCategories,
+								this.availableQuestions);
+			} catch(MalformedURLException e) {
+				throw new RuntimeException(e);
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Öffnet einen Speicherdialog und speichert die Daten in die
+	 * Datei
+	 */
+	public void saveDataDialog() {
+		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters()
+				.addAll(new FileChooser.ExtensionFilter("XML-Datei", "*.xml"),
+						new FileChooser.ExtensionFilter("Alle Dateien", "*.*"));
+		fc.setTitle("Speichern nach");
+		fc.setInitialDirectory(new File("."));
+		fc.setInitialFileName("game");
+		File file = fc.showSaveDialog(this.getStage());
+		if(file != null) {
+			Util.saveData(file, this.availableCategories);
+		}
 	}
 	
 	/**
