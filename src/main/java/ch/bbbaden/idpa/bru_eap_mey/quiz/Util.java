@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -201,7 +202,7 @@ public class Util {
 								List<Category> categoryList,
 								List<Question<?>> questionList) {
 		try {
-			File f = new File(gameFile.getFile());
+			File f = new File(gameFile.toURI());
 			if(!f.exists()) {
 				try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
 					bw.write(defaultText);
@@ -264,6 +265,8 @@ public class Util {
 		} catch(JDOMException e) {
 			throw new RuntimeException(e);
 		} catch(IOException e) {
+			throw new RuntimeException(e);
+		} catch(URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
 	}
