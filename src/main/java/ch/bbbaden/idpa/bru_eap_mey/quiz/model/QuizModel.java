@@ -18,6 +18,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.MainframeControl;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 import javafx.animation.PauseTransition;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -95,32 +96,52 @@ public class QuizModel {
 	}
 	
 	/**
-	 * Lädt die Daten für das Spiel aus der angegebenen Datei.
+	 * Lädt die Daten für das Spiel aus der in einem Dialog
+	 * ausgewählten Datei.
 	 * 
-	 * @param file
-	 *        die Datei
-	 * 
+	 * @return
+	 * 		{@code true}, wenn die Daten geladen wurden, sonst
+	 *         {@code false}
 	 * @see Util#loadData(java.net.URL, List, List)
 	 */
-	public void loadData(File file) {
-		this.availableCategories.clear();
-		this.availableQuestions.clear();
-		try {
-			Util.loadData(	file.toURI().toURL(), this.availableCategories,
-							this.availableQuestions);
-		} catch(MalformedURLException e) {
-			throw new RuntimeException(e);
+	public boolean loadDataDialog() {
+		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters()
+				.addAll(new FileChooser.ExtensionFilter("XML-Dateien", "*.xml"),
+						new FileChooser.ExtensionFilter("Alle Dateien", "*.*"));
+		fc.setTitle("Spieldaten auswählen");
+		fc.setInitialDirectory(new File("."));
+		File file = fc.showOpenDialog(this.getStage());
+		if(file != null) {
+			this.availableCategories.clear();
+			this.availableQuestions.clear();
+			try {
+				Util.loadData(	file.toURI().toURL(), this.availableCategories,
+								this.availableQuestions);
+			} catch(MalformedURLException e) {
+				throw new RuntimeException(e);
+			}
+			return true;
 		}
+		return false;
 	}
 	
 	/**
-	 * Speichert die Daten in die gegebene Datei.
-	 * 
-	 * @param file
-	 *        die Datei, in welche geschrieben werden soll
+	 * Öffnet einen Speicherdialog und speichert die Daten in die
+	 * Datei
 	 */
-	public void saveToFile(File file) {
-		Util.saveData(file, this.availableCategories);
+	public void saveDataDialog() {
+		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters()
+				.addAll(new FileChooser.ExtensionFilter("XML-Datei", "*.xml"),
+						new FileChooser.ExtensionFilter("Alle Dateien", "*.*"));
+		fc.setTitle("Speichern nach");
+		fc.setInitialDirectory(new File("."));
+		fc.setInitialFileName("game");
+		File file = fc.showSaveDialog(this.getStage());
+		if(file != null) {
+			Util.saveData(file, this.availableCategories);
+		}
 	}
 	
 	/**

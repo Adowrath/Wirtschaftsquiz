@@ -6,7 +6,6 @@ import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_ARGUMENT;
 import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_BOUND;
 
 
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +25,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
-import javafx.stage.FileChooser;
 
 /**
  * Der Hauptcontroller für das View, bei dem die Menüs aufgerufen
@@ -153,17 +151,7 @@ public class MainController {
 	 * gespeichert werden soll.
 	 */
 	public void saveData() {
-		FileChooser fc = new FileChooser();
-		fc.getExtensionFilters()
-				.addAll(new FileChooser.ExtensionFilter("XML-Datei", "*.xml"),
-						new FileChooser.ExtensionFilter("Alle Dateien", "*.*"));
-		fc.setTitle("Speichern nach");
-		fc.setInitialDirectory(new File("."));
-		fc.setInitialFileName("game");
-		File file = fc.showSaveDialog(this.getModel().getStage());
-		if(file != null) {
-			this.getModel().saveToFile(file);
-		}
+		this.getModel().saveDataDialog();
 	}
 	
 	/**
@@ -171,15 +159,7 @@ public class MainController {
 	 * geladen werden soll.
 	 */
 	public void loadData() {
-		FileChooser fc = new FileChooser();
-		fc.getExtensionFilters()
-				.addAll(new FileChooser.ExtensionFilter("XML-Dateien", "*.xml"),
-						new FileChooser.ExtensionFilter("Alle Dateien", "*.*"));
-		fc.setTitle("Spieldaten auswählen");
-		fc.setInitialDirectory(new File("."));
-		File file = fc.showOpenDialog(this.getModel().getStage());
-		if(file != null) {
-			this.getModel().loadData(file);
+		if(this.getModel().loadDataDialog()) {
 			this.loadCategories(this.getModel().getCategories());
 		}
 	}
