@@ -3,7 +3,6 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -87,12 +86,9 @@ public class QuizModel {
 		} catch(ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-		
-		URL gameFile = QuizModel.class.getResource("game.xml");
-		if(gameFile == null)
-			throw new IllegalStateException("game.xml wurde nicht gefunden - Datei gelöscht?");
-		Util.loadData(	gameFile, this.availableCategories,
-						this.availableQuestions);
+		if(!this.loadDataDialog()) {
+			System.exit(1);
+		}
 	}
 	
 	/**
