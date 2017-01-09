@@ -1,5 +1,16 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
+import org.eclipse.jdt.annotation.NonNull;
+
+
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 
 /**
@@ -20,16 +31,60 @@ public class Category {
 	private String description;
 	
 	/**
+	 * Die Fragen dieser Kategorie.
+	 */
+	private List<Question<?>> questions;
+	
+	/**
+	 * Konstruktor, der eine variadische Anzahl an Fragen akzeptiert.
+	 * 
+	 * @param nName
+	 *        der Name
+	 * @param nDescription
+	 *        die Beschreibung
+	 * @param nQuestions
+	 *        varargs an Fragen
+	 * 
+	 * @see #Category(String, String, List)
+	 */
+	public Category(String nName, String nDescription,
+					@NonNull Question<?>... nQuestions) {
+		this(nName, nDescription, Arrays.asList(nQuestions));
+	}
+	
+	/**
+	 * Konstruktor, der einen Stream als Fragen akzeptiert.
+	 * 
+	 * @param nName
+	 *        der Name
+	 * @param nDescription
+	 *        die Beschreibung
+	 * @param nQuestions
+	 *        ein Stream an Fragen
+	 * 
+	 * @see #Category(String, String, List)
+	 */
+	public Category(String nName, String nDescription,
+					Stream<Question<?>> nQuestions) {
+		this(nName, nDescription, nQuestions.collect(Collectors.toList()));
+	}
+	
+	/**
 	 * Der Konstruktor einer Kategorie.
 	 * 
 	 * @param nName
 	 *        der Name der Kategorie
 	 * @param nDescription
 	 *        die Beschreibung dieser Kategorie
+	 * @param nQuestions
+	 *        die Fragen dieser Kategorie
 	 */
-	public Category(String nName, String nDescription) {
+	public Category(String nName, String nDescription,
+					List<Question<?>> nQuestions) {
 		this.name = nName;
 		this.description = nDescription;
+		this.questions = new LinkedList<>();
+		nQuestions.forEach(question -> question.changeCategory(Category.this));
 	}
 	
 	/**
@@ -72,4 +127,37 @@ public class Category {
 		this.description = newDesc;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * 		alle Fragen dieser Kategorie in einer unmodifizierbaren
+	 *         Ansicht
+	 */
+	public List<Question<?>> getQuestions() {
+		return Collections.unmodifiableList(this.questions);
+	}
+	
+	/**
+	 * Fügt die angegebene Frage zu dieser Kategorie hinzu. Nur beim
+	 * Erstellen direkt benutzen, bei Änderung der Kategorie
+	 * {@link Question#changeCategory(Category)} verwenden.
+	 * 
+	 * @param question
+	 *        die hinzuzufügende Frage
+	 */
+	public void addQuestion(Question<?> question) {
+		this.questions.add(question);
+	}
+	
+	/**
+	 * Entfernt die angegebene Frage von dieser Kategorie. Nur beim
+	 * Löschen direkt benutzen, bei Änderung der Kategorie
+	 * {@link Question#changeCategory(Category)} verwenden.
+	 * 
+	 * @param question
+	 *        die zu entfernende Frage
+	 */
+	public void removeQuestion(Question<?> question) {
+		this.questions.remove(question);
+	}
 }

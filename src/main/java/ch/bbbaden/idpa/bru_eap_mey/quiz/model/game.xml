@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+	<category>
+		<name>Englisch</name>
+		<description>A description</description>
+		<question type="binary">
+			<text>Is English a germanic language?</text>
+			<trueAnswer>Yes</trueAnswer>
+			<falseAnswer>No</falseAnswer>
+		</question>
+		<question type="freehand">
+			<text>What does DNA stand for?</text>
+			<answer>Deoxyribonucleic acid</answer>
+		</question>
+		<question type="multipleChoice">
+			<text>What is the right archaic English form?</text>
+			<correctAnswer>Thou shalt not pass!</correctAnswer>
+			<wrongAnswer1>Thou shall not pass!</wrongAnswer1>
+			<wrongAnswer2>Ye shall not pass!</wrongAnswer2>
+			<wrongAnswer3>Ye shalt not pass!</wrongAnswer3>
+		</question>
+	</category>
+</game>

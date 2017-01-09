@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="190.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.FreehandController">
+	<children>
+		<Label layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="64.0" text="Frage:">
+			<font>
+				<Font size="20.0" />
+			</font>
+		</Label>
+		<Label fx:id="questionText" layoutX="72.0" layoutY="14.0" prefHeight="30.0" prefWidth="398.0">
+			<font>
+				<Font size="20.0" />
+			</font>
+		</Label>
+		<HBox alignment="CENTER" layoutX="0.0" layoutY="45.0" maxHeight="100.0" maxWidth="470.0" minHeight="100.0" minWidth="470.0" prefHeight="100.0" prefWidth="470.0">
+			<children>
+      				<VBox alignment="CENTER" minWidth="-Infinity" prefWidth="120.0" HBox.hgrow="ALWAYS">
+      					<children>
+      						<Label fx:id="antwortLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="50.0" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+      							<font>
+      								<Font size="16.0" />
+      							</font>
+      							<VBox.margin>
+      								<Insets bottom="20.0" />
+      							</VBox.margin>
+      						</Label>
+      						<TextField fx:id="eingabe" alignment="CENTER" maxWidth="-Infinity" minWidth="80.0" onAction="#accept" prefHeight="25.0" prefWidth="80.0" VBox.vgrow="ALWAYS" />
+      					</children>
+      					<padding>
+      						<Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+      					</padding>
+      				</VBox>
+			</children>
+		</HBox>
+		<Button layoutX="78.0" layoutY="152.0" mnemonicParsing="false" onAction="#accept" text="Weiter" />
+		<Button layoutX="337.0" layoutY="152.0" mnemonicParsing="false" onAction="#cancel" text="Abbrechen" />
+	</children>
+</AnchorPane>

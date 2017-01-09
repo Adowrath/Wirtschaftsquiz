@@ -63,5 +63,5 @@ $RECYCLE.BIN/
 *.lnk
 /bin/
 /Wirtschaftsquiz/*
-
+/target/
 /IDPA/*
