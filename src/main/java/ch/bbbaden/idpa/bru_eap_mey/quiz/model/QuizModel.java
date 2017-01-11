@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -150,9 +151,14 @@ public class QuizModel {
 	public void startGame(List<Category> selectedCategories) {
 		if(selectedCategories.size() == 0)
 			return;
-		this.currentQuestions.addAll(selectedCategories.stream()
+		
+		List<? extends Question<?>> questions = selectedCategories.stream()
 				.flatMap(c -> c.getQuestions().stream())
-				.collect(Collectors.toList()));
+				.collect(Collectors.toList());
+		Collections.shuffle(questions);
+		
+		this.currentQuestions.addAll(questions);
+		
 		try {
 			this.getStage().setScene(MainframeControl
 					.loadQuestion(this, this.currentQuestions.getFirst()));
