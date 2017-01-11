@@ -227,7 +227,7 @@ public class QuizModel {
 	 */
 	public void openCategoryEditor() {
 		try {
-			this.getStage().setScene(MainframeControl.mainPage(this));
+			this.getStage().setScene(MainframeControl.categoryEditScene(this));
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -238,7 +238,7 @@ public class QuizModel {
 	 */
 	public void openQuestionEditor() {
 		try {
-			this.getStage().setScene(MainframeControl.mainPage(this));
+			this.getStage().setScene(MainframeControl.questionEditScene(this));
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}

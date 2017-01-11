@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 
 
+import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.CategoryEditController;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.MainController;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.QuestionController;
+import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.QuestionEditController;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.QuizModel;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 import javafx.application.Application;
@@ -62,9 +64,9 @@ public class MainframeControl extends Application {
 		} else {
 			Util.showErrorExitOnNoOrClose(	"Stylesheet nicht gefunden",
 											"Das Stylesheet der Applikation (app.css) "
-											+ "wurde nicht gefunden. Möglicherweise "
-											+ "wurde es verschoben oder gelöscht?\r\n"
-											+ "Wollen Sie den Fehler ignorieren?");
+													+ "wurde nicht gefunden. Möglicherweise "
+													+ "wurde es verschoben oder gelöscht?\r\n"
+													+ "Wollen Sie den Fehler ignorieren?");
 		}
 	}
 	
@@ -84,6 +86,56 @@ public class MainframeControl extends Application {
 		Region root = loader.<Region> load();
 		MainController mc = loader.getController();
 		mc.setModel(qm);
+		
+		Scene scene = new Scene(root, root.getPrefWidth(),
+								root.getPrefHeight());
+		
+		loadCSS(scene);
+		
+		return scene;
+	}
+	
+	/**
+	 * Gibt die Szene für den Kategorieneditierview zurück.
+	 * 
+	 * @param qm
+	 *        das QuizModel, was dem View zugeteilt werden soll
+	 * @return
+	 * 		die Szene
+	 * @throws IOException
+	 *         wenn es einen Fehler beim Lesen gibt.
+	 */
+	public static Scene categoryEditScene(QuizModel qm) throws IOException {
+		FXMLLoader loader = new FXMLLoader(MainframeControl.class
+				.getResource("categoryEdit.fxml"));
+		Region root = loader.<Region> load();
+		CategoryEditController cec = loader.getController();
+		cec.setModel(qm);
+		
+		Scene scene = new Scene(root, root.getPrefWidth(),
+								root.getPrefHeight());
+		
+		loadCSS(scene);
+		
+		return scene;
+	}
+	
+	/**
+	 * Gibt die Szene für den Frageneditierview zurück.
+	 * 
+	 * @param qm
+	 *        das QuizModel, was dem View zugeteilt werden soll
+	 * @return
+	 * 		die Szene
+	 * @throws IOException
+	 *         wenn es einen Fehler beim Lesen gibt.
+	 */
+	public static Scene questionEditScene(QuizModel qm) throws IOException {
+		FXMLLoader loader = new FXMLLoader(MainframeControl.class
+				.getResource("questionEdit.fxml"));
+		Region root = loader.<Region> load();
+		QuestionEditController qec = loader.getController();
+		qec.setModel(qm);
 		
 		Scene scene = new Scene(root, root.getPrefWidth(),
 								root.getPrefHeight());
@@ -138,5 +190,4 @@ public class MainframeControl extends Application {
 		
 		launch(args);
 	}
-	
 }
