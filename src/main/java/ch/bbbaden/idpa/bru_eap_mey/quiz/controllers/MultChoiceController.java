@@ -14,9 +14,9 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.MultChoiceQuestion;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 /**
  * Der Controller für die Multiple Choice-Fragen.
@@ -30,7 +30,7 @@ public class MultChoiceController extends QuestionController<MultChoiceQuestion>
 	 * Der Text der Frage.
 	 */
 	@FXML
-	private Label questionText;
+	private Text questionText;
 	
 	/**
 	 * Der erste Radiobutton.

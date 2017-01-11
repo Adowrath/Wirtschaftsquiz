@@ -33,7 +33,7 @@ public class FreehandController extends QuestionController<FreehandQuestion> {
 	 * Der Text der Frage.
 	 */
 	@FXML
-	public Label questionText;
+	public Text questionText;
 	
 	/**
 	 * Das Antwort-Label.
