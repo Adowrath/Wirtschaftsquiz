@@ -121,7 +121,7 @@ public class FreehandQuestion extends Question<String> {
 									+ "effektiv gelöscht. Fortfahren?");
 			return null;
 		}
-		return new FreehandQuestion(textElement.getText(), null,
-									answerElement.getText());
+		return new FreehandQuestion(textElement.getText().replaceAll("[^ \\S]+", " "), null,
+									answerElement.getText().replaceAll("[^ \\S]+", " "));
 	}
 }
