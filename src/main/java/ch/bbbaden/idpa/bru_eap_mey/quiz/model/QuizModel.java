@@ -132,6 +132,7 @@ public class QuizModel {
 				.addAll(new FileChooser.ExtensionFilter("XML-Datei", "*.xml"),
 						new FileChooser.ExtensionFilter("Alle Dateien", "*.*"));
 		fc.setTitle("Speichern nach");
+		fc.setInitialFileName("game.xml");
 		fc.setInitialDirectory(new File("."));
 		fc.setInitialFileName("game");
 		File file = fc.showSaveDialog(this.getStage());
