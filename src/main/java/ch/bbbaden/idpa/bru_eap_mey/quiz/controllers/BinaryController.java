@@ -16,9 +16,9 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.BinaryQuestion;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 /**
  * Der Controller für die Wahr/Falsch-Fragen.
@@ -32,7 +32,7 @@ public class BinaryController extends QuestionController<BinaryQuestion> {
 	 * Der Text der Frage.
 	 */
 	@FXML
-	private Label questionText;
+	private Text questionText;
 	
 	/**
 	 * Der erste Radiobutton.

@@ -182,10 +182,10 @@ public class MultChoiceQuestion extends Question<Integer> {
 									+ "effektiv gelöscht. Fortfahren?");
 			return null;
 		}
-		return new MultChoiceQuestion(	textElement.getText(), null,
-										correctAnswerElement.getText(),
-										wrongAnswer1Element.getText(),
-										wrongAnswer2Element.getText(),
-										wrongAnswer3Element.getText());
+		return new MultChoiceQuestion(	textElement.getText().replaceAll("[^ \\S]+", " "), null,
+										correctAnswerElement.getText().replaceAll("[^ \\S]+", " "),
+										wrongAnswer1Element.getText().replaceAll("[^ \\S]+", " "),
+										wrongAnswer2Element.getText().replaceAll("[^ \\S]+", " "),
+										wrongAnswer3Element.getText().replaceAll("[^ \\S]+", " "));
 	}
 }

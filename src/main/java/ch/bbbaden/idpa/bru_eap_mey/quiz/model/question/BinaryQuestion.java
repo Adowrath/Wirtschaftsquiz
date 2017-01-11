@@ -143,8 +143,8 @@ public class BinaryQuestion extends Question<Boolean> {
 									+ "Fortfahren?");
 			return null;
 		}
-		return new BinaryQuestion(	textElement.getText(), null,
-									trueAnswerElement.getText(),
-									falseAnswerElement.getText());
+		return new BinaryQuestion(	textElement.getText().replaceAll("[^ \\S]+", " "), null,
+									trueAnswerElement.getText().replaceAll("[^ \\S]+", " "),
+									falseAnswerElement.getText().replaceAll("[^ \\S]+", " "));
 	}
 }

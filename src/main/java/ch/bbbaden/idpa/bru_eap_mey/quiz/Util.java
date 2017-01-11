@@ -253,8 +253,9 @@ public class Util {
 					
 					questions.add(loadedQuestion);
 				});
-				Category c = new Category(	nameElement.getText(),
-											descElement.getText(), questions);
+				Category c = new Category(nameElement.getText()
+						.replaceAll("[^ \\S]+", " "), descElement.getText()
+								.replaceAll("[^ \\S]+", " "), questions);
 				return c;
 			}).filter(c -> c != null).collect(Collectors.toList()));
 			

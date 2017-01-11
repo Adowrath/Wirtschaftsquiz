@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -132,6 +133,7 @@ public class QuizModel {
 				.addAll(new FileChooser.ExtensionFilter("XML-Datei", "*.xml"),
 						new FileChooser.ExtensionFilter("Alle Dateien", "*.*"));
 		fc.setTitle("Speichern nach");
+		fc.setInitialFileName("game.xml");
 		fc.setInitialDirectory(new File("."));
 		fc.setInitialFileName("game");
 		File file = fc.showSaveDialog(this.getStage());
@@ -149,9 +151,14 @@ public class QuizModel {
 	public void startGame(List<Category> selectedCategories) {
 		if(selectedCategories.size() == 0)
 			return;
-		this.currentQuestions.addAll(selectedCategories.stream()
+		
+		List<? extends Question<?>> questions = selectedCategories.stream()
 				.flatMap(c -> c.getQuestions().stream())
-				.collect(Collectors.toList()));
+				.collect(Collectors.toList());
+		Collections.shuffle(questions);
+		
+		this.currentQuestions.addAll(questions);
+		
 		try {
 			this.getStage().setScene(MainframeControl
 					.loadQuestion(this, this.currentQuestions.getFirst()));
@@ -226,7 +233,7 @@ public class QuizModel {
 	 */
 	public void openCategoryEditor() {
 		try {
-			this.getStage().setScene(MainframeControl.mainPage(this));
+			this.getStage().setScene(MainframeControl.categoryEditScene(this));
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -237,7 +244,7 @@ public class QuizModel {
 	 */
 	public void openQuestionEditor() {
 		try {
-			this.getStage().setScene(MainframeControl.mainPage(this));
+			this.getStage().setScene(MainframeControl.questionEditScene(this));
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}

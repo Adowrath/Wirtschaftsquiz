@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="190.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.MainController">
+<VBox minWidth="480.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.MainController">
 	<children>
 		<MenuBar>
 			<menus>
@@ -27,12 +27,12 @@
 				</Menu>
 			</menus>
 		</MenuBar>
-		<ScrollPane styleClass="edge-to-edge" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="140.0" prefWidth="470.0" VBox.vgrow="ALWAYS">
+		<ScrollPane prefHeight="140.0" fitToHeight="true" hbarPolicy="NEVER" VBox.vgrow="NEVER">
 			<content>
-				<FlowPane fx:id="theFlow" alignment="TOP_CENTER" prefHeight="140.0" prefWidth="470.0" rowValignment="TOP" columnHalignment="CENTER" />
+				<FlowPane fx:id="theFlow" alignment="TOP_CENTER" prefWidth="480.0" prefHeight="140.0" rowValignment="TOP" columnHalignment="CENTER" />
 			</content>
 		</ScrollPane>
-		<HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+		<HBox alignment="CENTER" spacing="80.0" VBox.vgrow="NEVER">
 			<children>
 				<Button mnemonicParsing="false" text="Spiel starten" onAction="#startGame" />
 			</children>
