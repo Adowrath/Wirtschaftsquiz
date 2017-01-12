@@ -209,25 +209,25 @@ public abstract class Question<AnswerType> {
 	public static final @Nullable Question<?> loadFromElement(Element el) {
 		String type = el.getAttributeValue("type");
 		if(type == null) {
-			Util.showErrorExitOnNoOrClose("Falsch formatierte Frage",
-								"Eine Frage hat keinen Fragentyp. "
-										+ "Wenn die Daten gespeichert werden, "
-										+ "wird diese Frage nicht gespeichert "
-										+ "und damit effektiv gelöscht. "
-										+ "Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
+											"Eine Frage hat keinen Fragentyp. "
+													+ "Wenn die Daten gespeichert werden, "
+													+ "wird diese Frage nicht gespeichert "
+													+ "und damit effektiv gelöscht. "
+													+ "Fortfahren?");
 		}
 		
 		Function<Element, @Nullable Question<?>> func = registeredTypes
 				.get(type);
 		if(func == null) {
-			Util.showErrorExitOnNoOrClose("Falsch formatierte Frage",
-								"Eine Frage hat einen unbekannten "
-										+ "Fragetyp: \"%s\". Wenn die Daten "
-										+ "gespeichert werden, wird diese "
-										+ "Frage nicht gespeichert "
-										+ "und damit effektiv gelöscht. "
-										+ "Fortfahren?",
-								type);
+			Util.showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
+											"Eine Frage hat einen unbekannten "
+													+ "Fragetyp: \"%s\". Wenn die Daten "
+													+ "gespeichert werden, wird diese "
+													+ "Frage nicht gespeichert "
+													+ "und damit effektiv gelöscht. "
+													+ "Fortfahren?",
+											type);
 			return null;
 		}
 		return func.apply(el);

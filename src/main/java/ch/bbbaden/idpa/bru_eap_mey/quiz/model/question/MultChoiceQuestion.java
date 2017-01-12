@@ -143,49 +143,55 @@ public class MultChoiceQuestion extends Question<Integer> {
 		
 		if(textElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Frage hat keinen Fragentext. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
+										"Eine Frage hat keinen Fragentext. "
+												+ "Wenn die Daten gespeichert werden, "
+												+ "wird diese Frage nicht gespeichert "
+												+ "und damit effektiv gelöscht. "
+												+ "Fortfahren?");
 			return null;
 		}
 		if(correctAnswerElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Multiple Choice-Frage hat keine korrekte Antwort. "
-									+ "Wenn die Daten gespeichert werden, wird "
-									+ "diese Frage nicht gespeichert und damit "
-									+ "effektiv gelöscht. Fortfahren?");
+										"Eine Multiple Choice-Frage hat keine korrekte Antwort. "
+												+ "Wenn die Daten gespeichert werden, wird "
+												+ "diese Frage nicht gespeichert und damit "
+												+ "effektiv gelöscht. Fortfahren?");
 			return null;
 		}
 		if(wrongAnswer1Element == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Multiple Choice-Frage hat keine erste falsche Antwort. "
-									+ "Wenn die Daten gespeichert werden, wird "
-									+ "diese Frage nicht gespeichert und damit "
-									+ "effektiv gelöscht. Fortfahren?");
+										"Eine Multiple Choice-Frage hat keine erste falsche Antwort. "
+												+ "Wenn die Daten gespeichert werden, wird "
+												+ "diese Frage nicht gespeichert und damit "
+												+ "effektiv gelöscht. Fortfahren?");
 			return null;
 		}
 		if(wrongAnswer2Element == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Multiple Choice-Frage hat keine zweite falsche Antwort. "
-									+ "Wenn die Daten gespeichert werden, wird "
-									+ "diese Frage nicht gespeichert und damit "
-									+ "effektiv gelöscht. Fortfahren?");
+										"Eine Multiple Choice-Frage hat keine zweite falsche Antwort. "
+												+ "Wenn die Daten gespeichert werden, wird "
+												+ "diese Frage nicht gespeichert und damit "
+												+ "effektiv gelöscht. Fortfahren?");
 			return null;
 		}
 		if(wrongAnswer3Element == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Multiple Choice-Frage hat keine dritte falsche Antwort. "
-									+ "Wenn die Daten gespeichert werden, wird "
-									+ "diese Frage nicht gespeichert und damit "
-									+ "effektiv gelöscht. Fortfahren?");
+										"Eine Multiple Choice-Frage hat keine dritte falsche Antwort. "
+												+ "Wenn die Daten gespeichert werden, wird "
+												+ "diese Frage nicht gespeichert und damit "
+												+ "effektiv gelöscht. Fortfahren?");
 			return null;
 		}
-		return new MultChoiceQuestion(	textElement.getText().replaceAll("[^ \\S]+", " "), null,
-										correctAnswerElement.getText().replaceAll("[^ \\S]+", " "),
-										wrongAnswer1Element.getText().replaceAll("[^ \\S]+", " "),
-										wrongAnswer2Element.getText().replaceAll("[^ \\S]+", " "),
-										wrongAnswer3Element.getText().replaceAll("[^ \\S]+", " "));
+		return new MultChoiceQuestion(	textElement.getText()
+				.replaceAll("[^ \\S]+", " "),
+										null,
+										correctAnswerElement.getText()
+												.replaceAll("[^ \\S]+", " "),
+										wrongAnswer1Element.getText()
+												.replaceAll("[^ \\S]+", " "),
+										wrongAnswer2Element.getText()
+												.replaceAll("[^ \\S]+", " "),
+										wrongAnswer3Element.getText()
+												.replaceAll("[^ \\S]+", " "));
 	}
 }

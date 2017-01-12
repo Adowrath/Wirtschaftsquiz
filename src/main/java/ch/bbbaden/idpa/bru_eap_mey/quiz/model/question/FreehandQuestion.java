@@ -85,8 +85,7 @@ public class FreehandQuestion extends Question<String> {
 	public Element save() {
 		return new Element("question").setAttribute("type", "freehand")
 				.addContent(new Element("text").setText(this.getQuestion()))
-				.addContent(new Element("answer")
-							.setText(this.answer));
+				.addContent(new Element("answer").setText(this.answer));
 	}
 	
 	/**
@@ -106,22 +105,24 @@ public class FreehandQuestion extends Question<String> {
 		
 		if(textElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Frage hat keinen Fragentext. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
+										"Eine Frage hat keinen Fragentext. "
+												+ "Wenn die Daten gespeichert werden, "
+												+ "wird diese Frage nicht gespeichert "
+												+ "und damit effektiv gelöscht. "
+												+ "Fortfahren?");
 			return null;
 		}
 		if(answerElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Freihandfrage hat keine Antwort. "
-									+ "Wenn die Daten gespeichert werden, wird "
-									+ "diese Frage nicht gespeichert und damit "
-									+ "effektiv gelöscht. Fortfahren?");
+										"Eine Freihandfrage hat keine Antwort. "
+												+ "Wenn die Daten gespeichert werden, wird "
+												+ "diese Frage nicht gespeichert und damit "
+												+ "effektiv gelöscht. Fortfahren?");
 			return null;
 		}
-		return new FreehandQuestion(textElement.getText().replaceAll("[^ \\S]+", " "), null,
-									answerElement.getText().replaceAll("[^ \\S]+", " "));
+		return new FreehandQuestion(textElement.getText().replaceAll(	"[^ \\S]+",
+																		" "),
+									null, answerElement.getText()
+											.replaceAll("[^ \\S]+", " "));
 	}
 }

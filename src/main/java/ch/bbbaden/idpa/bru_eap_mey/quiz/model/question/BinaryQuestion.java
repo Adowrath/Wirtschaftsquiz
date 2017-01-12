@@ -118,33 +118,37 @@ public class BinaryQuestion extends Question<Boolean> {
 		
 		if(textElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Frage hat keinen Fragentext. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
+										"Eine Frage hat keinen Fragentext. "
+												+ "Wenn die Daten gespeichert werden, "
+												+ "wird diese Frage nicht gespeichert "
+												+ "und damit effektiv gelöscht. "
+												+ "Fortfahren?");
 			return null;
 		}
 		if(trueAnswerElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine binäre Frage hat keine richtige Antwort. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
+										"Eine binäre Frage hat keine richtige Antwort. "
+												+ "Wenn die Daten gespeichert werden, "
+												+ "wird diese Frage nicht gespeichert "
+												+ "und damit effektiv gelöscht. "
+												+ "Fortfahren?");
 			return null;
 		}
 		if(falseAnswerElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine binäre Frage hat keine falsche Antwort. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
+										"Eine binäre Frage hat keine falsche Antwort. "
+												+ "Wenn die Daten gespeichert werden, "
+												+ "wird diese Frage nicht gespeichert "
+												+ "und damit effektiv gelöscht. "
+												+ "Fortfahren?");
 			return null;
 		}
-		return new BinaryQuestion(	textElement.getText().replaceAll("[^ \\S]+", " "), null,
-									trueAnswerElement.getText().replaceAll("[^ \\S]+", " "),
-									falseAnswerElement.getText().replaceAll("[^ \\S]+", " "));
+		return new BinaryQuestion(	textElement.getText().replaceAll("[^ \\S]+",
+																	" "),
+									null,
+									trueAnswerElement.getText()
+											.replaceAll("[^ \\S]+", " "),
+									falseAnswerElement.getText()
+											.replaceAll("[^ \\S]+", " "));
 	}
 }
