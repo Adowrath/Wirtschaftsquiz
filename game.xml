@@ -20,4 +20,20 @@
 			<wrongAnswer3>Ye shalt not pass!</wrongAnswer3>
 		</question>
 	</category>
+	<category>
+		<name>Deutsch</name>
+		<description>Eine Beschreibung</description>
+	</category>
+	<category>
+		<name>FRW</name>
+		<description>Finanzrechenwirtschaft</description>
+		<question type="binary">
+			<text>Wie lautet die transitorische Buchung am Jahresende, wenn die
+				Monatsmiete von 200 Anfang Dezember bereits für 3 Monate im Voraus bezahlt
+				wurde?
+			</text>
+			<trueAnswer>Trans. Aktiven / Mietaufwand 400</trueAnswer>
+			<falseAnswer>Mietaufwand / Transitorische Passiven 200</falseAnswer>
+		</question>
+	</category>
 </game>
