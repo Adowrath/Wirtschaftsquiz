@@ -73,4 +73,10 @@ public abstract class MainMenuController {
 		this.getModel().openQuestionEditor();
 	}
 	
+	/**
+	 * Ruft die Startseite wieder auf.
+	 */
+	public void mainPage() {
+		this.getModel().openMainPage();
+	}
 }
