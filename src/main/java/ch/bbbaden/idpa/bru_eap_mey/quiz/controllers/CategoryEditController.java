@@ -14,10 +14,8 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 
 /**
  * Der Controller für die Übersicht der Kategorien.
@@ -119,26 +117,5 @@ public class CategoryEditController extends MainMenuController {
 		Category c = this.catList.getSelectionModel().getSelectedItem();
 		this.getModel().getCategories().remove(c);
 		this.clearFields();
-	}
-	
-	/**
-	 * Die ListCell wird für die Anzeige de
-	 */
-	private static class CategoryListCell extends ListCell<Category> {
-		
-		/**
-		 * Wird benötigt, dass kein synthetischer Konstruktor erzeugt
-		 * werden muss.
-		 */
-		public CategoryListCell() {}
-		
-		@Override
-		public void updateItem(@Nullable Category item, boolean empty) {
-			super.updateItem(item, empty);
-			
-			this.setText(empty || item == null ? null : item.getNameAndCount());
-			this.setTooltip(empty || item == null ? null
-					: new Tooltip(item.getDescription()));
-		}
 	}
 }
