@@ -2,7 +2,9 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -17,7 +19,8 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  * Die Standardklasse für alle Fragen.
  * <br>
  * Jede Sub-Klasse muss sich statisch bei
- * {@link #register(String, Function)} registrieren, ansonsten
+ * {@link #register(String, Function, Supplier)} registrieren,
+ * ansonsten
  * funktioniert der Ladevorgang nicht!
  * 
  * @param <AnswerType>
@@ -136,7 +139,8 @@ public abstract class Question<AnswerType> {
 	 * @return
 	 * 		die Kategorie
 	 */
-	public final @Nullable Category getCategory() {
+	public final Category getCategory() {
+		assert this.category != null;
 		return this.category;
 	}
 	
@@ -173,26 +177,62 @@ public abstract class Question<AnswerType> {
 	public abstract Element save();
 	
 	/**
-	 * Alle registrierten Fragetypen.
+	 * Alle registrierten Ladefunktionen.
 	 */
-	private static final Map<String, Function<Element, @Nullable Question<?>>> registeredTypes = new HashMap<>();
+	private static final Map<String, Function<Element, @Nullable Question<?>>> registeredLoaders = new HashMap<>();
 	
 	/**
-	 * 
+	 * Alle registrierten Dummysupplier.
+	 */
+	private static final Map<String, Supplier<? extends Question<?>>> dummy = new HashMap<>();
+	
+	/**
+	 * Registriert den Fragetyp.
 	 * 
 	 * @param type
 	 *        der Typ der Frage, wird für das XML verwendet. Sollte
 	 *        mit dem Typ, der bei {@link #save()} als Attribut
 	 *        festgelegt wird, übereinstimmen.
 	 * @param func
-	 *        die Funktion, welche die Frage zurückgibt
+	 *        die Funktion, welche die Frage aus einem Element lädt
+	 * @param dummyGetter
+	 *        die Funktion, welche ein Dummy-Object erzeugt
 	 */
 	public static void register(String type,
-								Function<Element, @Nullable Question<?>> func) {
-		if(registeredTypes.containsKey(type))
+								Function<Element, @Nullable Question<?>> func,
+								Supplier<? extends Question<?>> dummyGetter) {
+		if(registeredLoaders.containsKey(type))
 			throw new IllegalArgumentException(type
 					+ " wurde bereits einmal registriert.");
-		registeredTypes.put(type, func);
+		registeredLoaders.put(type, func);
+		dummy.put(type, dummyGetter);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * 		ein Set aller registrierten Fragetypen
+	 */
+	public static Set<String> getTypes() {
+		return registeredLoaders.keySet();
+	}
+	
+	/**
+	 * Gibt ein Dummy-Objekt der Frage zurück.
+	 * 
+	 * @param type
+	 *        der Typ, mit dem die Frage registriert wurde.
+	 * @return
+	 * 		eine Dummyfrage
+	 * @throws IllegalArgumentException
+	 *         wenn der Typ nicht bekannt ist.
+	 */
+	public static Question<?> getDummy(String type) {
+		Supplier<? extends Question<?>> sup = dummy.get(type);
+		if(sup == null)
+			throw new IllegalArgumentException("\"" + type + "\""
+					+ " ist nicht als Frage registriert.");
+		return sup.get();
 	}
 	
 	/**
@@ -217,7 +257,7 @@ public abstract class Question<AnswerType> {
 													+ "Fortfahren?");
 		}
 		
-		Function<Element, @Nullable Question<?>> func = registeredTypes
+		Function<Element, @Nullable Question<?>> func = registeredLoaders
 				.get(type);
 		if(func == null) {
 			Util.showErrorExitOnNoOrClose(	"Falsch formatierte Frage",

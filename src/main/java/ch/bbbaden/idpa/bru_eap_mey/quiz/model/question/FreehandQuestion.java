@@ -10,6 +10,7 @@ import org.jdom2.Element;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
+import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.QuestionEditController;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 /**
@@ -22,7 +23,8 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 public class FreehandQuestion extends Question<String> {
 	
 	static {
-		Question.register("freehand", FreehandQuestion::load);
+		Question.register(	"freehand", FreehandQuestion::load,
+							FreehandQuestion::getDummy);
 	}
 	
 	/**
@@ -124,5 +126,16 @@ public class FreehandQuestion extends Question<String> {
 																		" "),
 									null, answerElement.getText()
 											.replaceAll("[^ \\S]+", " "));
+	}
+	
+	/**
+	 * Erstellt ein Dummy-Objekt. Wird für den
+	 * {@link QuestionEditController Frageneditor} verwendet.
+	 * 
+	 * @return
+	 * 		ein leeres, unregistriertes Fragenobjekt.
+	 */
+	public static FreehandQuestion getDummy() {
+		return new FreehandQuestion("", null, "");
 	}
 }

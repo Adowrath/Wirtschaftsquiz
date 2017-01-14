@@ -9,6 +9,7 @@ import org.jdom2.Element;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
+import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.QuestionEditController;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 /**
@@ -22,7 +23,8 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 public class BinaryQuestion extends Question<Boolean> {
 	
 	static {
-		Question.register("binary", BinaryQuestion::load);
+		Question.register(	"binary", BinaryQuestion::load,
+							BinaryQuestion::getDummy);
 	}
 	
 	/**
@@ -150,5 +152,16 @@ public class BinaryQuestion extends Question<Boolean> {
 											.replaceAll("[^ \\S]+", " "),
 									falseAnswerElement.getText()
 											.replaceAll("[^ \\S]+", " "));
+	}
+	
+	/**
+	 * Erstellt ein Dummy-Objekt. Wird für den
+	 * {@link QuestionEditController Frageneditor} verwendet.
+	 * 
+	 * @return
+	 * 		ein leeres, unregistriertes Fragenobjekt.
+	 */
+	public static BinaryQuestion getDummy() {
+		return new BinaryQuestion("", null, "", "");
 	}
 }

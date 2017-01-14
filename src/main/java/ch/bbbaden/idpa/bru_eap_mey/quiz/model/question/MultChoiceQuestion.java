@@ -9,6 +9,7 @@ import org.jdom2.Element;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
+import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.QuestionEditController;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 /**
@@ -21,7 +22,8 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 public class MultChoiceQuestion extends Question<Integer> {
 	
 	static {
-		Question.register("multipleChoice", MultChoiceQuestion::load);
+		Question.register(	"multipleChoice", MultChoiceQuestion::load,
+							MultChoiceQuestion::getDummy);
 	}
 	
 	/**
@@ -193,5 +195,16 @@ public class MultChoiceQuestion extends Question<Integer> {
 												.replaceAll("[^ \\S]+", " "),
 										wrongAnswer3Element.getText()
 												.replaceAll("[^ \\S]+", " "));
+	}
+	
+	/**
+	 * Erstellt ein Dummy-Objekt. Wird für den
+	 * {@link QuestionEditController Frageneditor} verwendet.
+	 * 
+	 * @return
+	 * 		ein leeres, unregistriertes Fragenobjekt.
+	 */
+	public static MultChoiceQuestion getDummy() {
+		return new MultChoiceQuestion("", null, "", "", "", "");
 	}
 }
