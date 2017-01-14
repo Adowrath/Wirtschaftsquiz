@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 
 /**
  * Der Controller für die Übersicht der Kategorien.
@@ -136,6 +137,8 @@ public class CategoryEditController extends MainMenuController {
 			super.updateItem(item, empty);
 			
 			this.setText(empty || item == null ? null : item.getNameAndCount());
+			this.setTooltip(empty || item == null ? null
+					: new Tooltip(item.getDescription()));
 		}
 	}
 }
