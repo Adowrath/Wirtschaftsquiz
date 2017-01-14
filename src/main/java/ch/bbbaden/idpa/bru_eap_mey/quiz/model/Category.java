@@ -160,4 +160,16 @@ public class Category {
 	public void removeQuestion(Question<?> question) {
 		this.questions.remove(question);
 	}
+	
+	/**
+	 * Gibt eine Anzeigefreundliche Repräsentation der Kategorie
+	 * zurück.
+	 * 
+	 * @return
+	 * 		ein String im Format "$Name ($AnzahlFragen)"
+	 */
+	public String getNameAndCount() {
+		return String.format(	"%s (%d)", this.getName(),
+								Integer.valueOf(this.getQuestions().size()));
+	}
 }

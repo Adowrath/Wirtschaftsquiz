@@ -66,9 +66,7 @@ public class MainController extends MainMenuController {
 		
 		children.clear();
 		for(Category cat : categories) { // Füge alle Buttons hinzu
-			ToggleButton tb = new ToggleButton(String
-					.format("%s (%d)", cat.getName(),
-							Integer.valueOf(cat.getQuestions().size())));
+			ToggleButton tb = new ToggleButton(cat.getNameAndCount());
 			if(cat.getQuestions().size() == 0) {
 				tb.setDisable(true);
 			}
