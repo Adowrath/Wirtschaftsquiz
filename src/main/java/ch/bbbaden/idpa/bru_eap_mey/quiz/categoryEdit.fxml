@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox minWidth="480.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.CategoryEditController">
+	<children>
+		<MenuBar>
+			<menus>
+				<Menu text="_Datei">
+					<items>
+						<MenuItem onAction="#saveData" text="_Speichern" />
+						<MenuItem onAction="#loadData" text="_Laden" />
+					</items>
+				</Menu>
+				<Menu text="_Navigieren">
+					<items>
+						<MenuItem onAction="#mainPage" text="_Startseite" />
+						<MenuItem onAction="#editQuestions" text="_Frageneditor" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+      <HBox VBox.vgrow="NEVER">
+         <children>
+            <ListView fx:id="catList" prefHeight="140.0" prefWidth="200.0" />
+            <GridPane hgap="10.0" vgap="10.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Name" />
+                  <Label text="Beschreibung" GridPane.rowIndex="1" />
+                  <TextField fx:id="nameField" GridPane.columnIndex="1" />
+                  <TextArea fx:id="descField" prefHeight="200.0" prefWidth="180.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#clearFields" text="Abbrechen" />
+                        <Button mnemonicParsing="false" onAction="#saveCategory" text="Speichern" />
+                        <Button mnemonicParsing="false" onAction="#deleteCategory" text="Löschen" />
+                     </children>
+                  </HBox>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </GridPane>
+         </children>
+      </HBox>
+	</children>
+</VBox>
