@@ -132,7 +132,7 @@ public class Util {
 				break;
 			}
 		} while(t != null);
-		return s;
+		return s == null ? null : ("<html>" + s).replaceAll("\n", "<br>");
 	}
 	
 	/**
