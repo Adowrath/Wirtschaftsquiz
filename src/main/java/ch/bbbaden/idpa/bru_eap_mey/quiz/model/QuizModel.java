@@ -18,6 +18,8 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.MainframeControl;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 import javafx.animation.PauseTransition;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -30,7 +32,8 @@ public class QuizModel {
 	/**
 	 * Eine Liste der Kategorien.
 	 */
-	private List<Category> availableCategories = new ArrayList<>();
+	private ObservableList<Category> availableCategories = FXCollections
+			.observableArrayList();
 	
 	/**
 	 * Eine Liste der Fragen.
@@ -70,7 +73,7 @@ public class QuizModel {
 	 * @return
 	 * 		die Liste aller Kategorien.
 	 */
-	public List<Category> getCategories() {
+	public ObservableList<Category> getCategories() {
 		return this.availableCategories;
 	}
 	
