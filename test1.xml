@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+	<category>
+		<name>Multiple-Choice</name>
+		<description>Multiple-Choice</description>
+		<question type="multipleChoice">
+			<text>Multiple Choice</text>
+			<correctAnswer>Korrekt</correctAnswer>
+			<wrongAnswer1>Falsch 1</wrongAnswer1>
+			<wrongAnswer2>Falsch 2</wrongAnswer2>
+			<wrongAnswer3>Falsch 3</wrongAnswer3>
+		</question>
+	</category>
+	<category>
+		<name>Richtig-Falsch</name>
+		<description>Richtig-Falsch</description>
+		<question type="binary">
+			<text>Binär</text>
+			<trueAnswer>Wahr</trueAnswer>
+			<falseAnswer>Falsch</falseAnswer>
+		</question>
+	</category>
+	<category>
+		<name>Freihand</name>
+		<description>Freihand</description>
+		<question type="freehand">
+			<text>Freihand</text>
+			<answer>Antwort</answer>
+		</question>
+	</category>
+</game>
