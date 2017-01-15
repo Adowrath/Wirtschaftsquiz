@@ -98,9 +98,7 @@ public class QuizModel {
 		} catch(ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-		if(!this.loadDataDialog()) {
-			System.exit(1);
-		}
+		this.loadDataDialog();
 	}
 	
 	/**
