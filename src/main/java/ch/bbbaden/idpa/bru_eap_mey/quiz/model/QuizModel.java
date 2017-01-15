@@ -3,7 +3,6 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -38,7 +37,8 @@ public class QuizModel {
 	/**
 	 * Eine Liste der Fragen.
 	 */
-	private List<Question<?>> availableQuestions = new ArrayList<>();
+	private ObservableList<Question<?>> availableQuestions = FXCollections
+			.observableArrayList();
 	
 	/**
 	 * Alle momentanen Fragen.
@@ -75,6 +75,14 @@ public class QuizModel {
 	 */
 	public ObservableList<Category> getCategories() {
 		return this.availableCategories;
+	}
+	
+	/**
+	 * @return
+	 * 		die Liste aller Fragen.
+	 */
+	public ObservableList<Question<?>> getQuestions() {
+		return this.availableQuestions;
 	}
 	
 	/**
@@ -158,8 +166,10 @@ public class QuizModel {
 		List<? extends Question<?>> questions = selectedCategories.stream()
 				.flatMap(c -> c.getQuestions().stream())
 				.collect(Collectors.toList());
+		
 		Collections.shuffle(questions);
 		
+		this.currentQuestions.clear();
 		this.currentQuestions.addAll(questions);
 		
 		try {
