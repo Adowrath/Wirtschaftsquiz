@@ -13,6 +13,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
@@ -49,6 +51,12 @@ public class Util {
 			+ System.getProperty("line.separator") + "</game>";
 	
 	/**
+	 * Ein Logger. Wird anstelle von {@code System.err} bzw.
+	 * {@code System.out} verwendet.
+	 */
+	private static final Logger logger = Logger.getLogger("Util");
+	
+	/**
 	 * Gibt nicht abgefangene Fehlermeldungen auf den Error-Stream aus
 	 * und öffnet ein JOptionPane mit der Fehlermeldung.
 	 * <br>
@@ -71,7 +79,7 @@ public class Util {
 		e.printStackTrace(new PrintWriter(errors));
 		String stackTrace = errors.toString();
 		
-		System.err.print(stackTrace);
+		logger.log(Level.SEVERE, stackTrace);
 		
 		JTextArea errorArea = new JTextArea(stackTrace);
 		JScrollPane errorPane = new JScrollPane(errorArea) {
@@ -124,7 +132,7 @@ public class Util {
 				break;
 			}
 		} while(t != null);
-		return s;
+		return s == null ? null : ("<html>" + s).replaceAll("\n", "<br>");
 	}
 	
 	/**

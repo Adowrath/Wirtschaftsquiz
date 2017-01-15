@@ -9,6 +9,7 @@ import org.jdom2.Element;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
+import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.QuestionEditController;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 /**
@@ -22,7 +23,8 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 public class BinaryQuestion extends Question<Boolean> {
 	
 	static {
-		Question.register("binary", BinaryQuestion::load);
+		Question.register(	"binary", BinaryQuestion::load,
+							BinaryQuestion::getDummy);
 	}
 	
 	/**
@@ -118,33 +120,48 @@ public class BinaryQuestion extends Question<Boolean> {
 		
 		if(textElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Frage hat keinen Fragentext. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
+										"Eine Frage hat keinen Fragentext. "
+												+ "Wenn die Daten gespeichert werden, "
+												+ "wird diese Frage nicht gespeichert "
+												+ "und damit effektiv gelöscht. "
+												+ "Fortfahren?");
 			return null;
 		}
 		if(trueAnswerElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine binäre Frage hat keine richtige Antwort. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
+										"Eine binäre Frage hat keine richtige Antwort. "
+												+ "Wenn die Daten gespeichert werden, "
+												+ "wird diese Frage nicht gespeichert "
+												+ "und damit effektiv gelöscht. "
+												+ "Fortfahren?");
 			return null;
 		}
 		if(falseAnswerElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine binäre Frage hat keine falsche Antwort. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
+										"Eine binäre Frage hat keine falsche Antwort. "
+												+ "Wenn die Daten gespeichert werden, "
+												+ "wird diese Frage nicht gespeichert "
+												+ "und damit effektiv gelöscht. "
+												+ "Fortfahren?");
 			return null;
 		}
-		return new BinaryQuestion(	textElement.getText().replaceAll("[^ \\S]+", " "), null,
-									trueAnswerElement.getText().replaceAll("[^ \\S]+", " "),
-									falseAnswerElement.getText().replaceAll("[^ \\S]+", " "));
+		return new BinaryQuestion(	textElement.getText().replaceAll("[^ \\S]+",
+																	" "),
+									null,
+									trueAnswerElement.getText()
+											.replaceAll("[^ \\S]+", " "),
+									falseAnswerElement.getText()
+											.replaceAll("[^ \\S]+", " "));
+	}
+	
+	/**
+	 * Erstellt ein Dummy-Objekt. Wird für den
+	 * {@link QuestionEditController Frageneditor} verwendet.
+	 * 
+	 * @return
+	 * 		ein leeres, unregistriertes Fragenobjekt.
+	 */
+	public static BinaryQuestion getDummy() {
+		return new BinaryQuestion("", null, "", "");
 	}
 }

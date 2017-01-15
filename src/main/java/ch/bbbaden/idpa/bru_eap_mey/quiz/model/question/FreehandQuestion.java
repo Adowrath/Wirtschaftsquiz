@@ -10,6 +10,7 @@ import org.jdom2.Element;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
+import ch.bbbaden.idpa.bru_eap_mey.quiz.controllers.QuestionEditController;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 /**
@@ -22,7 +23,8 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 public class FreehandQuestion extends Question<String> {
 	
 	static {
-		Question.register("freehand", FreehandQuestion::load);
+		Question.register(	"freehand", FreehandQuestion::load,
+							FreehandQuestion::getDummy);
 	}
 	
 	/**
@@ -85,8 +87,7 @@ public class FreehandQuestion extends Question<String> {
 	public Element save() {
 		return new Element("question").setAttribute("type", "freehand")
 				.addContent(new Element("text").setText(this.getQuestion()))
-				.addContent(new Element("answer")
-							.setText(this.answer));
+				.addContent(new Element("answer").setText(this.answer));
 	}
 	
 	/**
@@ -106,22 +107,35 @@ public class FreehandQuestion extends Question<String> {
 		
 		if(textElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Frage hat keinen Fragentext. "
-									+ "Wenn die Daten gespeichert werden, "
-									+ "wird diese Frage nicht gespeichert "
-									+ "und damit effektiv gelöscht. "
-									+ "Fortfahren?");
+										"Eine Frage hat keinen Fragentext. "
+												+ "Wenn die Daten gespeichert werden, "
+												+ "wird diese Frage nicht gespeichert "
+												+ "und damit effektiv gelöscht. "
+												+ "Fortfahren?");
 			return null;
 		}
 		if(answerElement == null) {
 			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-							"Eine Freihandfrage hat keine Antwort. "
-									+ "Wenn die Daten gespeichert werden, wird "
-									+ "diese Frage nicht gespeichert und damit "
-									+ "effektiv gelöscht. Fortfahren?");
+										"Eine Freihandfrage hat keine Antwort. "
+												+ "Wenn die Daten gespeichert werden, wird "
+												+ "diese Frage nicht gespeichert und damit "
+												+ "effektiv gelöscht. Fortfahren?");
 			return null;
 		}
-		return new FreehandQuestion(textElement.getText().replaceAll("[^ \\S]+", " "), null,
-									answerElement.getText().replaceAll("[^ \\S]+", " "));
+		return new FreehandQuestion(textElement.getText().replaceAll(	"[^ \\S]+",
+																		" "),
+									null, answerElement.getText()
+											.replaceAll("[^ \\S]+", " "));
+	}
+	
+	/**
+	 * Erstellt ein Dummy-Objekt. Wird für den
+	 * {@link QuestionEditController Frageneditor} verwendet.
+	 * 
+	 * @return
+	 * 		ein leeres, unregistriertes Fragenobjekt.
+	 */
+	public static FreehandQuestion getDummy() {
+		return new FreehandQuestion("", null, "");
 	}
 }

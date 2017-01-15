@@ -13,11 +13,9 @@ import java.util.stream.IntStream;
 
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
-import ch.bbbaden.idpa.bru_eap_mey.quiz.model.QuizModel;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -31,12 +29,8 @@ import javafx.scene.layout.Region;
  * werden oder das Spiel gestartet wird.
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class MainController {
+public class MainController extends MainMenuController {
 	
-	/**
-	 * Das Quizmodel
-	 */
-	private @Nullable QuizModel quizModel;
 	
 	/**
 	 * Das FlowPane mit allen Kategorien.
@@ -44,24 +38,9 @@ public class MainController {
 	@FXML
 	private FlowPane theFlow;
 	
-	/**
-	 * Initialisiert das Quizmodel.
-	 * 
-	 * @param model
-	 *        das Model
-	 */
-	public final void setModel(QuizModel model) {
-		this.quizModel = model;
-		this.loadCategories(model.getCategories());
-	}
-	
-	/**
-	 * @return
-	 * 		das Quizmodel dieses Controllers
-	 */
-	public final QuizModel getModel() {
-		assert this.quizModel != null;
-		return this.quizModel;
+	@Override
+	public void signalDataLoaded() {
+		this.loadCategories(this.getModel().getCategories());
 	}
 	
 	/**
@@ -87,9 +66,7 @@ public class MainController {
 		
 		children.clear();
 		for(Category cat : categories) { // Füge alle Buttons hinzu
-			ToggleButton tb = new ToggleButton(String
-					.format("%s (%d)", cat.getName(),
-							Integer.valueOf(cat.getQuestions().size())));
+			ToggleButton tb = new ToggleButton(cat.getNameAndCount());
 			if(cat.getQuestions().size() == 0) {
 				tb.setDisable(true);
 			}
@@ -145,37 +122,4 @@ public class MainController {
 				.filter(i -> ((ToggleButton) cNodes.get(i)).isSelected())
 				.mapToObj(categories::get).collect(Collectors.toList()));
 	}
-	
-	/**
-	 * Öffnet einen Dialog zur Auswahl einer Datei, in welche
-	 * gespeichert werden soll.
-	 */
-	public void saveData() {
-		this.getModel().saveDataDialog();
-	}
-	
-	/**
-	 * Öffnet einen Dialog zur Auswahl einer Datei, aus welcher
-	 * geladen werden soll.
-	 */
-	public void loadData() {
-		if(this.getModel().loadDataDialog()) {
-			this.loadCategories(this.getModel().getCategories());
-		}
-	}
-	
-	/**
-	 * Ruft den Dialog zum Bearbeiten der Kategorien auf.
-	 */
-	public void editCategories() {
-		this.getModel().openCategoryEditor();
-	}
-	
-	/**
-	 * Ruft den Dialog zum Bearbieten der Fragen auf.
-	 */
-	public void editQuestions() {
-		this.getModel().openQuestionEditor();
-	}
-	
 }

@@ -19,10 +19,10 @@
 						<MenuItem onAction="#loadData" text="_Laden" />
 					</items>
 				</Menu>
-				<Menu text="_Bearbeiten">
+				<Menu text="_Navigieren">
 					<items>
-						<MenuItem onAction="#editCategories" text="_Kategorien bearbeiten" />
-						<MenuItem onAction="#editQuestions" text="_Fragen bearbeiten" />
+						<MenuItem onAction="#editCategories" text="_Kategorieneditor" />
+						<MenuItem onAction="#editQuestions" text="_Frageneditor" />
 					</items>
 				</Menu>
 			</menus>
