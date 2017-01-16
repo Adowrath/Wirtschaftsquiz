@@ -261,6 +261,7 @@ public abstract class Question<AnswerType> {
 													+ "wird diese Frage nicht gespeichert "
 													+ "und damit effektiv gelöscht. "
 													+ "Fortfahren?");
+			return null;
 		}
 		
 		Function<Element, @Nullable Question<?>> func = registeredLoaders
