@@ -167,7 +167,6 @@ public class Category {
 		int result = 1;
 		result = prime * result + (this.description.hashCode());
 		result = prime * result + (this.name.hashCode());
-		result = prime * result + (this.questions.hashCode());
 		return result;
 	}
 	
@@ -183,8 +182,6 @@ public class Category {
 		if(!this.description.equals(other.description))
 			return false;
 		if(!this.name.equals(other.name))
-			return false;
-		if(!this.questions.equals(other.questions))
 			return false;
 		return true;
 	}
