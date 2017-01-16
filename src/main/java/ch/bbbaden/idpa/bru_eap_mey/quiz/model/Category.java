@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
@@ -128,7 +129,6 @@ public class Category {
 	}
 	
 	/**
-	 * 
 	 * @return
 	 * 		alle Fragen dieser Kategorie in einer unmodifizierbaren
 	 *         Ansicht
@@ -159,6 +159,31 @@ public class Category {
 	 */
 	public void removeQuestion(Question<?> question) {
 		this.questions.remove(question);
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (this.description.hashCode());
+		result = prime * result + (this.name.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(!(obj instanceof Category))
+			return false;
+		Category other = (Category) obj;
+		if(!this.description.equals(other.description))
+			return false;
+		if(!this.name.equals(other.name))
+			return false;
+		return true;
 	}
 	
 	/**

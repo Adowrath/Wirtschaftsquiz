@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+	<category>
+		<name>Kategorie</name>
+		<description>Beschreibung</description>
+		<question type="binary">
+			<text>Eine Frage (1)</text>
+			<trueAnswer>Richtige Antwort</trueAnswer>
+			<falseAnswer>Falsche Antwort</falseAnswer>
+		</question>
+		<question type="binary">
+			<text>Eine Frage (2)</text>
+			<trueAnswer>Richtige Antwort</trueAnswer>
+			<falseAnswer>Falsche Antwort</falseAnswer>
+		</question>
+	</category>
+</game>

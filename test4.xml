@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+	<category>
+		<name>A</name>
+		<description>A</description>
+		<question type="binary">
+			<text>Frage</text>
+			<trueAnswer>Ja</trueAnswer>
+			<falseAnswer>Nein</falseAnswer>
+		</question>
+	</category>
+	<category>
+		<name>B</name>
+		<description>B</description>
+	</category>
+	<category>
+		<name>C</name>
+		<description>C</description>
+		<question type="binary">
+			<text>Frage</text>
+			<trueAnswer>Ja</trueAnswer>
+			<falseAnswer>Nein</falseAnswer>
+		</question>
+		<question type="binary">
+			<text>Frage</text>
+			<trueAnswer>Ja</trueAnswer>
+			<falseAnswer>Nein</falseAnswer>
+		</question>
+		<question type="binary">
+			<text>Frage</text>
+			<trueAnswer>Ja</trueAnswer>
+			<falseAnswer>Nein</falseAnswer>
+		</question>
+		<question type="binary">
+			<text>Frage</text>
+			<trueAnswer>Ja</trueAnswer>
+			<falseAnswer>Nein</falseAnswer>
+		</question>
+		<question type="binary">
+			<text>Frage</text>
+			<trueAnswer>Ja</trueAnswer>
+			<falseAnswer>Nein</falseAnswer>
+		</question>
+	</category>
+</game>

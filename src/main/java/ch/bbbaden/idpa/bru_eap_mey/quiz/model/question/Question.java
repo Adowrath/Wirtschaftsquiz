@@ -176,6 +176,12 @@ public abstract class Question<AnswerType> {
 	 */
 	public abstract Element save();
 	
+	@Override
+	public abstract int hashCode();
+	
+	@Override
+	public abstract boolean equals(@Nullable Object other);
+	
 	/**
 	 * Alle registrierten Ladefunktionen.
 	 */
@@ -255,6 +261,7 @@ public abstract class Question<AnswerType> {
 													+ "wird diese Frage nicht gespeichert "
 													+ "und damit effektiv gelöscht. "
 													+ "Fortfahren?");
+			return null;
 		}
 		
 		Function<Element, @Nullable Question<?>> func = registeredLoaders

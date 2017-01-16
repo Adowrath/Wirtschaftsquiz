@@ -125,6 +125,40 @@ public class MultChoiceQuestion extends Question<Integer> {
 						.setText(this.wrongAnswer3));
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (this.correctAnswer.hashCode());
+		result = prime * result + (this.wrongAnswer1.hashCode());
+		result = prime * result + (this.wrongAnswer2.hashCode());
+		result = prime * result + (this.wrongAnswer3.hashCode());
+		result = prime * result + (this.getQuestion().hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(!(obj instanceof MultChoiceQuestion))
+			return false;
+		MultChoiceQuestion other = (MultChoiceQuestion) obj;
+		if(!this.correctAnswer.equals(other.correctAnswer))
+			return false;
+		if(!this.wrongAnswer1.equals(other.wrongAnswer1))
+			return false;
+		if(!this.wrongAnswer2.equals(other.wrongAnswer2))
+			return false;
+		if(!this.wrongAnswer3.equals(other.wrongAnswer3))
+			return false;
+		if(!this.getQuestion().equals(other.getQuestion()))
+			return false;
+		return true;
+	}
+	
 	/**
 	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
 	 * Fehler wird
