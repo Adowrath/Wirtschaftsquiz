@@ -176,6 +176,12 @@ public abstract class Question<AnswerType> {
 	 */
 	public abstract Element save();
 	
+	@Override
+	public abstract int hashCode();
+	
+	@Override
+	public abstract boolean equals(@Nullable Object other);
+	
 	/**
 	 * Alle registrierten Ladefunktionen.
 	 */

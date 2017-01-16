@@ -90,6 +90,31 @@ public class FreehandQuestion extends Question<String> {
 				.addContent(new Element("answer").setText(this.answer));
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (this.answer.hashCode());
+		result = prime * result + (this.getQuestion().hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(!(obj instanceof FreehandQuestion))
+			return false;
+		FreehandQuestion other = (FreehandQuestion) obj;
+		if(!this.answer.equals(other.answer))
+			return false;
+		if(!this.getQuestion().equals(other.getQuestion()))
+			return false;
+		return true;
+	}
+	
 	/**
 	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
 	 * Fehler wird

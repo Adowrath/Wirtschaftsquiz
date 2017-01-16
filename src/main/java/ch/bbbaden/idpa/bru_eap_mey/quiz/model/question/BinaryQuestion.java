@@ -102,6 +102,34 @@ public class BinaryQuestion extends Question<Boolean> {
 						.setText(this.wrongAnswer));
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (this.correctAnswer.hashCode());
+		result = prime * result + (this.wrongAnswer.hashCode());
+		result = prime * result + (this.getQuestion().hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(!(obj instanceof BinaryQuestion))
+			return false;
+		BinaryQuestion other = (BinaryQuestion) obj;
+		if(!this.correctAnswer.equals(other.correctAnswer))
+			return false;
+		if(!this.wrongAnswer.equals(other.wrongAnswer))
+			return false;
+		if(!this.getQuestion().equals(other.getQuestion()))
+			return false;
+		return true;
+	}
+	
 	/**
 	 * Versucht, aus dem Element eine Frage zu entnehmen. Bei einem
 	 * Fehler wird
