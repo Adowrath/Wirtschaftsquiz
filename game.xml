@@ -1,39 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <game>
-	<category>
-		<name>Englisch</name>
-		<description>A description</description>
-		<question type="binary">
-			<text>Is English a germanic language?</text>
-			<trueAnswer>Yes</trueAnswer>
-			<falseAnswer>No</falseAnswer>
-		</question>
-		<question type="freehand">
-			<text>What does DNA stand for?</text>
-			<answer>Deoxyribonucleic acid</answer>
-		</question>
-		<question type="multipleChoice">
-			<text>What is the right archaic English form?</text>
-			<correctAnswer>Thou shalt not pass!</correctAnswer>
-			<wrongAnswer1>Thou shall not pass!</wrongAnswer1>
-			<wrongAnswer2>Ye shall not pass!</wrongAnswer2>
-			<wrongAnswer3>Ye shalt not pass!</wrongAnswer3>
-		</question>
-	</category>
-	<category>
-		<name>Deutsch</name>
-		<description>Eine Beschreibung</description>
-	</category>
-	<category>
-		<name>FRW</name>
-		<description>Finanzrechenwirtschaft</description>
-		<question type="binary">
-			<text>Wie lautet die transitorische Buchung am Jahresende, wenn die
-				Monatsmiete von 200 Anfang Dezember bereits für 3 Monate im Voraus bezahlt
-				wurde?
-			</text>
-			<trueAnswer>Trans. Aktiven / Mietaufwand 400</trueAnswer>
-			<falseAnswer>Mietaufwand / Transitorische Passiven 200</falseAnswer>
-		</question>
-	</category>
+  <category>
+    <name>VWL</name>
+    <description>Volkswirtschaftslehre</description>
+    <question type="freehand">
+      <text>Wann fand die letzte grosse Finanzkrise statt?</text>
+      <answer>2007</answer>
+    </question>
+    <question type="multipleChoice">
+      <text>Was ist eine Aktie?</text>
+      <correctAnswer>Unternehmensanteil</correctAnswer>
+      <wrongAnswer1>Schuldnerpapier</wrongAnswer1>
+      <wrongAnswer2>Partizipationsschein</wrongAnswer2>
+      <wrongAnswer3>Staatsanleihe</wrongAnswer3>
+    </question>
+    <question type="freehand">
+      <text>Was ist Inflation?</text>
+      <answer>Geldentwertung</answer>
+    </question>
+    <question type="multipleChoice">
+      <text>Welche Unternehmungsform schüttet Dividenden aus?</text>
+      <correctAnswer>Aktiengesellschaft</correctAnswer>
+      <wrongAnswer1>Gemeinschaft mit beschränkter Haftung</wrongAnswer1>
+      <wrongAnswer2>Genossenschaft</wrongAnswer2>
+      <wrongAnswer3>Kommanditgesellschaft</wrongAnswer3>
+    </question>
+    <question type="multipleChoice">
+      <text>Welche dieser Banken ist Too Big to Fail?</text>
+      <correctAnswer>UBS</correctAnswer>
+      <wrongAnswer1>NAB</wrongAnswer1>
+      <wrongAnswer2>Raiffeisenbank</wrongAnswer2>
+      <wrongAnswer3>AKB</wrongAnswer3>
+    </question>
+    <question type="binary">
+      <text>Die Erhöhung des Leitzinses ____ die Inflationsrate</text>
+      <trueAnswer>verringert</trueAnswer>
+      <falseAnswer>erhöht</falseAnswer>
+    </question>
+  </category>
+  <category>
+    <name>BWL</name>
+    <description>Betriebswirtschaftslehre</description>
+    <question type="freehand">
+      <text>Wie nennt man das Strukturdiagramm einer Unternehmung?</text>
+      <answer>Organigramm</answer>
+    </question>
+    <question type="multipleChoice">
+      <text>Was ist das zentrale Geschäft der Banken?</text>
+      <correctAnswer>Zinsdifferenzgeschäft</correctAnswer>
+      <wrongAnswer1>Goldhandel</wrongAnswer1>
+      <wrongAnswer2>Währungskursgewinne</wrongAnswer2>
+      <wrongAnswer3>Transaktionskosten</wrongAnswer3>
+    </question>
+    <question type="freehand">
+      <text>Was steht an der Spitze der Maslowschen Bedürfnishierarchie?</text>
+      <answer>Selbstverwirklichung</answer>
+    </question>
+    <question type="binary">
+      <text>Kann der Arbeitnehmer während der Dauer des Arbeitsverhältnisses ein Arbeitszeugnis verlangen?</text>
+      <trueAnswer>Ja</trueAnswer>
+      <falseAnswer>Nein</falseAnswer>
+    </question>
+  </category>
+  <category>
+    <name>FRW</name>
+    <description>Finanzrechenwirtschaft</description>
+    <question type="binary">
+      <text>Wie lautet die Buchung am Jahresende, wenn eine Monatsmiete von 200 Anfang Dezember bereits für 3 Monate im Voraus bezahlt wurde?</text>
+      <trueAnswer>Trans. Aktiven / Mietaufwand 400</trueAnswer>
+      <falseAnswer>Mietaufwand / Transitorische Passiven 200</falseAnswer>
+    </question>
+    <question type="binary">
+      <text>Wie viele Tage hat ein Jahr nach der deutschen Zinsusanz?</text>
+      <trueAnswer>360</trueAnswer>
+      <falseAnswer>336</falseAnswer>
+    </question>
+    <question type="multipleChoice">
+      <text>Wie viel Prozent des Aktienkapitals müssen maximal in gesetzliche Reserven gelegt werden?</text>
+      <correctAnswer>20%</correctAnswer>
+      <wrongAnswer1>15%</wrongAnswer1>
+      <wrongAnswer2>25%</wrongAnswer2>
+      <wrongAnswer3>10%</wrongAnswer3>
+    </question>
+  </category>
 </game>
