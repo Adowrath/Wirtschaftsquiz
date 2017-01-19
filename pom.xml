@@ -2,15 +2,37 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.bbbaden</groupId>
   <version>1.0.1</version>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.5.1</version>
         <configuration>
-          <source/>
-          <target/>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
+      </plugin>
+      <plugin>
+      	<groupId>org.jacoco</groupId>
+      	<artifactId>jacoco-maven-plugin</artifactId>
+      	<version>0.7.8</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
       </plugin>
     </plugins>
   </build>
@@ -37,6 +59,11 @@
   		<artifactId>powermock-module-junit4</artifactId>
   		<version>1.6.6</version>
   		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.eclipse.jdt</groupId>
+  		<artifactId>org.eclipse.jdt.annotation</artifactId>
+  		<version>2.1.0</version>
   	</dependency>
   </dependencies>
   <artifactId>idpa.bru_eap_mey.wirtchaftsquiz</artifactId>
