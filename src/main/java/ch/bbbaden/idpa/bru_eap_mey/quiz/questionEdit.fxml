@@ -29,7 +29,7 @@
 				<Menu text="_Navigieren">
 					<items>
 						<MenuItem onAction="#mainPage" text="_Startseite" />
-						<MenuItem onAction="#editQuestions" text="_Frageneditor" />
+						<MenuItem onAction="#editCategories" text="_Kategorieneditor" />
 					</items>
 				</Menu>
 			</menus>

@@ -168,7 +168,7 @@ public class QuestionTest {
 		assertEquals("getCategory works correctly.", c, assigned);
 	}
 	
-	@Test(expected=AssertionError.class)
+	@Test(expected = AssertionError.class)
 	public void testGetCategoryNotInitialized() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
 		

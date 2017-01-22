@@ -7,12 +7,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @SuppressWarnings("javadoc")
 @RunWith(Suite.class)
-@SuiteClasses({
-	BinaryQuestionTest.class,
-	FreehandQuestionTest.class,
-	MultChoiceQuestionTest.class,
-	QuestionTest.class
-})
+@SuiteClasses({BinaryQuestionTest.class, FreehandQuestionTest.class,
+		MultChoiceQuestionTest.class, QuestionTest.class})
 public class QuestionTests {
 	//
 }
