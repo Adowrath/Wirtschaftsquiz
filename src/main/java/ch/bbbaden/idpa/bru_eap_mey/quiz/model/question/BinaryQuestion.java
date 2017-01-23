@@ -111,20 +111,15 @@ public class BinaryQuestion extends Question<Boolean> {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(!(obj instanceof BinaryQuestion))
-			return false;
-		BinaryQuestion other = (BinaryQuestion) obj;
-		if(!this.correctAnswer.equals(other.correctAnswer))
-			return false;
-		if(!this.wrongAnswer.equals(other.wrongAnswer))
-			return false;
-		if(!this.getQuestion().equals(other.getQuestion()))
-			return false;
-		return true;
+		return this == obj || obj != null && obj instanceof BinaryQuestion
+				
+				&& this.correctAnswer
+						.equals(((BinaryQuestion) obj).correctAnswer)
+				
+				&& this.wrongAnswer.equals(((BinaryQuestion) obj).wrongAnswer)
+				
+				&& this.getQuestion()
+						.equals(((BinaryQuestion) obj).getQuestion());
 	}
 	
 	/**

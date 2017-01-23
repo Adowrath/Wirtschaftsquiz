@@ -100,18 +100,12 @@ public class FreehandQuestion extends Question<String> {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(!(obj instanceof FreehandQuestion))
-			return false;
-		FreehandQuestion other = (FreehandQuestion) obj;
-		if(!this.answer.equals(other.answer))
-			return false;
-		if(!this.getQuestion().equals(other.getQuestion()))
-			return false;
-		return true;
+		return this == obj || obj != null && obj instanceof FreehandQuestion
+				
+				&& this.answer.equals(((FreehandQuestion) obj).answer)
+				
+				&& this.getQuestion()
+						.equals(((FreehandQuestion) obj).getQuestion());
 	}
 	
 	/**
