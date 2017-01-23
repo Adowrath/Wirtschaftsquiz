@@ -29,6 +29,28 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 public abstract class Question<AnswerType> {
 	
 	/**
+	 * Der Titel für das Fehlerfenster beim Lesen einer Frage.
+	 */
+	public static final String QUESTION_FORMAT_TITLE = "Falsch formatierte Frage";
+	
+	/**
+	 * Der Vorlagetext für das Fehlerfenster beim Lesen einer Frage.
+	 */
+	public static final String QUESTION_ERROR_FORMAT = "Eine %s hat %s. "
+			+ "Wenn die Daten gespeichert werden, wird diese Frage nicht "
+			+ "gespeichert und damit effektiv gelöscht. Fortfahren?";
+	
+	/**
+	 * Alle registrierten Ladefunktionen.
+	 */
+	private static final Map<String, Function<Element, @Nullable Question<?>>> registeredLoaders = new HashMap<>();
+	
+	/**
+	 * Alle registrierten Dummysupplier.
+	 */
+	private static final Map<String, Supplier<? extends Question<?>>> dummy = new HashMap<>();
+	
+	/**
 	 * Der Text dieser Frage.
 	 */
 	private String question;
@@ -183,16 +205,6 @@ public abstract class Question<AnswerType> {
 	public abstract boolean equals(@Nullable Object other);
 	
 	/**
-	 * Alle registrierten Ladefunktionen.
-	 */
-	private static final Map<String, Function<Element, @Nullable Question<?>>> registeredLoaders = new HashMap<>();
-	
-	/**
-	 * Alle registrierten Dummysupplier.
-	 */
-	private static final Map<String, Supplier<? extends Question<?>>> dummy = new HashMap<>();
-	
-	/**
 	 * Registriert den Fragetyp.
 	 * 
 	 * @param type
@@ -255,26 +267,19 @@ public abstract class Question<AnswerType> {
 	public static final @Nullable Question<?> loadFromElement(Element el) {
 		String type = el.getAttributeValue("type");
 		if(type == null) {
-			Util.showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-											"Eine Frage hat keinen Fragentyp. "
-													+ "Wenn die Daten gespeichert werden, "
-													+ "wird diese Frage nicht gespeichert "
-													+ "und damit effektiv gelöscht. "
-													+ "Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT, "Frage",
+											"keinen Fragetyp");
 			return null;
 		}
 		
 		Function<Element, @Nullable Question<?>> func = registeredLoaders
 				.get(type);
 		if(func == null) {
-			Util.showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-											"Eine Frage hat einen unbekannten "
-													+ "Fragetyp: \"%s\". Wenn die Daten "
-													+ "gespeichert werden, wird diese "
-													+ "Frage nicht gespeichert "
-													+ "und damit effektiv gelöscht. "
-													+ "Fortfahren?",
-											type);
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT, "Frage",
+											"einen unbekannten Fragetyp \""
+													+ type + "\"");
 			return null;
 		}
 		return func.apply(el);

@@ -29,8 +29,8 @@ public class FreehandQuestionTest {
 		
 		int answerCount = bq.getAnswerCount();
 		
-		assertEquals(	"Freehand Questions should have one answer.",
-					answerCount, 1);
+		assertEquals(	"Freehand Questions should have one answer.", answerCount,
+						1);
 	}
 	
 	@Test
@@ -101,7 +101,8 @@ public class FreehandQuestionTest {
 	@Test
 	public void testCheck() {
 		mockStatic(Util.class);
-		Mockito.when(Util.levenshteinDistance(anyString(), anyString())).thenReturn(0);
+		Mockito.when(Util.levenshteinDistance(anyString(), anyString()))
+				.thenReturn(0);
 		FreehandQuestion bq = new FreehandQuestion("", null, "answer");
 		
 		boolean answer = bq.check("answer");
@@ -110,16 +111,17 @@ public class FreehandQuestionTest {
 		Util.levenshteinDistance(anyString(), anyString());
 		assertTrue("Correct answer is accepted.", answer);
 	}
-
+	
 	@SuppressWarnings("boxing")
 	@Test
 	public void testCheckWrong() {
 		mockStatic(Util.class);
-		Mockito.when(Util.levenshteinDistance(anyString(), anyString())).thenReturn(Integer.MAX_VALUE);
+		Mockito.when(Util.levenshteinDistance(anyString(), anyString()))
+				.thenReturn(Integer.MAX_VALUE);
 		FreehandQuestion bq = new FreehandQuestion("", null, "answer");
 		
 		boolean answer = bq.check("Hans-Dieter");
-
+		
 		verifyStatic();
 		Util.levenshteinDistance(anyString(), anyString());
 		assertFalse("Incorrect answer is accepted.", answer);
@@ -151,7 +153,7 @@ public class FreehandQuestionTest {
 		//
 		
 		assertEquals(	"Freehand Question is equal to an exact twin version.",
-					bq1,bq2);
+						bq1, bq2);
 	}
 	
 	@Test
@@ -171,7 +173,7 @@ public class FreehandQuestionTest {
 		//
 		
 		assertNotEquals("Freehand Question is not equal to a general Object.",
-					bq, obj);
+						bq, obj);
 	}
 	
 	@Test
@@ -182,7 +184,7 @@ public class FreehandQuestionTest {
 		//
 		
 		assertNotEquals("Freehand Question is not equal to a version with different question.",
-					bq1, bq2);
+						bq1, bq2);
 	}
 	
 	@Test
@@ -193,7 +195,7 @@ public class FreehandQuestionTest {
 		//
 		
 		assertNotEquals("Freehand Question is not equal to a version with different answer.",
-					bq1, bq2);
+						bq1, bq2);
 	}
 	
 	@Test
@@ -204,7 +206,7 @@ public class FreehandQuestionTest {
 		int hash_2 = bq.hashCode();
 		
 		assertEquals(	"Freehand Question has the same hashCode as itself.",
-					hash_1, hash_2);
+						hash_1, hash_2);
 	}
 	
 	@Test
@@ -216,7 +218,7 @@ public class FreehandQuestionTest {
 		int hash2 = bq2.hashCode();
 		
 		assertEquals(	"Freehand Question has the same hashCode as a twin version.",
-					hash1, hash2);
+						hash1, hash2);
 	}
 	
 	@Test
@@ -252,11 +254,10 @@ public class FreehandQuestionTest {
 				.addContent(new Element("text").setText("q"));
 		
 		FreehandQuestion loaded = FreehandQuestion.load(element);
-
+		
 		verifyStatic();
 		Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
-		assertNull(	"Freehand Quesiton does not load with no answer.",
-					loaded);
+		assertNull("Freehand Quesiton does not load with no answer.", loaded);
 	}
 	
 	@Test

@@ -56,7 +56,7 @@ public class QuestionEditController extends MainMenuController {
 	private Label textLabel;
 	
 	/**
-	 * Das Label für die Kategorienauswahl.	
+	 * Das Label für die Kategorienauswahl.
 	 */
 	@FXML
 	private Label catLabel;

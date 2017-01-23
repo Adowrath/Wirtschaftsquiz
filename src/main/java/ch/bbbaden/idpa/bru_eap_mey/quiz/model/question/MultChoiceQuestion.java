@@ -1,8 +1,5 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
-import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showErrorExitOnNoOrClose;
-
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.jdom2.Element;
@@ -139,24 +136,22 @@ public class MultChoiceQuestion extends Question<Integer> {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(!(obj instanceof MultChoiceQuestion))
-			return false;
-		MultChoiceQuestion other = (MultChoiceQuestion) obj;
-		if(!this.correctAnswer.equals(other.correctAnswer))
-			return false;
-		if(!this.wrongAnswer1.equals(other.wrongAnswer1))
-			return false;
-		if(!this.wrongAnswer2.equals(other.wrongAnswer2))
-			return false;
-		if(!this.wrongAnswer3.equals(other.wrongAnswer3))
-			return false;
-		if(!this.getQuestion().equals(other.getQuestion()))
-			return false;
-		return true;
+		return this == obj || obj != null && obj instanceof MultChoiceQuestion
+				
+				&& this.correctAnswer
+						.equals(((MultChoiceQuestion) obj).correctAnswer)
+				
+				&& this.wrongAnswer1
+						.equals(((MultChoiceQuestion) obj).wrongAnswer1)
+				
+				&& this.wrongAnswer2
+						.equals(((MultChoiceQuestion) obj).wrongAnswer2)
+				
+				&& this.wrongAnswer3
+						.equals(((MultChoiceQuestion) obj).wrongAnswer3)
+				
+				&& this.getQuestion()
+						.equals(((MultChoiceQuestion) obj).getQuestion());
 	}
 	
 	/**
@@ -178,44 +173,38 @@ public class MultChoiceQuestion extends Question<Integer> {
 		Element wrongAnswer3Element = el.getChild("wrongAnswer3");
 		
 		if(textElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Frage hat keinen Fragentext. "
-												+ "Wenn die Daten gespeichert werden, "
-												+ "wird diese Frage nicht gespeichert "
-												+ "und damit effektiv gelöscht. "
-												+ "Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Multiple Choice-Frage",
+											"keinen Fragetext");
 			return null;
 		}
 		if(correctAnswerElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Multiple Choice-Frage hat keine korrekte Antwort. "
-												+ "Wenn die Daten gespeichert werden, wird "
-												+ "diese Frage nicht gespeichert und damit "
-												+ "effektiv gelöscht. Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Multiple Choice-Frage",
+											"keine korrekte Antwort");
 			return null;
 		}
 		if(wrongAnswer1Element == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Multiple Choice-Frage hat keine erste falsche Antwort. "
-												+ "Wenn die Daten gespeichert werden, wird "
-												+ "diese Frage nicht gespeichert und damit "
-												+ "effektiv gelöscht. Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Multiple Choice-Frage",
+											"keine erste falsche Antwort");
 			return null;
 		}
 		if(wrongAnswer2Element == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Multiple Choice-Frage hat keine zweite falsche Antwort. "
-												+ "Wenn die Daten gespeichert werden, wird "
-												+ "diese Frage nicht gespeichert und damit "
-												+ "effektiv gelöscht. Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Multiple Choice-Frage",
+											"keine zweite falsche Antwort");
 			return null;
 		}
 		if(wrongAnswer3Element == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Multiple Choice-Frage hat keine dritte falsche Antwort. "
-												+ "Wenn die Daten gespeichert werden, wird "
-												+ "diese Frage nicht gespeichert und damit "
-												+ "effektiv gelöscht. Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Multiple Choice-Frage",
+											"keine dritte falsche Antwort");
 			return null;
 		}
 		return new MultChoiceQuestion(	textElement.getText()

@@ -1,7 +1,6 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.levenshteinDistance;
-import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showErrorExitOnNoOrClose;
 
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -101,18 +100,12 @@ public class FreehandQuestion extends Question<String> {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(!(obj instanceof FreehandQuestion))
-			return false;
-		FreehandQuestion other = (FreehandQuestion) obj;
-		if(!this.answer.equals(other.answer))
-			return false;
-		if(!this.getQuestion().equals(other.getQuestion()))
-			return false;
-		return true;
+		return this == obj || obj != null && obj instanceof FreehandQuestion
+				
+				&& this.answer.equals(((FreehandQuestion) obj).answer)
+				
+				&& this.getQuestion()
+						.equals(((FreehandQuestion) obj).getQuestion());
 	}
 	
 	/**
@@ -131,20 +124,16 @@ public class FreehandQuestion extends Question<String> {
 		Element answerElement = el.getChild("answer");
 		
 		if(textElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Frage hat keinen Fragentext. "
-												+ "Wenn die Daten gespeichert werden, "
-												+ "wird diese Frage nicht gespeichert "
-												+ "und damit effektiv gelöscht. "
-												+ "Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Freihandfrage",
+											"keinen Fragetext");
 			return null;
 		}
 		if(answerElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Freihandfrage hat keine Antwort. "
-												+ "Wenn die Daten gespeichert werden, wird "
-												+ "diese Frage nicht gespeichert und damit "
-												+ "effektiv gelöscht. Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Freihandfrage", "keine Antwort");
 			return null;
 		}
 		return new FreehandQuestion(textElement.getText().replaceAll(	"[^ \\S]+",

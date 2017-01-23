@@ -172,18 +172,11 @@ public class Category {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		if(this == obj)
-			return true;
-		if(obj == null)
-			return false;
-		if(!(obj instanceof Category))
-			return false;
-		Category other = (Category) obj;
-		if(!this.description.equals(other.description))
-			return false;
-		if(!this.name.equals(other.name))
-			return false;
-		return true;
+		return this == obj || obj != null && obj instanceof Category
+				
+				&& this.description.equals(((Category) obj).description)
+				
+				&& this.name.equals(((Category) obj).name);
 	}
 	
 	/**

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.jdom2.JDOMException;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.MainframeControl;
@@ -88,7 +89,7 @@ public class QuizModel {
 	/**
 	 * Lädt die Daten für das Spiel aus der Standarddatei.
 	 * 
-	 * @see Util#loadData(java.net.URL, List, List)
+	 * @see Util#loadData(java.net.URI, List, List)
 	 */
 	public void loadData() {
 		try {
@@ -108,7 +109,7 @@ public class QuizModel {
 	 * @return
 	 * 		{@code true}, wenn die Daten geladen wurden, sonst
 	 *         {@code false}
-	 * @see Util#loadData(java.net.URL, List, List)
+	 * @see Util#loadData(java.net.URI, List, List)
 	 */
 	public boolean loadDataDialog() {
 		FileChooser fc = new FileChooser();
@@ -122,10 +123,16 @@ public class QuizModel {
 			this.availableCategories.clear();
 			this.availableQuestions.clear();
 			try {
-				Util.loadData(	file.toURI().toURL(), this.availableCategories,
+				Util.loadData(	file.toURI(), this.availableCategories,
+								// TODO Figure out some better way to
+								// handle the exceptions
 								this.availableQuestions);
 			} catch(MalformedURLException e) {
-				throw new RuntimeException(e);
+				e.printStackTrace();
+			} catch(IOException e) {
+				e.printStackTrace();
+			} catch(JDOMException e) {
+				e.printStackTrace();
 			}
 			return true;
 		}

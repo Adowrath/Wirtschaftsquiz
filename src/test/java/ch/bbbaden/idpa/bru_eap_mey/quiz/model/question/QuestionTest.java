@@ -1,9 +1,6 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyVararg;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
@@ -155,6 +152,8 @@ public class QuestionTest {
 		verify(c2).addQuestion(q);
 		verifyNoMoreInteractions(c1);
 		verifyNoMoreInteractions(c2);
+		
+		assertTrue("Nothing failed.", true);
 	}
 	
 	@Test
@@ -168,7 +167,7 @@ public class QuestionTest {
 		assertEquals("getCategory works correctly.", c, assigned);
 	}
 	
-	@Test(expected=AssertionError.class)
+	@Test(expected = AssertionError.class)
 	public void testGetCategoryNotInitialized() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
 		

@@ -7,6 +7,7 @@ import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_BOUND;
 
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
@@ -73,44 +74,84 @@ public class MultChoiceController extends QuestionController<MultChoiceQuestion>
 		this.questionText.setText(question.getQuestion());
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * ........I don't like writing lengthy if-elseif-else constructs.
-	 * So, suit your damn self. ._.
-	 */
 	@Override
 	public void accept(ActionEvent event) {
-		RadioButton current;
-		int selected = -1;
+		int selection = this.getSelection();
+		if(selection == -1)
+			return;
 		
-		current = this.radioButton1.isSelected()
-				? ((selected = 0) != -1 ? this.radioButton1 : null) : null;
-		current = this.radioButton2.isSelected()
-				? ((selected = 1) != -1 ? this.radioButton2 : null) : current;
-		current = this.radioButton3.isSelected()
-				? ((selected = 2) != -1 ? this.radioButton3 : null) : current;
-		current = this.radioButton4.isSelected()
-				? ((selected = 3) != -1 ? this.radioButton4 : null) : current;
+		RadioButton current = this.getButtonForIndex(selection);
+		assert current != null : "A valid index was selected, so "
+				+ "a valid RadioButton should be returned.";
 		
-		if(selected != -1) {
-			assert current != null;
-			Integer chosenAnswer = Integer.valueOf(this.answers[selected]);
-			Question<Integer> question = this.getModel()
-					.testAnswer(chosenAnswer);
+		Integer chosen = Integer.valueOf(this.answers[selection]);
+		Question<Integer> question = this.getModel().testAnswer(chosen);
+		
+		if(question.check(chosen)) {
 			
-			if(question.check(chosenAnswer)) {
-				current.setTextFill(Color.GREEN);
-			} else {
-				current.setTextFill(Color.RED);
-				int correct = question.getAnswer().intValue();
-				
-				(this.answers[0] == correct ? this.radioButton1
-						: this.answers[1] == correct ? this.radioButton2
-								: this.answers[2] == correct ? this.radioButton3
-										: this.radioButton4)
-												.setTextFill(Color.GREEN);
-			}
+			current.setTextFill(Color.GREEN);
+			
+		} else {
+			
+			current.setTextFill(Color.RED);
+			int correct = question.getAnswer().intValue();
+			RadioButton correctButton = this.getButtonForAnswer(correct);
+			assert correctButton != null : "The answer should be "
+					+ "\"linked\" to a valid button.";
+			
+			correctButton.setTextFill(Color.GREEN);
 		}
+	}
+	
+	/**
+	 * Sucht, welcher RadioButton ausgewählt ist.
+	 * 
+	 * @return
+	 * 		der Index, der zum ausgewählten RadioButton passt, oder
+	 *         -1, wenn keiner ausgewählt ist.
+	 */
+	private int getSelection() {
+		return this.radioButton1.isSelected() ? 0
+				: this.radioButton2.isSelected() ? 1
+						: this.radioButton3.isSelected() ? 2
+								: this.radioButton4.isSelected() ? 3 : -1;
+		
+	}
+	
+	/**
+	 * Sucht den nten (0-basiert) RadioButton.
+	 * 
+	 * @param answer
+	 *        die korrekte Antwort, gibt nur ein Resultat zwischen 0
+	 *        und 3 (inkl.).
+	 * @return
+	 * 		der RadioButton, oder {@code null} wenn die Antwort
+	 *         nicht passt.
+	 */
+	
+	private @Nullable RadioButton getButtonForAnswer(int answer) {
+		return this.getButtonForIndex(this.answers[0] == answer ? 0
+				: this.answers[1] == answer ? 1
+						: this.answers[2] == answer ? 2
+								: this.answers[3] == answer ? 3 : -1);
+	}
+	
+	/**
+	 * Sucht den nten (0-basiert) RadioButton.
+	 * 
+	 * @param index
+	 *        der ausgewählte Index, gibt nur ein Resultat bei
+	 *        zwischen 0
+	 *        und 3 (inkl.).
+	 * @return
+	 * 		der RadioButton, oder {@code null} wenn der index nicht
+	 *         passt.
+	 */
+	private @Nullable RadioButton getButtonForIndex(int index) {
+		return index == 0 ? this.radioButton1
+				: index == 1 ? this.radioButton2
+						: index == 2 ? this.radioButton3
+								: index == 3 ? this.radioButton3 : null;
 	}
 	
 	@Override
