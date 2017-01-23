@@ -1,8 +1,5 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
-import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showErrorExitOnNoOrClose;
-
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.jdom2.Element;
@@ -147,30 +144,23 @@ public class BinaryQuestion extends Question<Boolean> {
 		Element falseAnswerElement = el.getChild("falseAnswer");
 		
 		if(textElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Frage hat keinen Fragentext. "
-												+ "Wenn die Daten gespeichert werden, "
-												+ "wird diese Frage nicht gespeichert "
-												+ "und damit effektiv gelöscht. "
-												+ "Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"binäre Frage", "keinen Fragetext");
 			return null;
 		}
 		if(trueAnswerElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine binäre Frage hat keine richtige Antwort. "
-												+ "Wenn die Daten gespeichert werden, "
-												+ "wird diese Frage nicht gespeichert "
-												+ "und damit effektiv gelöscht. "
-												+ "Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"binäre Frage",
+											"keine richtige Antwort");
 			return null;
 		}
 		if(falseAnswerElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine binäre Frage hat keine falsche Antwort. "
-												+ "Wenn die Daten gespeichert werden, "
-												+ "wird diese Frage nicht gespeichert "
-												+ "und damit effektiv gelöscht. "
-												+ "Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"binäre Frage",
+											"keine falsche Antwort");
 			return null;
 		}
 		return new BinaryQuestion(	textElement.getText().replaceAll("[^ \\S]+",

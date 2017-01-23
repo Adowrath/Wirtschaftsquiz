@@ -44,6 +44,19 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 public class Util {
 	
 	/**
+	 * Der Titel für das Fehlerfenster beim Lesen einer Frage.
+	 */
+	public static final String CATEGORY_FORMAT_TITLE = "Falsch formatierte Frage";
+	
+	/**
+	 * Der Vorlagetext für das Fehlerfenster beim Lesen einer Frage.
+	 */
+	public static final String CATEGORY_ERROR_FORMAT = "Eine %s hat %s. "
+			+ "Wenn die Daten gespeichert werden, wird diese Kategorie "
+			+ "mitsamt Fragen nicht gespeichert und damit effektiv gelöscht. "
+			+ "Fortfahren?";
+	
+	/**
 	 * Der Standardinhalt für eine leere XML-Datei.
 	 */
 	private static final String defaultText = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -231,21 +244,17 @@ public class Util {
 				Element descElement = element.getChild("description");
 				
 				if(nameElement == null) {
-					showErrorExitOnNoOrClose(	"Falsch formatierte Kategorie",
-												"Eine Kategorie hat keinen Namen. "
-														+ "Wenn die Daten gespeichert werden, "
-														+ "wird diese Kategorie mitsamt Fragen "
-														+ "nicht gespeichert und damit effektiv "
-														+ "gelöscht. Fortfahren?");
+					showErrorExitOnNoOrClose(	CATEGORY_FORMAT_TITLE,
+												CATEGORY_ERROR_FORMAT, 
+												"Kategorie",
+												"keinen Namen");
 					return null;
 				}
 				if(descElement == null) {
-					showErrorExitOnNoOrClose(	"Falsch formatierte Kategorie",
-												"Eine Kategorie hat keine Beschreibung. "
-														+ "Wenn die Daten gespeichert werden, "
-														+ "wird diese Kategorie mitsamt Fragen "
-														+ "nicht gespeichert und damit effektiv "
-														+ "gelöscht. Fortfahren?");
+					showErrorExitOnNoOrClose(	CATEGORY_FORMAT_TITLE,
+												CATEGORY_ERROR_FORMAT, 
+												"Kategorie",
+												"keine Beschreibung");
 					return null;
 				}
 				

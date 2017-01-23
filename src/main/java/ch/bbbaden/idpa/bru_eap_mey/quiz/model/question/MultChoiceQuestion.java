@@ -1,8 +1,5 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
-import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showErrorExitOnNoOrClose;
-
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.jdom2.Element;
@@ -178,44 +175,38 @@ public class MultChoiceQuestion extends Question<Integer> {
 		Element wrongAnswer3Element = el.getChild("wrongAnswer3");
 		
 		if(textElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Frage hat keinen Fragentext. "
-												+ "Wenn die Daten gespeichert werden, "
-												+ "wird diese Frage nicht gespeichert "
-												+ "und damit effektiv gelöscht. "
-												+ "Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Multiple Choice-Frage",
+											"keinen Fragetext");
 			return null;
 		}
 		if(correctAnswerElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Multiple Choice-Frage hat keine korrekte Antwort. "
-												+ "Wenn die Daten gespeichert werden, wird "
-												+ "diese Frage nicht gespeichert und damit "
-												+ "effektiv gelöscht. Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Multiple Choice-Frage",
+											"keine korrekte Antwort");
 			return null;
 		}
 		if(wrongAnswer1Element == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Multiple Choice-Frage hat keine erste falsche Antwort. "
-												+ "Wenn die Daten gespeichert werden, wird "
-												+ "diese Frage nicht gespeichert und damit "
-												+ "effektiv gelöscht. Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Multiple Choice-Frage",
+											"keine erste falsche Antwort");
 			return null;
 		}
 		if(wrongAnswer2Element == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Multiple Choice-Frage hat keine zweite falsche Antwort. "
-												+ "Wenn die Daten gespeichert werden, wird "
-												+ "diese Frage nicht gespeichert und damit "
-												+ "effektiv gelöscht. Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Multiple Choice-Frage",
+											"keine zweite falsche Antwort");
 			return null;
 		}
 		if(wrongAnswer3Element == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Multiple Choice-Frage hat keine dritte falsche Antwort. "
-												+ "Wenn die Daten gespeichert werden, wird "
-												+ "diese Frage nicht gespeichert und damit "
-												+ "effektiv gelöscht. Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Multiple Choice-Frage",
+											"keine dritte falsche Antwort");
 			return null;
 		}
 		return new MultChoiceQuestion(	textElement.getText()

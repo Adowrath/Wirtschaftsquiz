@@ -1,7 +1,6 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
 import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.levenshteinDistance;
-import static ch.bbbaden.idpa.bru_eap_mey.quiz.Util.showErrorExitOnNoOrClose;
 
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -131,20 +130,16 @@ public class FreehandQuestion extends Question<String> {
 		Element answerElement = el.getChild("answer");
 		
 		if(textElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Frage hat keinen Fragentext. "
-												+ "Wenn die Daten gespeichert werden, "
-												+ "wird diese Frage nicht gespeichert "
-												+ "und damit effektiv gelöscht. "
-												+ "Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Freihandfrage",
+											"keinen Fragetext");
 			return null;
 		}
 		if(answerElement == null) {
-			showErrorExitOnNoOrClose(	"Falsch formatierte Frage",
-										"Eine Freihandfrage hat keine Antwort. "
-												+ "Wenn die Daten gespeichert werden, wird "
-												+ "diese Frage nicht gespeichert und damit "
-												+ "effektiv gelöscht. Fortfahren?");
+			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
+											QUESTION_ERROR_FORMAT,
+											"Freihandfrage", "keine Antwort");
 			return null;
 		}
 		return new FreehandQuestion(textElement.getText().replaceAll(	"[^ \\S]+",
