@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -59,7 +59,7 @@ public class Util {
 	/**
 	 * Der Standardinhalt für eine leere XML-Datei.
 	 */
-	private static final String defaultText = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+	private static final String DEFAULT_TEXT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 			+ System.getProperty("line.separator") + "<game>"
 			+ System.getProperty("line.separator") + "</game>";
 	
@@ -118,8 +118,7 @@ public class Util {
 	}
 	
 	/**
-	 * Sucht anhand etwas fuzzy definierter Regeln nach der
-	 * "Top-Most" Fehler-Nachricht
+	 * Sucht nach dem obersten Cause, der eine Fehlermeldung angibt.
 	 * 
 	 * @param t
 	 *        das Trowable-Objekt
@@ -150,9 +149,10 @@ public class Util {
 	
 	/**
 	 * Gibt ein gemischtes Array von Array-Indezes von 0 bis 3 zurück.
-	 * Verwendet ein Sortiernetzwerk (Sortiernetzwerke beim mischen?
-	 * Finde die Source leider nicht mehr, aber es funktioniert
-	 * einwandfrei)
+	 * Verwendet ein Sortiernetzwerk.
+	 * 
+	 * <em>(Sortiernetzwerke beim mischen? Finde die Source leider
+	 * nicht mehr, aber es funktioniert einwandfrei)</em>
 	 * 
 	 * @return
 	 * 		ein gemischtes Array von 0 bis 3
@@ -218,75 +218,73 @@ public class Util {
 	 * @param questionList
 	 *        eine Liste der Fragen. Sollte leer sein, da neue
 	 *        Elemente hinzugefügt werden.
+	 * @throws IOException
+	 *         falls die Datei nicht initialisiert werden kann
+	 *         <strong>ODER</strong> ein Fehler beim Lesen erfolgt.
+	 * @throws MalformedURLException
+	 *         falls die URI keiner gültigen URL entspricht.
+	 * @throws JDOMException
+	 *         falls ein Fehler beim Parsen des XML-Dokuments
+	 *         auftritt.
 	 */
-	public static void loadData(URL gameFile,
+	public static void loadData(URI gameFile,
 								List<Category> categoryList,
-								List<Question<?>> questionList) {
-		try {
-			File f = new File(gameFile.toURI());
-			if(!f.exists()) {
-				try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
-					bw.write(defaultText);
-				} catch(IOException e) {
-					throw new RuntimeException(	"Konnte Spieldatei nicht initialisieren.",
-												e);
-				}
-				return;
+								List<Question<?>> questionList)
+			throws IOException, MalformedURLException, JDOMException {
+		File f = new File(gameFile);
+		if(!f.exists()) {
+			try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+				bw.write(DEFAULT_TEXT);
 			}
-			Document doc = new SAXBuilder().build(gameFile);
-			
-			List<@Nullable Element> cats = doc.getRootElement()
-					.getChildren("category");
-			categoryList.addAll(cats.stream().map(element -> {
-				assert element != null;
-				
-				Element nameElement = element.getChild("name");
-				Element descElement = element.getChild("description");
-				
-				if(nameElement == null) {
-					showErrorExitOnNoOrClose(	CATEGORY_FORMAT_TITLE,
-												CATEGORY_ERROR_FORMAT, 
-												"Kategorie",
-												"keinen Namen");
-					return null;
-				}
-				if(descElement == null) {
-					showErrorExitOnNoOrClose(	CATEGORY_FORMAT_TITLE,
-												CATEGORY_ERROR_FORMAT, 
-												"Kategorie",
-												"keine Beschreibung");
-					return null;
-				}
-				
-				List<Question<?>> questions = new LinkedList<>();
-				
-				element.getChildren("question").forEach(el -> {
-					assert el != null;
-					
-					Question<?> loadedQuestion = Question.loadFromElement(el);
-					
-					if(loadedQuestion == null)
-						return;
-					
-					questions.add(loadedQuestion);
-				});
-				Category c = new Category(nameElement.getText()
-						.replaceAll("[^ \\S]+", " "), descElement.getText()
-								.replaceAll("[^ \\S]+", " "), questions);
-				return c;
-			}).filter(c -> c != null).collect(Collectors.toList()));
-			
-			questionList.addAll(categoryList.stream()
-					.map(Category::getQuestions).flatMap(List::stream)
-					.collect(Collectors.toList()));
-			
-		} catch(JDOMException e) {
-			throw new RuntimeException(e);
-		} catch(IOException e) {
-			throw new RuntimeException(e);
-		} catch(URISyntaxException e) {
-			throw new RuntimeException(e);
+			return;
 		}
+		Document doc = new SAXBuilder().build(gameFile.toURL());
+		
+		List<@Nullable Element> cats = doc.getRootElement()
+				.getChildren("category");
+		categoryList.addAll(cats.stream().map(element -> {
+			assert element != null;
+			
+			Element nameElement = element.getChild("name");
+			Element descElement = element.getChild("description");
+			
+			if(nameElement == null) {
+				showErrorExitOnNoOrClose(	CATEGORY_FORMAT_TITLE,
+											CATEGORY_ERROR_FORMAT, "Kategorie",
+											"keinen Namen");
+				return null;
+			}
+			if(descElement == null) {
+				showErrorExitOnNoOrClose(	CATEGORY_FORMAT_TITLE,
+											CATEGORY_ERROR_FORMAT, "Kategorie",
+											"keine Beschreibung");
+				return null;
+			}
+			
+			List<Question<?>> questions = new LinkedList<>();
+			
+			element.getChildren("question").forEach(el -> {
+				assert el != null;
+				
+				Question<?> loadedQuestion = Question.loadFromElement(el);
+				
+				if(loadedQuestion == null)
+					return;
+				
+				questions.add(loadedQuestion);
+			});
+			
+			Category c = new Category(	nameElement.getText()
+					.replaceAll("[^ \\S]+", " "),
+										descElement.getText()
+												.replaceAll("[^ \\S]+", " "),
+										questions);
+			return c;
+		}).filter(c -> c != null).collect(Collectors.toList()));
+		
+		questionList.addAll(categoryList.stream().map(Category::getQuestions)
+				.flatMap(List::stream).collect(Collectors.toList()));
+		
 	}
 	
 	/**

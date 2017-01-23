@@ -104,7 +104,7 @@ public class BinaryQuestionTest {
 	public void testCheck() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "", "");
 		
-		boolean answer = bq.check(Boolean.valueOf(true));
+		boolean answer = bq.check(Boolean.TRUE);
 		
 		assertTrue("true is the accepted answer.", answer);
 	}
@@ -113,7 +113,7 @@ public class BinaryQuestionTest {
 	public void testCheckWrong() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "", "");
 		
-		boolean answer = bq.check(Boolean.valueOf(false));
+		boolean answer = bq.check(Boolean.FALSE);
 		
 		assertFalse("false is not the accepted answer.", answer);
 	}

@@ -41,6 +41,16 @@ public abstract class Question<AnswerType> {
 			+ "gespeichert und damit effektiv gelöscht. Fortfahren?";
 	
 	/**
+	 * Alle registrierten Ladefunktionen.
+	 */
+	private static final Map<String, Function<Element, @Nullable Question<?>>> registeredLoaders = new HashMap<>();
+	
+	/**
+	 * Alle registrierten Dummysupplier.
+	 */
+	private static final Map<String, Supplier<? extends Question<?>>> dummy = new HashMap<>();
+	
+	/**
 	 * Der Text dieser Frage.
 	 */
 	private String question;
@@ -193,16 +203,6 @@ public abstract class Question<AnswerType> {
 	
 	@Override
 	public abstract boolean equals(@Nullable Object other);
-	
-	/**
-	 * Alle registrierten Ladefunktionen.
-	 */
-	private static final Map<String, Function<Element, @Nullable Question<?>>> registeredLoaders = new HashMap<>();
-	
-	/**
-	 * Alle registrierten Dummysupplier.
-	 */
-	private static final Map<String, Supplier<? extends Question<?>>> dummy = new HashMap<>();
 	
 	/**
 	 * Registriert den Fragetyp.
