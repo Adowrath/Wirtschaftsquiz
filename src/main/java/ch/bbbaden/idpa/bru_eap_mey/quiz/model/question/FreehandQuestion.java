@@ -91,10 +91,10 @@ public class FreehandQuestion extends Question<String> {
 	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		int prime = 31;
 		int result = 1;
-		result = prime * result + (this.answer.hashCode());
-		result = prime * result + (this.getQuestion().hashCode());
+		result = prime * result + this.answer.hashCode();
+		result = prime * result + this.getQuestion().hashCode();
 		return result;
 	}
 	
@@ -121,8 +121,6 @@ public class FreehandQuestion extends Question<String> {
 	 */
 	public static @Nullable FreehandQuestion load(Element el) {
 		Element textElement = el.getChild("text");
-		Element answerElement = el.getChild("answer");
-		
 		if(textElement == null) {
 			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
 											QUESTION_ERROR_FORMAT,
@@ -130,12 +128,15 @@ public class FreehandQuestion extends Question<String> {
 											"keinen Fragetext");
 			return null;
 		}
+		
+		Element answerElement = el.getChild("answer");
 		if(answerElement == null) {
 			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
 											QUESTION_ERROR_FORMAT,
 											"Freihandfrage", "keine Antwort");
 			return null;
 		}
+		
 		return new FreehandQuestion(textElement.getText().replaceAll(	"[^ \\S]+",
 																		" "),
 									null, answerElement.getText()

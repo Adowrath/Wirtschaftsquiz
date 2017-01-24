@@ -89,7 +89,7 @@ public class Category {
 	}
 	
 	/**
-	 * Getter für den Namen
+	 * Getter für den Namen.
 	 * 
 	 * @return
 	 * 		den Namen
@@ -109,7 +109,7 @@ public class Category {
 	}
 	
 	/**
-	 * Getter für den Beschreibung
+	 * Getter für den Beschreibung.
 	 * 
 	 * @return
 	 * 		die Beschreibung
@@ -163,10 +163,10 @@ public class Category {
 	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		int prime = 31;
 		int result = 1;
-		result = prime * result + (this.description.hashCode());
-		result = prime * result + (this.name.hashCode());
+		result = prime * result + this.description.hashCode();
+		result = prime * result + this.name.hashCode();
 		return result;
 	}
 	

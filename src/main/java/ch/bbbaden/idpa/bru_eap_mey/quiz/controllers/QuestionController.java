@@ -33,6 +33,8 @@ public abstract class QuestionController<QuestionType extends Question<?>> {
 	}
 	
 	/**
+	 * Ein einfacher Getter.
+	 * 
 	 * @return
 	 * 		das Quizmodel dieses Controllers
 	 */

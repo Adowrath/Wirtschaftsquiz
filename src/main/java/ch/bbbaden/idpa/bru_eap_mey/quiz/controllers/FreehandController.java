@@ -33,19 +33,19 @@ public class FreehandController extends QuestionController<FreehandQuestion> {
 	 * Der Text der Frage.
 	 */
 	@FXML
-	public Text questionText;
+	private Text questionText;
 	
 	/**
 	 * Das Antwort-Label.
 	 */
 	@FXML
-	public Label antwortLabel;
+	private Label antwortLabel;
 	
 	/**
 	 * Das Eingabefeld.
 	 */
 	@FXML
-	public TextField eingabe;
+	private TextField eingabe;
 	
 	@Override
 	public void setQuestion(FreehandQuestion question) {

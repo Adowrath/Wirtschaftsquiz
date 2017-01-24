@@ -17,11 +17,17 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 
+/**
+ * Die Tests für die Multiple Choice-Frage-Klasse.
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Util.class})
-@SuppressWarnings({"static-method", "javadoc"})
+@SuppressWarnings({"static-method"})
 public class MultChoiceQuestionTest {
 	
+	/**
+	 * Überprüft die Zahl der Antworten.
+	 */
 	@Test
 	public void testGetAnswerCount() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("", null, "", "", "",
@@ -33,6 +39,9 @@ public class MultChoiceQuestionTest {
 						answerCount, 4);
 	}
 	
+	/**
+	 * Schaut dass die Antworten richtig gespeichert werden.
+	 */
 	@Test
 	public void testGetAnswers() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("", null, "a", "b", "c",
@@ -44,6 +53,9 @@ public class MultChoiceQuestionTest {
 							new String[] {"a", "b", "c", "d"}, answers);
 	}
 	
+	/**
+	 * Schaut, dass die Antworten richtig überschrieben werden können.
+	 */
 	@Test
 	public void testSetAnswers() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("", null, "a", "b", "c",
@@ -56,6 +68,9 @@ public class MultChoiceQuestionTest {
 							new String[] {"e", "f", "g", "h"}, answers);
 	}
 	
+	/**
+	 * Schaut, dass die Antwortlables korrekt sind.
+	 */
 	@Test
 	public void testGetAnswerFieldLabels() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("", null, "", "", "",
@@ -70,6 +85,9 @@ public class MultChoiceQuestionTest {
 							labels);
 	}
 	
+	/**
+	 * Schaut, dass auf die richtige Datei verwieden wird.
+	 */
 	@Test
 	public void testGetFilename() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("", null, "", "", "",
@@ -81,6 +99,9 @@ public class MultChoiceQuestionTest {
 						"multChoiceQuestion.fxml", filename);
 	}
 	
+	/**
+	 * Überprüft den Speichervorgang.
+	 */
 	@Test
 	public void testSave() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("q", null, "a", "b",
@@ -117,6 +138,9 @@ public class MultChoiceQuestionTest {
 						saved.getChild("wrongAnswer3").getText());
 	}
 	
+	/**
+	 * Eine richtige Antwort wird akzeptiert.
+	 */
 	@Test
 	public void testCheck() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("", null, "", "", "",
@@ -127,6 +151,9 @@ public class MultChoiceQuestionTest {
 		assertTrue("0 is the accepted answer.", answer);
 	}
 	
+	/**
+	 * Eine falsche Antwort wird abgelehnt.
+	 */
 	@Test
 	public void testCheckWrong() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("", null, "", "", "",
@@ -137,6 +164,9 @@ public class MultChoiceQuestionTest {
 		assertFalse("1 is not the accepted answer.", answer);
 	}
 	
+	/**
+	 * Schaut, dass die richtige Antwort richtig ist. (:derp:)
+	 */
 	@Test
 	public void testGetAnswer() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("", null, "", "", "",
@@ -147,6 +177,9 @@ public class MultChoiceQuestionTest {
 		assertEquals("1 is the correct answer.", answer.intValue(), 0);
 	}
 	
+	/**
+	 * Schaut, dass eine Frage zu sich selbst gleich ist.
+	 */
 	@Test
 	public void testSelfreferentialEquals() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("ab", null, "abcd",
@@ -158,6 +191,9 @@ public class MultChoiceQuestionTest {
 		assertEquals("Multiple-Choice Question is equal to itself.", mcq, mcq);
 	}
 	
+	/**
+	 * Überprüft die normale Gleichheit.
+	 */
 	@Test
 	public void testEquals() {
 		MultChoiceQuestion mcq1 = new MultChoiceQuestion(	"ab", null, "abcd",
@@ -175,6 +211,9 @@ public class MultChoiceQuestionTest {
 						mcq1, mcq2);
 	}
 	
+	/**
+	 * Keine Frage ist gleich null.
+	 */
 	@Test
 	public void testEqualsFalseWithNull() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("ab", null, "abcd",
@@ -187,6 +226,9 @@ public class MultChoiceQuestionTest {
 						null);
 	}
 	
+	/**
+	 * Keine Frage ist gleich einem normalen Objekt.
+	 */
 	@Test
 	public void testEqualsFalseWithObject() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("ab", null, "abcd",
@@ -200,6 +242,9 @@ public class MultChoiceQuestionTest {
 						mcq, obj);
 	}
 	
+	/**
+	 * Fragetexte müssen gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithQuestion() {
 		MultChoiceQuestion mcq1 = new MultChoiceQuestion(	"ab", null, "abcd",
@@ -217,6 +262,9 @@ public class MultChoiceQuestionTest {
 						mcq1, mcq2);
 	}
 	
+	/**
+	 * Korrekte Antwort muss gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithCorrectAnswer() {
 		MultChoiceQuestion mcq1 = new MultChoiceQuestion(	"ab", null, "abcd",
@@ -234,6 +282,9 @@ public class MultChoiceQuestionTest {
 						mcq1, mcq2);
 	}
 	
+	/**
+	 * Erste falsche Antwort muss gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithWrongAnswer1() {
 		MultChoiceQuestion mcq1 = new MultChoiceQuestion(	"ab", null, "abcd",
@@ -251,6 +302,9 @@ public class MultChoiceQuestionTest {
 						mcq1, mcq2);
 	}
 	
+	/**
+	 * Zweite falsche Antwort muss gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithWrongAnswer2() {
 		MultChoiceQuestion mcq1 = new MultChoiceQuestion(	"ab", null, "abcd",
@@ -267,6 +321,10 @@ public class MultChoiceQuestionTest {
 		assertNotEquals("Multiple-Choice Question is not equal to a version with different 2nd wrong answer.",
 						mcq1, mcq2);
 	}
+	
+	/**
+	 * Dritte falsche Antwort muss gleich sein.
+	 */
 	
 	@Test
 	public void testEqualsFalseWithWrongAnswer3() {
@@ -285,6 +343,10 @@ public class MultChoiceQuestionTest {
 						mcq1, mcq2);
 	}
 	
+	/**
+	 * Der Hashcode wird gleich berechnet.
+	 */
+	
 	@Test
 	public void testSelfreferentialHashCode() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("ab", null, "abcd",
@@ -297,6 +359,10 @@ public class MultChoiceQuestionTest {
 		assertEquals(	"Multiple-Choice Question has the same hashCode as itself.",
 						hash_1, hash_2);
 	}
+	
+	/**
+	 * Hashcode wird korrekt zwischen zwei Fragen berechnet.
+	 */
 	
 	@Test
 	public void testHashCode() {
@@ -316,6 +382,10 @@ public class MultChoiceQuestionTest {
 						hash1, hash2);
 	}
 	
+	/**
+	 * Prüft, ob die Ladefunktion funktioniert.
+	 */
+	
 	@Test
 	public void testLoad() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("q", null, "a", "b",
@@ -331,6 +401,10 @@ public class MultChoiceQuestionTest {
 		
 		assertEquals("Multiple-Choice Question loads correctly.", mcq, loaded);
 	}
+	
+	/**
+	 * Prüft die Fehlermeldung bei fehlendem Text.
+	 */
 	
 	@Test
 	public void testLoadNoText() {
@@ -349,6 +423,10 @@ public class MultChoiceQuestionTest {
 					loaded);
 	}
 	
+	/**
+	 * Prüft die Fehlermeldung bei fehlender korrekter Antwort.
+	 */
+	
 	@Test
 	public void testLoadNoCorrectAnswer() {
 		mockStatic(Util.class);
@@ -365,6 +443,10 @@ public class MultChoiceQuestionTest {
 		assertNull(	"Multiple-Choice Question does not load with no text.",
 					loaded);
 	}
+	
+	/**
+	 * Prüft die Fehlermeldung bei fehlender erster falscher Antwort.
+	 */
 	
 	@Test
 	public void testLoadNoWrongAnswer1() {
@@ -383,6 +465,10 @@ public class MultChoiceQuestionTest {
 					loaded);
 	}
 	
+	/**
+	 * Prüft die Fehlermeldung bei fehlender zweiter falscher Antwort.
+	 */
+	
 	@Test
 	public void testLoadNoWrongAnswer2() {
 		mockStatic(Util.class);
@@ -400,6 +486,9 @@ public class MultChoiceQuestionTest {
 					loaded);
 	}
 	
+	/**
+	 * Prüft die Fehlermeldung bei fehlender dritter falscher Antwort.
+	 */
 	@Test
 	public void testLoadNoWrongAnswer3() {
 		mockStatic(Util.class);
@@ -417,6 +506,9 @@ public class MultChoiceQuestionTest {
 					loaded);
 	}
 	
+	/**
+	 * Schaut, ob der Dummy funktioniert.
+	 */
 	@Test
 	public void testGetDummy() {
 		MultChoiceQuestion mcq = MultChoiceQuestion.getDummy();
