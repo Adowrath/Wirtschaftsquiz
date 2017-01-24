@@ -118,13 +118,14 @@ public class BinaryQuestionTest {
 		assertFalse("false is not the accepted answer.", answer);
 	}
 	
+	@SuppressWarnings("boxing")
 	@Test
 	public void testGetAnswer() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "", "");
 		
 		Boolean answer = bq.getAnswer();
 		
-		assertEquals("true is the correct answer.", answer, Boolean.TRUE);
+		assertTrue("true is the correct answer.", answer);
 	}
 	
 	@Test

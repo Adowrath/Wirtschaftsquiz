@@ -124,13 +124,13 @@ public class MultChoiceQuestion extends Question<Integer> {
 	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		int prime = 31;
 		int result = 1;
-		result = prime * result + (this.correctAnswer.hashCode());
-		result = prime * result + (this.wrongAnswer1.hashCode());
-		result = prime * result + (this.wrongAnswer2.hashCode());
-		result = prime * result + (this.wrongAnswer3.hashCode());
-		result = prime * result + (this.getQuestion().hashCode());
+		result = prime * result + this.correctAnswer.hashCode();
+		result = prime * result + this.wrongAnswer1.hashCode();
+		result = prime * result + this.wrongAnswer2.hashCode();
+		result = prime * result + this.wrongAnswer3.hashCode();
+		result = prime * result + this.getQuestion().hashCode();
 		return result;
 	}
 	
@@ -167,11 +167,6 @@ public class MultChoiceQuestion extends Question<Integer> {
 	 */
 	public static @Nullable MultChoiceQuestion load(Element el) {
 		Element textElement = el.getChild("text");
-		Element correctAnswerElement = el.getChild("correctAnswer");
-		Element wrongAnswer1Element = el.getChild("wrongAnswer1");
-		Element wrongAnswer2Element = el.getChild("wrongAnswer2");
-		Element wrongAnswer3Element = el.getChild("wrongAnswer3");
-		
 		if(textElement == null) {
 			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
 											QUESTION_ERROR_FORMAT,
@@ -179,6 +174,8 @@ public class MultChoiceQuestion extends Question<Integer> {
 											"keinen Fragetext");
 			return null;
 		}
+		
+		Element correctAnswerElement = el.getChild("correctAnswer");
 		if(correctAnswerElement == null) {
 			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
 											QUESTION_ERROR_FORMAT,
@@ -186,6 +183,8 @@ public class MultChoiceQuestion extends Question<Integer> {
 											"keine korrekte Antwort");
 			return null;
 		}
+		
+		Element wrongAnswer1Element = el.getChild("wrongAnswer1");
 		if(wrongAnswer1Element == null) {
 			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
 											QUESTION_ERROR_FORMAT,
@@ -193,6 +192,8 @@ public class MultChoiceQuestion extends Question<Integer> {
 											"keine erste falsche Antwort");
 			return null;
 		}
+		
+		Element wrongAnswer2Element = el.getChild("wrongAnswer2");
 		if(wrongAnswer2Element == null) {
 			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
 											QUESTION_ERROR_FORMAT,
@@ -200,6 +201,8 @@ public class MultChoiceQuestion extends Question<Integer> {
 											"keine zweite falsche Antwort");
 			return null;
 		}
+		
+		Element wrongAnswer3Element = el.getChild("wrongAnswer3");
 		if(wrongAnswer3Element == null) {
 			Util.showErrorExitOnNoOrClose(	QUESTION_FORMAT_TITLE,
 											QUESTION_ERROR_FORMAT,
@@ -207,6 +210,7 @@ public class MultChoiceQuestion extends Question<Integer> {
 											"keine dritte falsche Antwort");
 			return null;
 		}
+		
 		return new MultChoiceQuestion(	textElement.getText()
 				.replaceAll("[^ \\S]+", " "),
 										null,

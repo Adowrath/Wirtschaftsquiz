@@ -141,7 +141,7 @@ public class QuestionEditController extends MainMenuController {
 	
 	/**
 	 * Diese Methode reagiert anstelle einer Subklasse von
-	 * {@link ChangeListener} auf Änderung der Auswahl
+	 * {@link ChangeListener} auf Änderung der Auswahl.
 	 * 
 	 * @param obs
 	 *        die Observable-Value (ungenutzt)
@@ -215,22 +215,22 @@ public class QuestionEditController extends MainMenuController {
 	 * Speichert eine Frage anhand der momentanen Angaben.
 	 */
 	public void saveQuestion() {
-		Question<?> q = this.queList.getSelectionModel().getSelectedItem();
-		String quesText = this.textField.getText();
-		Category category = this.catBox.getSelectionModel().getSelectedItem();
 		@NonNull
 		String[] answers = Stream.of(this.otherTextFields).map(tf -> {
 			String s = tf.getText();
 			return s == null ? "" : s;
 		}).toArray(i -> new @NonNull String[i]);
-		
+
+		Category category = this.catBox.getSelectionModel().getSelectedItem();
+		String quesText = this.textField.getText();
 		if(quesText == null || quesText.isEmpty() || category == null)
 			return;
 		for(String a : answers) {
 			if(a.isEmpty())
 				return;
 		}
-		
+
+		Question<?> q = this.queList.getSelectionModel().getSelectedItem();
 		if(q == null) {
 			q = this.tempQues;
 			if(q == null)
@@ -241,8 +241,8 @@ public class QuestionEditController extends MainMenuController {
 			q.setAnswers(answers);
 			
 			this.getModel().getQuestions().add(q);
-		} else {
 			
+		} else {
 			q.setQuestion(quesText);
 			q.changeCategory(category);
 			q.setAnswers(answers);

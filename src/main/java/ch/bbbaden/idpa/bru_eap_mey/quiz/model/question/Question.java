@@ -227,6 +227,8 @@ public abstract class Question<AnswerType> {
 	}
 	
 	/**
+	 * Das ist für den Frageneditcontroller nützlich, dass er alle
+	 * registrierten Fragetypen sehen kann.
 	 * 
 	 * @return
 	 * 		ein Set aller registrierten Fragetypen

@@ -2,7 +2,6 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -32,19 +31,19 @@ public class QuizModel {
 	/**
 	 * Eine Liste der Kategorien.
 	 */
-	private ObservableList<Category> availableCategories = FXCollections
+	private final ObservableList<Category> availableCategories = FXCollections
 			.observableArrayList();
 	
 	/**
 	 * Eine Liste der Fragen.
 	 */
-	private ObservableList<Question<?>> availableQuestions = FXCollections
+	private final ObservableList<Question<?>> availableQuestions = FXCollections
 			.observableArrayList();
 	
 	/**
 	 * Alle momentanen Fragen.
 	 */
-	private Deque<Question<?>> currentQuestions = new LinkedList<>();
+	private final Deque<Question<?>> currentQuestions = new LinkedList<>();
 	
 	/**
 	 * Die Stage der Applikation.
@@ -62,6 +61,8 @@ public class QuizModel {
 	}
 	
 	/**
+	 * Gibt die momentane Stage zurück.
+	 * 
 	 * @return
 	 * 		die Stage
 	 */
@@ -87,18 +88,31 @@ public class QuizModel {
 	}
 	
 	/**
+	 * Versucht, die Klasse unter dem gegebenen Namen zu laden.
+	 * 
+	 * @param className
+	 *        der Klassenname.
+	 */
+	public static void tryLoadQuestionClass(String className) {
+		try {
+			Class.forName(className);
+		} catch(ClassNotFoundException e) {
+			Util.showUncaughtErrorWithMessage(Thread
+					.currentThread(), e, "Die Klasse " + className
+							+ " wurde nicht gefunden. Spielen mit diesem "
+							+ "Fragetyp wird nicht möglich sein.");
+		}
+	}
+	
+	/**
 	 * Lädt die Daten für das Spiel aus der Standarddatei.
 	 * 
 	 * @see Util#loadData(java.net.URI, List, List)
 	 */
 	public void loadData() {
-		try {
-			Class.forName("ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.FreehandQuestion");
-			Class.forName("ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.MultChoiceQuestion");
-			Class.forName("ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.BinaryQuestion");
-		} catch(ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
+		tryLoadQuestionClass("ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.FreehandQuestion");
+		tryLoadQuestionClass("ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.MultChoiceQuestion");
+		tryLoadQuestionClass("ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.BinaryQuestion");
 		this.loadDataDialog();
 	}
 	
@@ -127,12 +141,9 @@ public class QuizModel {
 								// TODO Figure out some better way to
 								// handle the exceptions
 								this.availableQuestions);
-			} catch(MalformedURLException e) {
-				e.printStackTrace();
-			} catch(IOException e) {
-				e.printStackTrace();
-			} catch(JDOMException e) {
-				e.printStackTrace();
+			} catch(IOException | JDOMException e) {
+				Util.showUncaughtErrorWithMessage(Thread
+						.currentThread(), e, "Ein Fehler ist beim Lesen der Daten aufgetreten.");
 			}
 			return true;
 		}
@@ -141,7 +152,7 @@ public class QuizModel {
 	
 	/**
 	 * Öffnet einen Speicherdialog und speichert die Daten in die
-	 * Datei
+	 * Datei.
 	 */
 	public void saveDataDialog() {
 		FileChooser fc = new FileChooser();
@@ -154,18 +165,23 @@ public class QuizModel {
 		fc.setInitialFileName("game");
 		File file = fc.showSaveDialog(this.getStage());
 		if(file != null) {
-			Util.saveData(file, this.availableCategories);
+			try {
+				Util.saveData(file, this.availableCategories);
+			} catch(IOException e) {
+				Util.showUncaughtErrorWithMessage(Thread
+						.currentThread(), e, "Fehler beim Speichervorgang!");
+			}
 		}
 	}
 	
 	/**
-	 * Startet das Spiel mit den gegebenen Kategorien
+	 * Startet das Spiel mit den gegebenen Kategorien.
 	 * 
 	 * @param selectedCategories
 	 *        alle gewählten Kategorien.
 	 */
 	public void startGame(List<Category> selectedCategories) {
-		if(selectedCategories.size() == 0)
+		if(selectedCategories.isEmpty())
 			return;
 		
 		List<? extends Question<?>> questions = selectedCategories.stream()
@@ -181,7 +197,8 @@ public class QuizModel {
 			this.getStage().setScene(MainframeControl
 					.loadQuestion(this, this.currentQuestions.getFirst()));
 		} catch(IOException e) {
-			throw new RuntimeException(e);
+			Util.showUncaughtErrorWithMessage(Thread
+					.currentThread(), e, "FXML der Frage konnte nicht geladen werden.");
 		}
 	}
 	
@@ -215,7 +232,8 @@ public class QuizModel {
 										.getFirst()));
 					}
 				} catch(IOException e) {
-					e.printStackTrace();
+					Util.showUncaughtErrorWithMessage(Thread
+							.currentThread(), e, "FXML der Frage konnte nicht geladen werden.");
 				}
 			});
 			delay.play();
@@ -232,39 +250,44 @@ public class QuizModel {
 	 */
 	public void cancelRound() {
 		this.currentQuestions.clear();
-		this.openMainPage();
+		try {
+			this.openMainPage();
+		} catch(IOException e) {
+			Util.showUncaughtErrorWithMessage(Thread
+					.currentThread(), e, "Fehler beim Öffnen der Hauptansicht.");
+		}
 	}
 	
 	/**
 	 * Öffnet die Hauptansicht.
+	 * 
+	 * @throws IOException
+	 *         falls es einen Fehler beim Lesen der Datei gab.
+	 * @see MainframeControl#mainPage(QuizModel)
 	 */
-	public void openMainPage() {
-		try {
-			this.getStage().setScene(MainframeControl.mainPage(this));
-		} catch(IOException e) {
-			throw new RuntimeException(e);
-		}
+	public void openMainPage() throws IOException {
+		this.getStage().setScene(MainframeControl.mainPage(this));
 	}
 	
 	/**
 	 * Öffnet den Kategorieneditor.
+	 * 
+	 * @throws IOException
+	 *         falls es einen Fehler beim Lesen der Datei gab.
+	 * @see MainframeControl#categoryEditScene(QuizModel)
 	 */
-	public void openCategoryEditor() {
-		try {
-			this.getStage().setScene(MainframeControl.categoryEditScene(this));
-		} catch(IOException e) {
-			throw new RuntimeException(e);
-		}
+	public void openCategoryEditor() throws IOException {
+		this.getStage().setScene(MainframeControl.categoryEditScene(this));
 	}
 	
 	/**
 	 * Öffnet den Kategorieneditor.
+	 * 
+	 * @throws IOException
+	 *         falls es einen Fehler beim Lesen der Datei gab.
+	 * @see MainframeControl#questionEditScene(QuizModel)
 	 */
-	public void openQuestionEditor() {
-		try {
-			this.getStage().setScene(MainframeControl.questionEditScene(this));
-		} catch(IOException e) {
-			throw new RuntimeException(e);
-		}
+	public void openQuestionEditor() throws IOException {
+		this.getStage().setScene(MainframeControl.questionEditScene(this));
 	}
 }

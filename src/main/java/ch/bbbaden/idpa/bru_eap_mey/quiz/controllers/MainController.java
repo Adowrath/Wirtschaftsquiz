@@ -50,21 +50,45 @@ public class MainController extends MainMenuController {
 	 *        die Kategorienliste
 	 */
 	private void loadCategories(List<Category> categories) {
-		if(categories.size() == 0) {
-			this.theFlow.getChildren().clear();
+		final List<Node> children = this.theFlow.getChildren();
+		children.clear();
+		
+		if(categories.isEmpty())
 			return;
-		}
+		
 		final FlowPane bufferPane = new FlowPane();
 		@SuppressWarnings("unused")
 		final Scene bufferScene = new Scene(bufferPane);
 		
-		final List<Node> children = this.theFlow.getChildren();
 		final List<Region> buffer = new LinkedList<>();
-		final List<Region> rowBuffer = new LinkedList<>();
-		double currentWidth = 0.0D;
-		int rows = 1;
 		
-		children.clear();
+		fillNormalBuffer(buffer, categories);
+		
+		bufferPane.getChildren().addAll(buffer);
+		bufferPane.applyCss();
+		bufferPane.layout();
+		
+		final double width = this.theFlow.getPrefWidth() - 5;
+		final double height = this.theFlow.getPrefHeight() - 5;
+		final double normalHeight = buffer.get(0).getHeight();
+		
+		spreadOnRowsJustified(buffer, width, height, normalHeight);
+		
+		children.addAll(buffer);
+	}
+	
+	/**
+	 * Füllt den Buffer mit normalen ToggleButtons.
+	 * 
+	 * @param buffer
+	 *        der Buffer, wird erst geleert
+	 * @param categories
+	 *        die Kategorien
+	 */
+	private static void fillNormalBuffer(	List<Region> buffer,
+											List<Category> categories) {
+		buffer.clear();
+		
 		for(Category cat : categories) { // Füge alle Buttons hinzu
 			ToggleButton tb = new ToggleButton(cat.getNameAndCount());
 			if(cat.getQuestions().size() == 0) {
@@ -74,18 +98,41 @@ public class MainController extends MainMenuController {
 			
 			buffer.add(tb);
 		}
-		bufferPane.getChildren().addAll(buffer);
-		bufferPane.applyCss();
-		bufferPane.layout();
-		
-		final double width = this.theFlow.getPrefWidth() - 5;
-		final double height = this.theFlow.getPrefHeight() - 5;
-		final double normalHeight = buffer.get(0).getHeight();
-		
+	}
+	
+	/**
+	 * Verteilt die Elemente im Buffer auf Reihen, die maximal
+	 * {@code maxWidth} breit sind, und stellt ihre Höhe auf die
+	 * maximale Platzverwendung ein.
+	 * 
+	 * <p>
+	 * Wenn {@code maxHeight} auf -1 gesetzt wird, werden die Elemente
+	 * nicht in ihrer Höhe beeinflusst.
+	 * 
+	 * @param buffer
+	 *        der Buffer enthält alle zu verteilenden Elemente.
+	 * @param maxWidth
+	 *        die maximale Breite einer Reihe, wird vollständig
+	 *        ausgenutzt.
+	 * @param maxHeight
+	 *        die maximale normale Höhe für den Container, wird
+	 *        überschritten, falls die Elemente kleiner als
+	 *        {@code minHeight} werden würden.
+	 * @param minHeight
+	 *        die minimale Grösse für eine Region, damit es nicht
+	 *        <em>zu</em> klein ist.
+	 */
+	private static void spreadOnRowsJustified(	List<Region> buffer,
+												double maxWidth,
+												double maxHeight,
+												double minHeight) {
+		final List<Region> rowBuffer = new LinkedList<>();
+		double currentWidth = 0.0D;
+		int rows = 1;
 		for(Region r : buffer) { // Verlege sie auf Reihen
 			double w = r.getWidth();
-			if(currentWidth + w > width) {
-				double add = (width - currentWidth) / rowBuffer.size();
+			if(currentWidth + w > maxWidth) {
+				double add = (maxWidth - currentWidth) / rowBuffer.size();
 				for(Region node : rowBuffer) {
 					node.setPrefWidth(node.getWidth() + add);
 				}
@@ -98,22 +145,23 @@ public class MainController extends MainMenuController {
 			rowBuffer.add(r);
 		}
 		
-		double add = (width - currentWidth) / rowBuffer.size();
+		double add = (maxWidth - currentWidth) / rowBuffer.size();
 		for(Region node : rowBuffer) {
 			node.setPrefWidth(node.getWidth() + add);
 		}
 		
-		final double newHeight = height / rows;
-		if(newHeight > normalHeight) {
-			for(Region r : buffer) {
-				r.setPrefHeight(newHeight); // Setze die Höhe.
+		if(maxHeight != -1) {
+			final double newHeight = maxHeight / rows;
+			if(newHeight > minHeight) {
+				for(Region r : buffer) {
+					r.setPrefHeight(newHeight); // Setze die Höhe.
+				}
 			}
 		}
-		children.addAll(buffer);
 	}
 	
 	/**
-	 * Startet das Spiel mit den ausgewählten Kategorien
+	 * Startet das Spiel mit den ausgewählten Kategorien.
 	 */
 	public void startGame() {
 		List<Node> cNodes = this.theFlow.getChildren();

@@ -17,38 +17,33 @@ import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 /**
- * Die Hauptklasse des Wirtschaftsquizes
+ * Die Hauptklasse des Wirtschaftsquizes.
  */
 public class MainframeControl extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws IOException {
-		try {
-			FXMLLoader loader = new FXMLLoader(this.getClass()
-					.getResource("main.fxml"));
-			Region root = loader.<Region> load();
-			
-			QuizModel qm = new QuizModel();
-			qm.loadData();
-			qm.setStage(primaryStage);
-			MainController con = loader.getController();
-			con.setModel(qm);
-			
-			Scene scene = new Scene(root, root.getPrefWidth(),
-									root.getPrefHeight());
-			
-			loadCSS(scene);
-			
-			primaryStage.setScene(scene);
-			primaryStage.sizeToScene();
-			primaryStage.setResizable(false);
-			primaryStage.setTitle("Wirtschaftsquiz");
-			
-			primaryStage.show();
-		} catch(IOException e) {
-			
-			throw e;
-		}
+		FXMLLoader loader = new FXMLLoader(this.getClass()
+				.getResource("main.fxml"));
+		Region root = loader.<Region> load();
+		
+		QuizModel qm = new QuizModel();
+		qm.loadData();
+		qm.setStage(primaryStage);
+		MainController con = loader.getController();
+		con.setModel(qm);
+		
+		Scene scene = new Scene(root, root.getPrefWidth(),
+								root.getPrefHeight());
+		
+		loadCSS(scene);
+		
+		primaryStage.setScene(scene);
+		primaryStage.sizeToScene();
+		primaryStage.setResizable(false);
+		primaryStage.setTitle("Wirtschaftsquiz");
+		
+		primaryStage.show();
 	}
 	
 	/**
@@ -59,14 +54,14 @@ public class MainframeControl extends Application {
 	 */
 	private static void loadCSS(Scene sc) {
 		URL url = MainframeControl.class.getResource("app.css");
-		if(url != null) {
-			sc.getStylesheets().add(url.toExternalForm());
-		} else {
+		if(url == null) {
 			Util.showErrorExitOnNoOrClose(	"Stylesheet nicht gefunden",
 											"Das Stylesheet der Applikation (app.css) "
 													+ "wurde nicht gefunden. Möglicherweise "
 													+ "wurde es verschoben oder gelöscht?\r\n"
 													+ "Wollen Sie den Fehler ignorieren?");
+		} else {
+			sc.getStylesheets().add(url.toExternalForm());
 		}
 	}
 	

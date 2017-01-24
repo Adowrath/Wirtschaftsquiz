@@ -151,7 +151,7 @@ public class MultChoiceController extends QuestionController<MultChoiceQuestion>
 		return index == 0 ? this.radioButton1
 				: index == 1 ? this.radioButton2
 						: index == 2 ? this.radioButton3
-								: index == 3 ? this.radioButton3 : null;
+								: index == 3 ? this.radioButton4 : null;
 	}
 	
 	@Override

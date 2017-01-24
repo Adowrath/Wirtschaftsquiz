@@ -70,6 +70,54 @@ public class Util {
 	private static final Logger logger = Logger.getLogger("Util");
 	
 	/**
+	 * Don't instantiate! It does not help you!
+	 */
+	private Util() { /* */ }
+	
+	/**
+	 * Eine erweiterte Methode von
+	 * {@link #showUncaughtError(Thread, Throwable)}, die direkt eine
+	 * zusätzliche Fehlernachricht akzeptiert.
+	 * 
+	 * @param t
+	 *        der Thread, in dem der Fehler geschah.
+	 * @param e
+	 *        die Fehlermeldung.
+	 * @param message
+	 *        die für den Benutzer "nützliche" Nachricht.
+	 */
+	public static void showUncaughtErrorWithMessage(Thread t,
+													Throwable e,
+													String message) {
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		String stackTrace = errors.toString();
+		
+		logger.log(Level.SEVERE, stackTrace);
+		
+		JTextArea errorArea = new JTextArea(stackTrace);
+		JScrollPane errorPane = new JScrollPane(errorArea) {
+			
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Dimension getPreferredSize() {
+				return new Dimension(480, 320);
+			}
+		};
+		JLabel errorMessage = new JLabel(message, SwingConstants.CENTER);
+		
+		JPanel jp = new JPanel(new BorderLayout(0, 10));
+		jp.add(errorMessage, BorderLayout.PAGE_START);
+		jp.add(errorPane, BorderLayout.CENTER);
+		
+		JOptionPane.showMessageDialog(	null, jp,
+										String.format(	"Error in Thread \"%s\"",
+														t),
+										JOptionPane.ERROR_MESSAGE);
+	}
+	
+	/**
 	 * Gibt nicht abgefangene Fehlermeldungen auf den Error-Stream aus
 	 * und öffnet ein JOptionPane mit der Fehlermeldung.
 	 * <br>
@@ -87,34 +135,7 @@ public class Util {
 	 *        der Throwable
 	 */
 	public static void showUncaughtError(Thread t, Throwable e) {
-		
-		StringWriter errors = new StringWriter();
-		e.printStackTrace(new PrintWriter(errors));
-		String stackTrace = errors.toString();
-		
-		logger.log(Level.SEVERE, stackTrace);
-		
-		JTextArea errorArea = new JTextArea(stackTrace);
-		JScrollPane errorPane = new JScrollPane(errorArea) {
-			
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public Dimension getPreferredSize() {
-				return new Dimension(480, 320);
-			}
-		};
-		String s = fuzzyFindMessage(e);
-		JLabel errorMessage = new JLabel(s, SwingConstants.CENTER);
-		
-		JPanel jp = new JPanel(new BorderLayout(0, 10));
-		jp.add(errorMessage, BorderLayout.PAGE_START);
-		jp.add(errorPane, BorderLayout.CENTER);
-		
-		JOptionPane.showMessageDialog(	null, jp,
-										String.format(	"Error in Thread \"%s\"",
-														t),
-										JOptionPane.ERROR_MESSAGE);
+		showUncaughtErrorWithMessage(t, e, fuzzyFindMessage(e));
 	}
 	
 	/**
@@ -127,7 +148,7 @@ public class Util {
 	 *         die allerletzte Message.
 	 */
 	@SuppressWarnings("all")
-	private static @Nullable String fuzzyFindMessage(@Nullable Throwable t) {
+	private static String fuzzyFindMessage(@Nullable Throwable t) {
 		if(t == null)
 			return "Kein Fehler";
 		String s = "";
@@ -144,7 +165,8 @@ public class Util {
 				break;
 			}
 		} while(t != null);
-		return s == null ? null : ("<html>" + s).replaceAll("\n", "<br>");
+		return s == null ? "Ein unbekannter Fehler ist aufgetreten."
+				: ("<html>" + s).replaceAll("\n", "<br>");
 	}
 	
 	/**
@@ -238,6 +260,7 @@ public class Util {
 			}
 			return;
 		}
+		
 		Document doc = new SAXBuilder().build(gameFile.toURL());
 		
 		List<@Nullable Element> cats = doc.getRootElement()
@@ -274,12 +297,11 @@ public class Util {
 				questions.add(loadedQuestion);
 			});
 			
-			Category c = new Category(	nameElement.getText()
-					.replaceAll("[^ \\S]+", " "),
-										descElement.getText()
-												.replaceAll("[^ \\S]+", " "),
-										questions);
-			return c;
+			return new Category(nameElement.getText().replaceAll(	"[^ \\S]+",
+																	" "),
+								descElement.getText().replaceAll(	"[^ \\S]+",
+																	" "),
+								questions);
 		}).filter(c -> c != null).collect(Collectors.toList()));
 		
 		questionList.addAll(categoryList.stream().map(Category::getQuestions)
@@ -294,33 +316,27 @@ public class Util {
 	 * @param gameFile
 	 *        die Datei, in die geschrieben wird.
 	 * @param categoryList
-	 *        die Liste der Kategorien
+	 *        die Liste der Kategorien.
+	 * @throws IOException
+	 *         wenn das Schreiben in die Datei nicht geklappt hat.
 	 */
-	public static void saveData(File gameFile, List<Category> categoryList) {
-		try {
-			
-			Element game = new Element("game");
-			Document doc = new Document(game);
-			game.addContent(categoryList.stream()
-					.map(cat -> new Element("category")
-							.addContent(new Element("name")
-									.setText(cat.getName()))
-							.addContent(new Element("description")
-									.setText(cat.getDescription()))
-							.addContent(cat.getQuestions().stream()
-									.map(Question::save)
-									.collect(Collectors.toList())))
-					.collect(Collectors.toList()));
-			
-			
-			XMLOutputter xmlOutput = new XMLOutputter(Format.getPrettyFormat());
-			
-			try(Writer fw = new FileWriter(gameFile)) {
-				xmlOutput.output(doc, fw);
-			}
-			
-		} catch(IOException e) {
-			throw new RuntimeException(e);
+	public static void saveData(File gameFile, List<Category> categoryList)
+			throws IOException {
+		Element game = new Element("game");
+		Document doc = new Document(game);
+		game.addContent(categoryList.stream().map(cat -> new Element("category")
+				.addContent(new Element("name").setText(cat.getName()))
+				.addContent(new Element("description")
+						.setText(cat.getDescription()))
+				.addContent(cat.getQuestions().stream().map(Question::save)
+						.collect(Collectors.toList())))
+				.collect(Collectors.toList()));
+		
+		
+		XMLOutputter xmlOutput = new XMLOutputter(Format.getPrettyFormat());
+		
+		try(Writer fw = new FileWriter(gameFile)) {
+			xmlOutput.output(doc, fw);
 		}
 	}
 	

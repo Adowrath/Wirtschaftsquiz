@@ -53,7 +53,7 @@ public class CategoryEditController extends MainMenuController {
 	
 	/**
 	 * Diese Methode reagiert anstelle einer Subklasse von
-	 * {@link ChangeListener} auf Änderung der Auswahl
+	 * {@link ChangeListener} auf Änderung der Auswahl.
 	 * 
 	 * @param obs
 	 *        die Observable-Value (ungenutzt)
@@ -81,14 +81,13 @@ public class CategoryEditController extends MainMenuController {
 	 * Speichert eine Kategorie anhand der momentanen Angaben.
 	 */
 	public void saveCategory() {
-		Category c = this.catList.getSelectionModel().getSelectedItem();
 		String name = this.nameField.getText();
 		String desc = this.descField.getText();
-		if(name == null || name.trim().isEmpty())
-			return;
-		if(desc == null || desc.trim().isEmpty())
+		if(name == null || name.trim().isEmpty() || desc == null
+				|| desc.trim().isEmpty())
 			return;
 		
+		Category c = this.catList.getSelectionModel().getSelectedItem();
 		if(c == null) {
 			this.getModel().getCategories().add(new Category(name, desc));
 			this.catList.getSelectionModel().selectLast();
