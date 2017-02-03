@@ -19,7 +19,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
  * 
  * @see Question
  */
-public class Category {
+public final class Category {
 	
 	/**
 	 * Der Name dieser Kategorie.

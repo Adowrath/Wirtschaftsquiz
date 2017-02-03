@@ -21,7 +21,7 @@ import javafx.scene.control.TextField;
  * Der Controller für die Übersicht der Kategorien.
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class CategoryEditController extends MainMenuController {
+public final class CategoryEditController extends MainMenuController {
 	
 	/**
 	 * Die Liste aller Kategorien.

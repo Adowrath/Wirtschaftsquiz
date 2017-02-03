@@ -26,7 +26,7 @@ import javafx.util.Duration;
 /**
  * Das Hauptmodel für das gesamte Wirtschaftsquiz.
  */
-public class QuizModel {
+public final class QuizModel {
 	
 	/**
 	 * Eine Liste der Kategorien.

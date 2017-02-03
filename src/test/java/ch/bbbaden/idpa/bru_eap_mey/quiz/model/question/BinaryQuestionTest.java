@@ -20,7 +20,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Util.class})
 @SuppressWarnings({"static-method", "javadoc"})
-public class BinaryQuestionTest {
+public final class BinaryQuestionTest {
 	
 	@Test
 	public void testGetAnswerCount() {

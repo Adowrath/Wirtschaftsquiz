@@ -27,7 +27,7 @@ import javafx.scene.text.Text;
  * @see FreehandQuestion
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class FreehandController extends QuestionController<FreehandQuestion> {
+public final class FreehandController extends QuestionController<FreehandQuestion> {
 	
 	/**
 	 * Der Text der Frage.

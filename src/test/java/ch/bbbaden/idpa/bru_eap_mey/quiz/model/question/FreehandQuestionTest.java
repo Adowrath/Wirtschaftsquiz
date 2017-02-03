@@ -21,7 +21,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Util.class})
 @SuppressWarnings({"static-method", "javadoc"})
-public class FreehandQuestionTest {
+public final class FreehandQuestionTest {
 	
 	@Test
 	public void testGetAnswerCount() {

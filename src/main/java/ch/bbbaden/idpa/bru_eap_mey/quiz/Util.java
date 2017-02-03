@@ -41,7 +41,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 /**
  * Eine Reihe verschiedener Utility Methoden.
  */
-public class Util {
+public final class Util {
 	
 	/**
 	 * Der Titel für das Fehlerfenster beim Lesen einer Frage.

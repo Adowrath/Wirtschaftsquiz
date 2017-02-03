@@ -10,6 +10,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({BinaryQuestionTest.class, FreehandQuestionTest.class,
 		MultChoiceQuestionTest.class, QuestionTest.class})
-public class QuestionTests {
+public final class QuestionTests {
 	//
 }

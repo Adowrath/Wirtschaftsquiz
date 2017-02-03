@@ -25,7 +25,7 @@ import javafx.scene.text.Text;
  * @see MultChoiceQuestion
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class MultChoiceController extends QuestionController<MultChoiceQuestion> {
+public final class MultChoiceController extends QuestionController<MultChoiceQuestion> {
 	
 	/**
 	 * Der Text der Frage.

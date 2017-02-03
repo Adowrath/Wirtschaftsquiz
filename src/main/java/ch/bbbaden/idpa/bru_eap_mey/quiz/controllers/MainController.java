@@ -29,7 +29,7 @@ import javafx.scene.layout.Region;
  * werden oder das Spiel gestartet wird.
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class MainController extends MainMenuController {
+public final class MainController extends MainMenuController {
 	
 	
 	/**

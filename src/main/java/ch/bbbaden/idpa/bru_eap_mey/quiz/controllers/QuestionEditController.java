@@ -35,7 +35,7 @@ import javafx.util.StringConverter;
  * Der Controller für die Übersicht der Fragen.
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class QuestionEditController extends MainMenuController {
+public final class QuestionEditController extends MainMenuController {
 	
 	/**
 	 * Die Liste aller Fragen.

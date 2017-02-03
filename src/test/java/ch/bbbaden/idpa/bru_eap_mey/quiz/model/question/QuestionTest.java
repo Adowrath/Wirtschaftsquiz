@@ -31,7 +31,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Util.class})
 @SuppressWarnings({"static-method", "javadoc"})
-public class QuestionTest {
+public final class QuestionTest {
 	
 	@Before
 	public void clearTypes() throws IllegalArgumentException,

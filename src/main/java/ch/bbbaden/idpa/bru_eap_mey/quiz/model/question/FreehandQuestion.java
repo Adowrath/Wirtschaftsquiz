@@ -19,7 +19,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  * {@link Util#levenshteinDistance(CharSequence, CharSequence)
  * Levenshtein-Algorithmus} überprüft.
  */
-public class FreehandQuestion extends Question<String> {
+public final class FreehandQuestion extends Question<String> {
 	
 	static {
 		Question.register(	"freehand", FreehandQuestion::load,

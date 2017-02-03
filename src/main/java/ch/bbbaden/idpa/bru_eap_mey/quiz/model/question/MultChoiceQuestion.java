@@ -16,7 +16,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  * <br>
  * Hier besitzt jede Frage 4 Antwortmöglichkeiten.
  */
-public class MultChoiceQuestion extends Question<Integer> {
+public final class MultChoiceQuestion extends Question<Integer> {
 	
 	static {
 		Question.register(	"multipleChoice", MultChoiceQuestion::load,

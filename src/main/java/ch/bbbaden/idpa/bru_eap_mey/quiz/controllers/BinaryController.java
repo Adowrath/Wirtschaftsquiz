@@ -26,7 +26,7 @@ import javafx.scene.text.Text;
  * @see BinaryQuestion
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class BinaryController extends QuestionController<BinaryQuestion> {
+public final class BinaryController extends QuestionController<BinaryQuestion> {
 	
 	/**
 	 * Der Text der Frage.

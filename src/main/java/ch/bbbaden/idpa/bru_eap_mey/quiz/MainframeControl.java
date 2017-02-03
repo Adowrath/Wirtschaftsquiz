@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 /**
  * Die Hauptklasse des Wirtschaftsquizes.
  */
-public class MainframeControl extends Application {
+public final class MainframeControl extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws IOException {

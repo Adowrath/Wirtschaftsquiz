@@ -23,7 +23,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Util.class})
 @SuppressWarnings({"static-method"})
-public class MultChoiceQuestionTest {
+public final class MultChoiceQuestionTest {
 	
 	/**
 	 * Überprüft die Zahl der Antworten.

@@ -9,7 +9,7 @@ import javafx.scene.control.ListCell;
 /**
  * Die ListCell wird für die Anzeige der Fragen benötigt.
  */
-public class QuestionListCell extends ListCell<Question<?>> {
+public final class QuestionListCell extends ListCell<Question<?>> {
 	
 	@Override
 	public void updateItem(@Nullable Question<?> item, boolean empty) {

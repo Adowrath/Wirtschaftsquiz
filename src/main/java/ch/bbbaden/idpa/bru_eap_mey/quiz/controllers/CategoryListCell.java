@@ -10,7 +10,7 @@ import javafx.scene.control.Tooltip;
 /**
  * Die ListCell wird für die Anzeige der Kategorien benötigt.
  */
-public class CategoryListCell extends ListCell<Category> {
+public final class CategoryListCell extends ListCell<Category> {
 	
 	@Override
 	public void updateItem(@Nullable Category item, boolean empty) {

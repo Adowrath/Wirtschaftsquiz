@@ -18,7 +18,7 @@ import org.junit.Test;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 
 @SuppressWarnings({"static-method", "javadoc"})
-public class CategoryTest {
+public final class CategoryTest {
 	
 	@Test
 	public void testCategoryEmptyVarargs() {
