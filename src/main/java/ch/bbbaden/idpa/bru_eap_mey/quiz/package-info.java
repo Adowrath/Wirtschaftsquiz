@@ -1,4 +1,4 @@
-/*
+/**
  * Das Grundpackage für dieses Wirtschaftsquiz.
  */
 @NonNullByDefault

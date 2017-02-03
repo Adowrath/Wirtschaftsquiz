@@ -99,8 +99,8 @@ public final class QuizModel {
 		} catch(ClassNotFoundException e) {
 			Util.showUncaughtErrorWithMessage(Thread
 					.currentThread(), e, "Die Klasse " + className
-							+ " wurde nicht gefunden. Spielen mit diesem "
-							+ "Fragetyp wird nicht möglich sein.");
+							+ " wurde nicht gefunden. Spielen mit diesem"
+							+ " Fragetyp wird nicht möglich sein.");
 		}
 	}
 	
@@ -138,12 +138,14 @@ public final class QuizModel {
 			this.availableQuestions.clear();
 			try {
 				Util.loadData(	file.toURI(), this.availableCategories,
-								// TODO Figure out some better way to
-								// handle the exceptions
 								this.availableQuestions);
-			} catch(IOException | JDOMException e) {
+			} catch(IOException e) {
 				Util.showUncaughtErrorWithMessage(Thread
-						.currentThread(), e, "Ein Fehler ist beim Lesen der Daten aufgetreten.");
+						.currentThread(), e, "Ein Fehler ist beim Lesen der Datei aufgetreten.");
+			} catch(JDOMException e) {
+				Util.showUncaughtErrorWithMessage(Thread
+						.currentThread(), e, "Die XML-Datei\"" + file.getName()
+								+ "\" ist falsch formattiert.");
 			}
 			return true;
 		}
@@ -213,9 +215,9 @@ public final class QuizModel {
 	 * @return
 	 * 		die momentane Frage
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> Question<T> testAnswer(T t) {
 		try {
+			@SuppressWarnings("unchecked")
 			Question<T> question = (Question<T>) this.currentQuestions
 					.removeFirst();
 			if(!question.check(t)) {

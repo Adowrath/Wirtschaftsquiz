@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -70,9 +71,11 @@ public final class Util {
 	private static final Logger logger = Logger.getLogger("Util");
 	
 	/**
-	 * Don't instantiate! It does not help you!
+	 * Don't instantiate. It does not help you!
 	 */
-	private Util() { /* */ }
+	private Util() {
+		throw new AssertionError("Don't. You don't need it.");
+	}
 	
 	/**
 	 * Eine erweiterte Methode von
@@ -147,24 +150,23 @@ public final class Util {
 	 * 		die Nachricht, wenn eine gefunden wurde. Ansonsten
 	 *         die allerletzte Message.
 	 */
-	@SuppressWarnings("all")
-	private static String fuzzyFindMessage(@Nullable Throwable t) {
-		if(t == null)
-			return "Kein Fehler";
+	private static String fuzzyFindMessage(Throwable t) {
+		@Nullable
+		Throwable thr = t;
 		String s = "";
 		do {
 			try {
-				s = t.getMessage();
+				s = thr.getMessage();
 				if(s != null && !s.isEmpty()) {
 					s = s.trim();
 					Class.forName(s, false, null);
 				}
-				t = t.getCause();
+				thr = thr.getCause();
 			} catch(ClassNotFoundException e) {
 				e.getClass(); // Einfach damit Eclipse nicht meckert.
 				break;
 			}
-		} while(t != null);
+		} while(thr != null);
 		return s == null ? "Ein unbekannter Fehler ist aufgetreten."
 				: ("<html>" + s).replaceAll("\n", "<br>");
 	}
@@ -302,7 +304,7 @@ public final class Util {
 								descElement.getText().replaceAll(	"[^ \\S]+",
 																	" "),
 								questions);
-		}).filter(c -> c != null).collect(Collectors.toList()));
+		}).filter(Objects::nonNull).collect(Collectors.toList()));
 		
 		questionList.addAll(categoryList.stream().map(Category::getQuestions)
 				.flatMap(List::stream).collect(Collectors.toList()));
