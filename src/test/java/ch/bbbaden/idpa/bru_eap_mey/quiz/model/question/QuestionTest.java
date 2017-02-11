@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.internal.util.collections.Sets;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -29,7 +30,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Util.class})
+@PrepareForTest({Util.class, Category.class})
 @SuppressWarnings({"static-method", "javadoc"})
 public final class QuestionTest {
 	
@@ -141,8 +142,8 @@ public final class QuestionTest {
 	@Test
 	public void testChangeCategoryTwice() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
-		Category c1 = mock(Category.class);
-		Category c2 = mock(Category.class);
+		Category c1 = PowerMockito.mock(Category.class);
+		Category c2 = PowerMockito.mock(Category.class);
 		
 		q.changeCategory(c1);
 		q.changeCategory(c2);
@@ -159,7 +160,7 @@ public final class QuestionTest {
 	@Test
 	public void testGetCategory() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
-		Category c = mock(Category.class);
+		Category c = PowerMockito.mock(Category.class);
 		q.changeCategory(c);
 		
 		Category assigned = q.getCategory();
