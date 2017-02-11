@@ -99,15 +99,9 @@ public final class Util {
 		logger.log(Level.SEVERE, stackTrace);
 		
 		JTextArea errorArea = new JTextArea(stackTrace);
-		JScrollPane errorPane = new JScrollPane(errorArea) {
-			
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public Dimension getPreferredSize() {
-				return new Dimension(480, 320);
-			}
-		};
+		JScrollPane errorPane = new JScrollPane(errorArea);
+		errorPane.setPreferredSize(new Dimension(480, 320));
+		
 		JLabel errorMessage = new JLabel(message, SwingConstants.CENTER);
 		
 		JPanel jp = new JPanel(new BorderLayout(0, 10));
