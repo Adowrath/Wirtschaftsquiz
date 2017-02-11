@@ -271,7 +271,10 @@ public final class QuestionEditController extends MainMenuController {
 	public void deleteQuestion() {
 		Question<?> q = this.queList.getSelectionModel().getSelectedItem();
 		if(q != null) {
-			q.getCategory().removeQuestion(q);
+			Category c = q.getCategory();
+			if(c != null) {
+				c.removeQuestion(q);
+			}
 			this.getModel().getQuestions().remove(q);
 			this.clearFields();
 		}

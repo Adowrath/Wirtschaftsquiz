@@ -167,13 +167,13 @@ public final class QuestionTest {
 		assertEquals("getCategory works correctly.", c, assigned);
 	}
 	
-	@Test(expected = AssertionError.class)
+	@Test
 	public void testGetCategoryNotInitialized() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
 		
-		q.getCategory();
+		Category c = q.getCategory();
 		
-		fail("An assert should be used to check if the category isn't null.");
+		assertNull("There is no default category.", c);
 	}
 	
 	@Test

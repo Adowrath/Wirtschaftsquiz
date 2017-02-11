@@ -161,8 +161,7 @@ public abstract class Question<AnswerType> {
 	 * @return
 	 * 		die Kategorie
 	 */
-	public final Category getCategory() {
-		assert this.category != null;
+	public final @Nullable Category getCategory() {
 		return this.category;
 	}
 	
