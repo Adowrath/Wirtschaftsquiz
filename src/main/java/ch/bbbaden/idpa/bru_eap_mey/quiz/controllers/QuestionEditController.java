@@ -106,7 +106,9 @@ public final class QuestionEditController extends MainMenuController {
 	 * entsprechenden Listenern und CellFactories.
 	 */
 	public void initialize() {
-		this.catBox.setCellFactory(cell -> new CategoryListCell());
+		this.catBox
+				.setCellFactory(cell -> new CustomListCell<>(	Category::getNameAndCount,
+																Category::getDescription));
 		this.catBox.setConverter(new StringConverter<Category>() {
 			
 			@Override
@@ -120,7 +122,8 @@ public final class QuestionEditController extends MainMenuController {
 			}
 		});
 		
-		this.queList.setCellFactory(cell -> new QuestionListCell());
+		this.queList
+				.setCellFactory(cell -> new CustomListCell<>(Question::getQuestion));
 		this.queList.getSelectionModel().selectedItemProperty()
 				.addListener(this::newSelection);
 		
@@ -173,7 +176,7 @@ public final class QuestionEditController extends MainMenuController {
 		this.catBox.getSelectionModel().clearSelection();
 		if(newValue != null) {
 			this.catBox.getSelectionModel().select(newValue.getCategory());
-
+			
 			String[] labelTexts = newValue.getAnswerFieldLabels();
 			String[] answers = newValue.getAnswers();
 			int size = newValue.getAnswerCount();
