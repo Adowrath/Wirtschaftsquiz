@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.jdom2.JDOMException;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.MainframeControl;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
+import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,16 +48,37 @@ public final class QuizModel {
 	/**
 	 * Die Stage der Applikation.
 	 */
-	private @Nullable Stage stage;
+	private final Stage stage;
 	
 	/**
-	 * Setzt die Stage.
+	 * Der Delay, der für die Übergänge zwischen den einzelnen Fragen
+	 * verwendet wird.
+	 */
+	private final Animation delay;
+	
+	/**
+	 * Der Konstruktor.
 	 * 
 	 * @param st
-	 *        die Stage
+	 *        die Stage, welche von dem Model kontrolliert wird.
 	 */
-	public void setStage(Stage st) {
+	public QuizModel(Stage st) {
 		this.stage = st;
+		this.delay = new PauseTransition(Duration.seconds(5));
+		this.delay.setOnFinished(event -> {
+			try {
+				if(this.currentQuestions.isEmpty()) {
+					this.openMainPage();
+				} else {
+					this.getStage().setScene(MainframeControl
+							.loadQuestion(	this,
+											this.currentQuestions.getFirst()));
+				}
+			} catch(IOException e) {
+				Util.showUncaughtErrorWithMessage(Thread
+						.currentThread(), e, "FXML der Frage konnte nicht geladen werden.");
+			}
+		});
 	}
 	
 	/**
@@ -67,7 +88,6 @@ public final class QuizModel {
 	 * 		die Stage
 	 */
 	public Stage getStage() {
-		assert this.stage != null;
 		return this.stage;
 	}
 	
@@ -223,22 +243,8 @@ public final class QuizModel {
 			if(!question.check(t)) {
 				this.currentQuestions.addLast(question);
 			}
-			PauseTransition delay = new PauseTransition(Duration.seconds(5));
-			delay.setOnFinished(event -> {
-				try {
-					if(this.currentQuestions.isEmpty()) {
-						this.openMainPage();
-					} else {
-						this.getStage().setScene(MainframeControl
-								.loadQuestion(this, this.currentQuestions
-										.getFirst()));
-					}
-				} catch(IOException e) {
-					Util.showUncaughtErrorWithMessage(Thread
-							.currentThread(), e, "FXML der Frage konnte nicht geladen werden.");
-				}
-			});
-			delay.play();
+			
+			this.delay.playFromStart();
 			
 			return question;
 		} catch(ClassCastException e) {
@@ -251,6 +257,7 @@ public final class QuizModel {
 	 * Bricht eine Runde ab.
 	 */
 	public void cancelRound() {
+		this.delay.stop();
 		this.currentQuestions.clear();
 		try {
 			this.openMainPage();

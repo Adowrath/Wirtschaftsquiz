@@ -1,11 +1,20 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.controllers;
 
-import org.eclipse.jdt.annotation.Nullable;
+import static org.eclipse.jdt.annotation.DefaultLocation.PARAMETER;
+import static org.eclipse.jdt.annotation.DefaultLocation.RETURN_TYPE;
+import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_ARGUMENT;
+import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_BOUND;
+
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.QuizModel;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 /**
  * Die Grundklasse für alle Controller im Quiz.
@@ -14,13 +23,30 @@ import javafx.event.ActionEvent;
  *        der Typ der Frage, relevant für
  *        {@link #setQuestion(Question) setQuestion}.
  */
+@NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
 public abstract class QuestionController<QuestionType extends Question<?>> {
+	
+	/**
+	 * Die Pseudoklasse für eine falsche Antwort.
+	 */
+	public static final PseudoClass wrongAnswer = PseudoClass.getPseudoClass("wrongAnswer");
+	
+	/**
+	 * Die Pseudoklasse für eine richtige Antwort.
+	 */
+	public static final PseudoClass correctAnswer = PseudoClass.getPseudoClass("correctAnswer");
+	
+	/**
+	 * Der Weiter-Knopf.
+	 */
+	@FXML
+	protected Button continueButton;
 	
 	/**
 	 * Das Quizmodel wird hier für Rückmeldungen (bspw. Frage
 	 * korrekt/inkorrekt)
 	 */
-	private @Nullable QuizModel quizModel;
+	private QuizModel quizModel;
 	
 	/**
 	 * Initialisiert das Quizmodel.

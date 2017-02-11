@@ -17,7 +17,6 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
@@ -69,6 +68,9 @@ public final class BinaryController extends QuestionController<BinaryQuestion> {
 		boolean selected1 = this.radioButton1.isSelected();
 		boolean selected2 = this.radioButton2.isSelected();
 		if(selected1 || selected2) {
+			
+			this.continueButton.setDisable(true);
+			
 			Boolean chosenAnswer = Boolean
 					.valueOf(this.answers[selected1 ? 0 : 1]);
 			Question<Boolean> question = this.getModel()
@@ -76,12 +78,12 @@ public final class BinaryController extends QuestionController<BinaryQuestion> {
 			
 			if(question.check(chosenAnswer)) {
 				(selected1 ? this.radioButton1 : this.radioButton2)
-						.setTextFill(Color.GREEN);
+						.pseudoClassStateChanged(correctAnswer, true);
 			} else {
 				(selected1 ? this.radioButton1 : this.radioButton2)
-						.setTextFill(Color.RED);
+						.pseudoClassStateChanged(wrongAnswer, true);
 				(selected1 ? this.radioButton2 : this.radioButton1)
-						.setTextFill(Color.GREEN);
+						.pseudoClassStateChanged(correctAnswer, true);
 			}
 		}
 	}

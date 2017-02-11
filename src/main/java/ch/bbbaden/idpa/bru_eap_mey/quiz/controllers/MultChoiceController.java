@@ -16,7 +16,6 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
@@ -80,6 +79,8 @@ public final class MultChoiceController extends QuestionController<MultChoiceQue
 		if(selection == -1)
 			return;
 		
+		this.continueButton.setDisable(true);
+		
 		RadioButton current = this.getButtonForIndex(selection);
 		assert current != null : "A valid index was selected, so "
 				+ "a valid RadioButton should be returned.";
@@ -89,17 +90,18 @@ public final class MultChoiceController extends QuestionController<MultChoiceQue
 		
 		if(question.check(chosen)) {
 			
-			current.setTextFill(Color.GREEN);
+			current.pseudoClassStateChanged(correctAnswer, true);
 			
 		} else {
 			
-			current.setTextFill(Color.RED);
+			current.pseudoClassStateChanged(wrongAnswer, true);
+			
 			int correct = question.getAnswer().intValue();
 			RadioButton correctButton = this.getButtonForAnswer(correct);
 			assert correctButton != null : "The answer should be "
 					+ "\"linked\" to a valid button.";
 			
-			correctButton.setTextFill(Color.GREEN);
+			correctButton.pseudoClassStateChanged(correctAnswer, true);
 		}
 	}
 	

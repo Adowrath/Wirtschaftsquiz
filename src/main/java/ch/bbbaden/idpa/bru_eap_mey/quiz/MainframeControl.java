@@ -27,9 +27,9 @@ public final class MainframeControl extends Application {
 				.getResource("main.fxml"));
 		Region root = loader.<Region> load();
 		
-		QuizModel qm = new QuizModel();
+		QuizModel qm = new QuizModel(primaryStage);
 		qm.loadData();
-		qm.setStage(primaryStage);
+		
 		MainController con = loader.getController();
 		con.setModel(qm);
 		
