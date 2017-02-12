@@ -3,7 +3,6 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz.model;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 
 
@@ -51,9 +50,9 @@ public final class CategoryTest {
 	 */
 	@Test
 	public void testCategoryVarargs() {
-		Question<?> q1 = mock(Question.class, CALLS_REAL_METHODS);
-		Question<?> q2 = mock(Question.class, CALLS_REAL_METHODS);
-		Question<?> q3 = mock(Question.class, CALLS_REAL_METHODS);
+		Question<?> q1 = mock(Question.class);
+		Question<?> q2 = mock(Question.class);
+		Question<?> q3 = mock(Question.class);
 		List<Question<?>> origList = Arrays.asList(q1, q2, q3);
 		
 		Category c = new Category("a", "b", q1, q2, q3);
@@ -68,9 +67,9 @@ public final class CategoryTest {
 	 */
 	@Test
 	public void testCategoryList() {
-		Question<?> q1 = mock(Question.class, CALLS_REAL_METHODS);
-		Question<?> q2 = mock(Question.class, CALLS_REAL_METHODS);
-		Question<?> q3 = mock(Question.class, CALLS_REAL_METHODS);
+		Question<?> q1 = mock(Question.class);
+		Question<?> q2 = mock(Question.class);
+		Question<?> q3 = mock(Question.class);
 		List<Question<?>> origList = Arrays.asList(q1, q2, q3);
 		
 		Category c = new Category("a", "b", origList);
@@ -85,9 +84,9 @@ public final class CategoryTest {
 	 */
 	@Test
 	public void testCategoryStream() {
-		Question<?> q1 = mock(Question.class, CALLS_REAL_METHODS);
-		Question<?> q2 = mock(Question.class, CALLS_REAL_METHODS);
-		Question<?> q3 = mock(Question.class, CALLS_REAL_METHODS);
+		Question<?> q1 = mock(Question.class);
+		Question<?> q2 = mock(Question.class);
+		Question<?> q3 = mock(Question.class);
 		List<Question<?>> origList = Arrays.asList(q1, q2, q3);
 		Stream<Question<?>> stream = Stream.of(q1, q2, q3);
 		
@@ -174,7 +173,7 @@ public final class CategoryTest {
 	 */
 	@Test
 	public void testGetNameAndCountWithQuestions() {
-		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
+		Question<?> q = mock(Question.class);
 		Category c = new Category("a", "b", q);
 		
 		String nameAndCount = c.getNameAndCount();
@@ -204,7 +203,7 @@ public final class CategoryTest {
 	 */
 	@Test
 	public void testRemoveQuestion() {
-		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
+		Question<?> q = mock(Question.class);
 		Category c = new Category("a", "b", q);
 		List<Question<?>> list = Collections.emptyList();
 		
@@ -247,8 +246,7 @@ public final class CategoryTest {
 	 */
 	@Test
 	public void testEqualsIndifferentOfQuestions() {
-		Category c1 = new Category(	"ab", "abcd",
-									mock(Question.class, CALLS_REAL_METHODS));
+		Category c1 = new Category("ab", "abcd", mock(Question.class));
 		Category c2 = new Category("ab", "abcd");
 		
 		//
@@ -346,8 +344,7 @@ public final class CategoryTest {
 	 */
 	@Test
 	public void testHashCodeIndifferentOfQuestions() {
-		Category c1 = new Category(	"ab", "abcd",
-									mock(Question.class, CALLS_REAL_METHODS));
+		Category c1 = new Category("ab", "abcd", mock(Question.class));
 		Category c2 = new Category("ab", "abcd");
 		
 		int hash1 = c1.hashCode();

@@ -6,7 +6,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyVararg;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -15,17 +14,21 @@ import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.jdom2.Element;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.runner.RunWith;
-import org.mockito.internal.util.collections.Sets;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -39,7 +42,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Util.class, Category.class})
-@SuppressWarnings({"static-method"})
+@SuppressWarnings({"static-method", "boxing"})
 public final class QuestionTest {
 	
 	/**
@@ -82,12 +85,18 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testGetDummy() {
-		Question<?> dummy = mock(Question.class);
-		Question.register(	"type", e -> null,
-							() -> dummy);
+		Question<Object> dummy = mock(Question.class);
+		AtomicInteger callCount = new AtomicInteger(0);
+		Supplier<Question<Object>> sup = () -> {
+			callCount.incrementAndGet();
+			return dummy;
+		};
+		Question.register("type", mock(Function.class), sup);
 		
 		Question<?> q = Question.getDummy("type");
 		
+		this.now.checkThat(	"Supplier was called exactly once.",
+							callCount.intValue(), is(equalTo(1)));
 		this.now.checkThat("Correct dummy is returned.", q, is(equalTo(dummy)));
 	}
 	
@@ -111,10 +120,8 @@ public final class QuestionTest {
 	public void testRegisterDouble() {
 		//
 		
-		Question.register(	"type", e -> null,
-							() -> mock(Question.class, CALLS_REAL_METHODS));
-		Question.register(	"type", e -> null,
-							() -> mock(Question.class, CALLS_REAL_METHODS));
+		Question.register("type", mock(Function.class), mock(Supplier.class));
+		Question.register("type", mock(Function.class), mock(Supplier.class));
 		
 		fail("register should throw IllegalArgumentException because the type is being registered twice.");
 	}
@@ -124,7 +131,7 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testGetTypesEmpty() {
-		Set<String> empty = Sets.newSet();
+		Set<String> empty = Collections.emptySet();
 		
 		Set<String> types = Question.getTypes();
 		
@@ -137,9 +144,8 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testGetTypes() {
-		Set<String> expected = Sets.newSet("type");
-		Question.register(	"type", e -> null,
-							() -> mock(Question.class, CALLS_REAL_METHODS));
+		Set<String> expected = Collections.singleton("type");
+		Question.register("type", mock(Function.class), mock(Supplier.class));
 		
 		Set<String> types = Question.getTypes();
 		
@@ -153,13 +159,19 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testLoadFromElement() {
-		Question<?> loaded = mock(Question.class, CALLS_REAL_METHODS);
-		Question.register(	"aType", e -> loaded,
-							() -> mock(Question.class, CALLS_REAL_METHODS));
+		Question<?> loaded = mock(Question.class);
+		AtomicInteger callCount = new AtomicInteger(0);
+		Function<Element, @Nullable Question<?>> func = el -> {
+			callCount.incrementAndGet();
+			return loaded;
+		};
+		Question.register("aType", func, mock(Supplier.class));
 		
 		Question<?> actual = Question.loadFromElement(new Element("a")
 				.setAttribute("type", "aType"));
 		
+		this.now.checkThat(	"Function was called exactly once.",
+							callCount.intValue(), is(equalTo(1)));
 		this.now.checkThat(	"Correct loaded Question is returned.", actual,
 							is(equalTo(loaded)));
 	}
@@ -169,7 +181,7 @@ public final class QuestionTest {
 	 * Element keinen Typ hat.
 	 */
 	@Test
-	public void testLoadFromElementNoText() {
+	public void testLoadFromElementNoType() {
 		mockStatic(Util.class);
 		
 		Question<?> loaded = Question.loadFromElement(new Element("a"));
@@ -219,7 +231,7 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testChangeCategoryTwice() {
-		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
+		Question<?> q = mock(Question.class);
 		Category c1 = PowerMockito.mock(Category.class);
 		Category c2 = PowerMockito.mock(Category.class);
 		
@@ -253,7 +265,7 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testGetCategory() {
-		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
+		Question<?> q = mock(Question.class);
 		Category c = PowerMockito.mock(Category.class);
 		q.changeCategory(c);
 		
@@ -268,7 +280,7 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testGetCategoryNotInitialized() {
-		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
+		Question<?> q = mock(Question.class);
 		
 		Category c = q.getCategory();
 		
@@ -280,7 +292,7 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testSetGetQuestion() {
-		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
+		Question<?> q = mock(Question.class);
 		String question = "Some question";
 		q.setQuestion(question);
 		
