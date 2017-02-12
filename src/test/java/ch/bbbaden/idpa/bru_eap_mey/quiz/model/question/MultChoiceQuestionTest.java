@@ -1,15 +1,18 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyVararg;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.verifyNoMoreInteractions;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.jdom2.Element;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -22,8 +25,14 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Util.class})
-@SuppressWarnings({"static-method"})
+@SuppressWarnings({"boxing"})
 public final class MultChoiceQuestionTest {
+	
+	/**
+	 * Der ErrorCollector.
+	 */
+	@Rule
+	public ErrorCollector now = new ErrorCollector();
 	
 	/**
 	 * Überprüft die Zahl der Antworten.
@@ -35,8 +44,8 @@ public final class MultChoiceQuestionTest {
 		
 		int answerCount = mcq.getAnswerCount();
 		
-		assertEquals(	"Multiple-Choice Questions should have four answers.",
-						answerCount, 4);
+		this.now.checkThat(	"Multiple-Choice Questions should have four answers.",
+							answerCount, is(equalTo(4)));
 	}
 	
 	/**
@@ -49,8 +58,8 @@ public final class MultChoiceQuestionTest {
 		
 		String[] answers = mcq.getAnswers();
 		
-		assertArrayEquals(	"Answers are returned correctly.",
-							new String[] {"a", "b", "c", "d"}, answers);
+		this.now.checkThat(	"Answers are returned correctly.", answers,
+							is(equalTo(new String[] {"a", "b", "c", "d"})));
 	}
 	
 	/**
@@ -64,8 +73,8 @@ public final class MultChoiceQuestionTest {
 		mcq.setAnswers(new @NonNull String[] {"e", "f", "g", "h"});
 		String[] answers = mcq.getAnswers();
 		
-		assertArrayEquals(	"Answers are returned correctly.",
-							new String[] {"e", "f", "g", "h"}, answers);
+		this.now.checkThat(	"Answers are returned correctly.", answers,
+							is(equalTo(new String[] {"e", "f", "g", "h"})));
 	}
 	
 	/**
@@ -78,11 +87,10 @@ public final class MultChoiceQuestionTest {
 		
 		String[] labels = mcq.getAnswerFieldLabels();
 		
-		assertArrayEquals(	"Answer labels are correct.",
-							new String[] {"Korrekte Antwort",
+		this.now.checkThat(	"Answer labels are correct.", labels,
+							is(equalTo(new String[] {"Korrekte Antwort",
 									"Falsche Antwort 1", "Falsche Antwort 2",
-									"Falsche Antwort 3"},
-							labels);
+									"Falsche Antwort 3"})));
 	}
 	
 	/**
@@ -95,8 +103,8 @@ public final class MultChoiceQuestionTest {
 		
 		String filename = mcq.getFilename();
 		
-		assertEquals(	"Multiple-Choice Filename is correct",
-						"multChoiceQuestion.fxml", filename);
+		this.now.checkThat(	"Multiple-Choice Filename is correct", filename,
+							is(equalTo("multChoiceQuestion.fxml")));
 	}
 	
 	/**
@@ -107,35 +115,38 @@ public final class MultChoiceQuestionTest {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("q", null, "a", "b",
 														"c", "d");
 		
-		Element expected = new Element("question")
-				.setAttribute("type", "multipleChoice")
-				.addContent(new Element("text").setText("q"))
-				.addContent(new Element("correctAnswer").setText("a"))
-				.addContent(new Element("wrongAnswer1").setText("b"))
-				.addContent(new Element("wrongAnswer2").setText("c"))
-				.addContent(new Element("wrongAnswer3").setText("d"));
-		Element saved = mcq.save();
+		Element saved = mcq.save(); // TODO Better Element comparison.
 		
-		assertEquals(	"Save works correctly.", expected.getName(),
-						saved.getName());
-		assertEquals(	"Save works correctly.",
-						expected.getAttributeValue("type"),
-						saved.getAttributeValue("type"));
-		assertEquals(	"Save works correctly.",
-						expected.getChild("text").getText(),
-						saved.getChild("text").getText());
-		assertEquals(	"Save works correctly.",
-						expected.getChild("correctAnswer").getText(),
-						saved.getChild("correctAnswer").getText());
-		assertEquals(	"Save works correctly.",
-						expected.getChild("wrongAnswer1").getText(),
-						saved.getChild("wrongAnswer1").getText());
-		assertEquals(	"Save works correctly.",
-						expected.getChild("wrongAnswer2").getText(),
-						saved.getChild("wrongAnswer2").getText());
-		assertEquals(	"Save works correctly.",
-						expected.getChild("wrongAnswer3").getText(),
-						saved.getChild("wrongAnswer3").getText());
+		this.now.checkThat(	"Save works correctly.", saved.getName(),
+							is(equalTo("question")));
+		this.now.checkThat(	"Save works correctly.",
+							saved.getAttributeValue("type"),
+							is(equalTo("multipleChoice")));
+		this.now.checkThat(	"Save works correctly.", saved.getChild("text"),
+							is(notNullValue()));
+		this.now.checkThat(	"Save works correctly.",
+							saved.getChild("text").getText(), is(equalTo("q")));
+		this.now.checkThat(	"Save works correctly.",
+							saved.getChild("correctAnswer"),
+							is(notNullValue()));
+		this.now.checkThat(	"Save works correctly.",
+							saved.getChild("correctAnswer").getText(),
+							is(equalTo("a")));
+		this.now.checkThat(	"Save works correctly.",
+							saved.getChild("wrongAnswer1"), is(notNullValue()));
+		this.now.checkThat(	"Save works correctly.",
+							saved.getChild("wrongAnswer1").getText(),
+							is(equalTo("b")));
+		this.now.checkThat(	"Save works correctly.",
+							saved.getChild("wrongAnswer2"), is(notNullValue()));
+		this.now.checkThat(	"Save works correctly.",
+							saved.getChild("wrongAnswer2").getText(),
+							is(equalTo("c")));
+		this.now.checkThat(	"Save works correctly.",
+							saved.getChild("wrongAnswer3"), is(notNullValue()));
+		this.now.checkThat(	"Save works correctly.",
+							saved.getChild("wrongAnswer3").getText(),
+							is(equalTo("d")));
 	}
 	
 	/**
@@ -148,7 +159,8 @@ public final class MultChoiceQuestionTest {
 		
 		boolean answer = mcq.check(Integer.valueOf(0));
 		
-		assertTrue("0 is the accepted answer.", answer);
+		this.now.checkThat(	"0 is the accepted answer.", answer,
+							is(equalTo(Boolean.TRUE)));
 	}
 	
 	/**
@@ -161,7 +173,8 @@ public final class MultChoiceQuestionTest {
 		
 		boolean answer = mcq.check(Integer.valueOf(1));
 		
-		assertFalse("1 is not the accepted answer.", answer);
+		this.now.checkThat(	"1 is not the accepted answer.", answer,
+							is(equalTo(Boolean.FALSE)));
 	}
 	
 	/**
@@ -174,7 +187,7 @@ public final class MultChoiceQuestionTest {
 		
 		Integer answer = mcq.getAnswer();
 		
-		assertEquals("1 is the correct answer.", answer.intValue(), 0);
+		this.now.checkThat("0 is the correct answer.", answer, is(equalTo(0)));
 	}
 	
 	/**
@@ -188,7 +201,8 @@ public final class MultChoiceQuestionTest {
 		
 		//
 		
-		assertEquals("Multiple-Choice Question is equal to itself.", mcq, mcq);
+		this.now.checkThat(	"Multiple-Choice Question is equal to itself.", mcq,
+							is(equalTo(mcq)));
 	}
 	
 	/**
@@ -207,8 +221,8 @@ public final class MultChoiceQuestionTest {
 		
 		//
 		
-		assertEquals(	"Multiple-Choice Question is equal to an exact twin version.",
-						mcq1, mcq2);
+		this.now.checkThat(	"Multiple-Choice Question is equal to an exact twin version.",
+							mcq1, is(equalTo(mcq2)));
 	}
 	
 	/**
@@ -222,8 +236,8 @@ public final class MultChoiceQuestionTest {
 		
 		//
 		
-		assertNotEquals("Multiple-Choice Question is not equal to null.", mcq,
-						null);
+		this.now.checkThat(	"Multiple-Choice Question is not equal to null.",
+							mcq, is(not(equalTo(null))));
 	}
 	
 	/**
@@ -238,8 +252,8 @@ public final class MultChoiceQuestionTest {
 		
 		//
 		
-		assertNotEquals("Multiple-Choice Question is not equal to a general Object.",
-						mcq, obj);
+		this.now.checkThat(	"Multiple-Choice Question is not equal to a general Object.",
+							mcq, is(not(equalTo(obj))));
 	}
 	
 	/**
@@ -258,8 +272,8 @@ public final class MultChoiceQuestionTest {
 		
 		//
 		
-		assertNotEquals("Multiple-Choice Question is not equal to a version with different question.",
-						mcq1, mcq2);
+		this.now.checkThat(	"Multiple-Choice Question is not equal to a version with different question.",
+							mcq1, is(not(equalTo(mcq2))));
 	}
 	
 	/**
@@ -278,8 +292,8 @@ public final class MultChoiceQuestionTest {
 		
 		//
 		
-		assertNotEquals("Multiple-Choice Question is not equal to a version with different correct answer.",
-						mcq1, mcq2);
+		this.now.checkThat(	"Multiple-Choice Question is not equal to a version with different correct answer.",
+							mcq1, is(not(equalTo(mcq2))));
 	}
 	
 	/**
@@ -298,8 +312,8 @@ public final class MultChoiceQuestionTest {
 		
 		//
 		
-		assertNotEquals("Multiple-Choice Question is not equal to a version with different 1st wrong answer.",
-						mcq1, mcq2);
+		this.now.checkThat(	"Multiple-Choice Question is not equal to a version with different 1st wrong answer.",
+							mcq1, is(not(equalTo(mcq2))));
 	}
 	
 	/**
@@ -318,8 +332,8 @@ public final class MultChoiceQuestionTest {
 		
 		//
 		
-		assertNotEquals("Multiple-Choice Question is not equal to a version with different 2nd wrong answer.",
-						mcq1, mcq2);
+		this.now.checkThat(	"Multiple-Choice Question is not equal to a version with different 2nd wrong answer.",
+							mcq1, is(not(equalTo(mcq2))));
 	}
 	
 	/**
@@ -338,8 +352,8 @@ public final class MultChoiceQuestionTest {
 		
 		//
 		
-		assertNotEquals("Multiple-Choice Question is not equal to a version with different 3rd wrong answer.",
-						mcq1, mcq2);
+		this.now.checkThat(	"Multiple-Choice Question is not equal to a version with different 3rd wrong answer.",
+							mcq1, is(not(equalTo(mcq2))));
 	}
 	
 	/**
@@ -354,8 +368,8 @@ public final class MultChoiceQuestionTest {
 		int hash_1 = mcq.hashCode();
 		int hash_2 = mcq.hashCode();
 		
-		assertEquals(	"Multiple-Choice Question has the same hashCode as itself.",
-						hash_1, hash_2);
+		this.now.checkThat(	"Multiple-Choice Question has the same hashCode as itself.",
+							hash_1, is(equalTo(hash_2)));
 	}
 	
 	/**
@@ -375,8 +389,8 @@ public final class MultChoiceQuestionTest {
 		int hash1 = mcq1.hashCode();
 		int hash2 = mcq2.hashCode();
 		
-		assertEquals(	"Multiple-Choice Question has the same hashCode as a twin version.",
-						hash1, hash2);
+		this.now.checkThat(	"Multiple-Choice Question has the same hashCode as a twin version.",
+							hash1, is(equalTo(hash2)));
 	}
 	
 	/**
@@ -395,7 +409,8 @@ public final class MultChoiceQuestionTest {
 		
 		MultChoiceQuestion loaded = MultChoiceQuestion.load(element);
 		
-		assertEquals("Multiple-Choice Question loads correctly.", mcq, loaded);
+		this.now.checkThat(	"Multiple-Choice Question loads correctly.", mcq,
+							is(equalTo(loaded)));
 	}
 	
 	/**
@@ -412,10 +427,17 @@ public final class MultChoiceQuestionTest {
 		
 		MultChoiceQuestion loaded = MultChoiceQuestion.load(element);
 		
-		verifyStatic();
-		Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
-		assertNull(	"Multiple-Choice Question does not load with no text.",
-					loaded);
+		this.now.checkSucceeds(() -> {
+			verifyStatic();
+			Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verifyNoMoreInteractions(Util.class);
+			return null;
+		});
+		this.now.checkThat(	"Multiple-Choice Question does not load with no text.",
+							loaded, is(nullValue()));
 	}
 	
 	/**
@@ -431,11 +453,18 @@ public final class MultChoiceQuestionTest {
 				.addContent(new Element("wrongAnswer3").setText("d"));
 		
 		MultChoiceQuestion loaded = MultChoiceQuestion.load(element);
-		
-		verifyStatic();
-		Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
-		assertNull(	"Multiple-Choice Question does not load with no text.",
-					loaded);
+
+		this.now.checkSucceeds(() -> {
+			verifyStatic();
+			Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verifyNoMoreInteractions(Util.class);
+			return null;
+		});
+		this.now.checkThat(	"Multiple-Choice Question does not load with no text.",
+							loaded, is(nullValue()));
 	}
 	
 	/**
@@ -451,11 +480,18 @@ public final class MultChoiceQuestionTest {
 				.addContent(new Element("wrongAnswer3").setText("d"));
 		
 		MultChoiceQuestion loaded = MultChoiceQuestion.load(element);
-		
-		verifyStatic();
-		Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
-		assertNull(	"Multiple-Choice Question does not load with no text.",
-					loaded);
+
+		this.now.checkSucceeds(() -> {
+			verifyStatic();
+			Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verifyNoMoreInteractions(Util.class);
+			return null;
+		});
+		this.now.checkThat(	"Multiple-Choice Question does not load with no text.",
+							loaded, is(nullValue()));
 	}
 	
 	/**
@@ -471,11 +507,18 @@ public final class MultChoiceQuestionTest {
 				.addContent(new Element("wrongAnswer3").setText("d"));
 		
 		MultChoiceQuestion loaded = MultChoiceQuestion.load(element);
-		
-		verifyStatic();
-		Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
-		assertNull(	"Multiple-Choice Question does not load with no text.",
-					loaded);
+
+		this.now.checkSucceeds(() -> {
+			verifyStatic();
+			Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verifyNoMoreInteractions(Util.class);
+			return null;
+		});
+		this.now.checkThat(	"Multiple-Choice Question does not load with no text.",
+							loaded, is(nullValue()));
 	}
 	
 	/**
@@ -492,10 +535,17 @@ public final class MultChoiceQuestionTest {
 		
 		MultChoiceQuestion loaded = MultChoiceQuestion.load(element);
 		
-		verifyStatic();
-		Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
-		assertNull(	"Multiple-Choice Question does not load with no text.",
-					loaded);
+		this.now.checkSucceeds(() -> {
+			verifyStatic();
+			Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verifyNoMoreInteractions(Util.class);
+			return null;
+		});
+		this.now.checkThat(	"Multiple-Choice Question does not load with no text.",
+							loaded, is(nullValue()));
 	}
 	
 	/**
@@ -507,7 +557,7 @@ public final class MultChoiceQuestionTest {
 		
 		//
 		
-		assertNotNull(	"Just the execution with a non-null result of it is enough",
-						mcq);
+		this.now.checkThat(	"Just the execution with a non-null result of it is enough",
+							mcq, is(notNullValue()));
 	}
 }

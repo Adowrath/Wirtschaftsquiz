@@ -1,13 +1,16 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model.question;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyVararg;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.verifyNoMoreInteractions;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 
@@ -18,7 +21,9 @@ import java.util.Set;
 
 import org.jdom2.Element;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 import org.junit.runner.RunWith;
 import org.mockito.internal.util.collections.Sets;
 import org.powermock.api.mockito.PowerMockito;
@@ -38,6 +43,12 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 public final class QuestionTest {
 	
 	/**
+	 * Der ErrorCollector.
+	 */
+	@Rule
+	public ErrorCollector now = new ErrorCollector();
+	
+	/**
 	 * Leert die Maps der Ladern und Dummy-Erstellern.
 	 * 
 	 * @throws NoSuchFieldException
@@ -55,8 +66,8 @@ public final class QuestionTest {
 	 *         tritt dies nie auf)
 	 */
 	@Before
-	public void clearTypes() throws IllegalArgumentException,
-			IllegalAccessException, NoSuchFieldException, SecurityException {
+	public void clearTypes() throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException {
 		Field f1 = Question.class.getDeclaredField("registeredLoaders");
 		f1.setAccessible(true);
 		((Map<?, ?>) f1.get(null)).clear();
@@ -71,12 +82,13 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testGetDummy() {
+		Question<?> dummy = mock(Question.class);
 		Question.register(	"type", e -> null,
-							() -> mock(Question.class, CALLS_REAL_METHODS));
+							() -> dummy);
 		
 		Question<?> q = Question.getDummy("type");
 		
-		assertNotNull("getDummy should return a non-null object.", q);
+		this.now.checkThat("Correct dummy is returned.", q, is(equalTo(dummy)));
 	}
 	
 	/**
@@ -112,13 +124,12 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testGetTypesEmpty() {
-		//
+		Set<String> empty = Sets.newSet();
 		
 		Set<String> types = Question.getTypes();
-		Set<String> expected = Sets.newSet();
 		
-		assertEquals(	"The registered types should be empty by default.",
-						expected, types);
+		this.now.checkThat(	"The registered types should be empty by default.",
+							types, is(equalTo(empty)));
 	}
 	
 	/**
@@ -126,14 +137,14 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testGetTypes() {
+		Set<String> expected = Sets.newSet("type");
 		Question.register(	"type", e -> null,
 							() -> mock(Question.class, CALLS_REAL_METHODS));
 		
 		Set<String> types = Question.getTypes();
-		Set<String> expected = Sets.newSet("type");
 		
-		assertEquals(	"The registered types accurately recored what was registered.",
-						expected, types);
+		this.now.checkThat(	"The registered types accurately recored what was registered.",
+							types, is(equalTo(expected)));
 	}
 	
 	/**
@@ -142,15 +153,15 @@ public final class QuestionTest {
 	 */
 	@Test
 	public void testLoadFromElement() {
-		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
-		Question.register(	"type", e -> q,
+		Question<?> loaded = mock(Question.class, CALLS_REAL_METHODS);
+		Question.register(	"aType", e -> loaded,
 							() -> mock(Question.class, CALLS_REAL_METHODS));
 		
-		Question<?> loaded = Question
-				.loadFromElement(new Element("a").setAttribute("type", "type"));
+		Question<?> actual = Question.loadFromElement(new Element("a")
+				.setAttribute("type", "aType"));
 		
-		assertEquals(	"loadFromElement uses correct registered type.", q,
-						loaded);
+		this.now.checkThat(	"Correct loaded Question is returned.", actual,
+							is(equalTo(loaded)));
 	}
 	
 	/**
@@ -160,14 +171,21 @@ public final class QuestionTest {
 	@Test
 	public void testLoadFromElementNoText() {
 		mockStatic(Util.class);
-		Question.register(	"type", e -> mock(Question.class, CALLS_REAL_METHODS),
-							() -> mock(Question.class, CALLS_REAL_METHODS));
 		
 		Question<?> loaded = Question.loadFromElement(new Element("a"));
 		
-		verifyStatic();
-		Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
-		assertNull("loadFromElement complains if type was not found.", loaded);
+		this.now.checkSucceeds(() -> {
+			verifyStatic();
+			Util.showErrorExitOnNoOrClose(	anyString(), anyString(),
+											anyVararg());
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verifyNoMoreInteractions(Util.class);
+			return null;
+		});
+		this.now.checkThat(	"loadFromElement complains if type was not found.",
+							loaded, is(nullValue()));
 	}
 	
 	/**
@@ -181,10 +199,18 @@ public final class QuestionTest {
 		Question<?> loaded = Question
 				.loadFromElement(new Element("a").setAttribute("type", "some"));
 		
-		verifyStatic();
-		Util.showErrorExitOnNoOrClose(anyString(), anyString(), anyVararg());
-		assertNull(	"loadFromElement complains if the type was not registered.",
-					loaded);
+		this.now.checkSucceeds(() -> {
+			verifyStatic();
+			Util.showErrorExitOnNoOrClose(	anyString(), anyString(),
+											anyVararg());
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verifyNoMoreInteractions(Util.class);
+			return null;
+		});
+		this.now.checkThat(	"loadFromElement complains if the type was not registered.",
+							loaded, is(nullValue()));
 	}
 	
 	/**
@@ -200,13 +226,26 @@ public final class QuestionTest {
 		q.changeCategory(c1);
 		q.changeCategory(c2);
 		
-		verify(c1).addQuestion(q);
-		verify(c1).removeQuestion(q);
-		verify(c2).addQuestion(q);
-		verifyNoMoreInteractions(c1);
-		verifyNoMoreInteractions(c2);
-		
-		assertTrue("Nothing failed.", true);
+		this.now.checkSucceeds(() -> {
+			verify(c1).addQuestion(q);
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verify(c1).removeQuestion(q);
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verifyNoMoreInteractions(c1);
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verify(c2).addQuestion(q);
+			return null;
+		});
+		this.now.checkSucceeds(() -> {
+			verifyNoMoreInteractions(c2);
+			return null;
+		});
 	}
 	
 	/**
@@ -220,7 +259,8 @@ public final class QuestionTest {
 		
 		Category assigned = q.getCategory();
 		
-		assertEquals("getCategory works correctly.", c, assigned);
+		this.now.checkThat(	"getCategory works correctly.", assigned,
+							is(equalTo(c)));
 	}
 	
 	/**
@@ -232,7 +272,7 @@ public final class QuestionTest {
 		
 		Category c = q.getCategory();
 		
-		assertNull("There is no default category.", c);
+		this.now.checkThat("There is no default category.", c, is(nullValue()));
 	}
 	
 	/**
@@ -242,10 +282,11 @@ public final class QuestionTest {
 	public void testSetGetQuestion() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
 		String question = "Some question";
-		
 		q.setQuestion(question);
+		
 		String savedText = q.getQuestion();
 		
-		assertEquals("Question text was saved correctly.", question, savedText);
+		this.now.checkThat(	"Question text was saved correctly.", savedText,
+							is(equalTo(question)));
 	}
 }

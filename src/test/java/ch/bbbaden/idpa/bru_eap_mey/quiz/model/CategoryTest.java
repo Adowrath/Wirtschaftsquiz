@@ -1,7 +1,8 @@
 package ch.bbbaden.idpa.bru_eap_mey.quiz.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 
@@ -12,7 +13,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
@@ -20,8 +23,14 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 /**
  * Die Tests für die Kategorien.
  */
-@SuppressWarnings({"static-method"})
+@SuppressWarnings({"boxing"})
 public final class CategoryTest {
+	
+	/**
+	 * Der ErrorCollector.
+	 */
+	@Rule
+	public ErrorCollector now = new ErrorCollector();
 	
 	/**
 	 * Überprüft den Varargs-Konstruktor ohne Argumente.
@@ -33,8 +42,8 @@ public final class CategoryTest {
 		Category c = new Category("a", "b");
 		List<Question<?>> catList = c.getQuestions();
 		
-		assertEquals(	"Varargs constructor saves the questions correctly with no questions.",
-						list, catList);
+		this.now.checkThat(	"Varargs constructor saves the questions correctly with no questions.",
+							catList, is(equalTo(list)));
 	}
 	
 	/**
@@ -50,7 +59,8 @@ public final class CategoryTest {
 		Category c = new Category("a", "b", q1, q2, q3);
 		List<Question<?>> catList = c.getQuestions();
 		
-		assertEquals("Varargs constructor saves correctly.", origList, catList);
+		this.now.checkThat(	"Varargs constructor saves correctly.", catList,
+							is(equalTo(origList)));
 	}
 	
 	/**
@@ -66,7 +76,8 @@ public final class CategoryTest {
 		Category c = new Category("a", "b", origList);
 		List<Question<?>> catList = c.getQuestions();
 		
-		assertEquals("Varargs constructor saves correctly.", origList, catList);
+		this.now.checkThat(	"Varargs constructor saves correctly.", catList,
+							is(equalTo(origList)));
 	}
 	
 	/**
@@ -83,7 +94,8 @@ public final class CategoryTest {
 		Category c = new Category("a", "b", stream);
 		List<Question<?>> catList = c.getQuestions();
 		
-		assertEquals("Varargs constructor saves correctly.", origList, catList);
+		this.now.checkThat(	"Varargs constructor saves correctly.", catList,
+							is(equalTo(origList)));
 	}
 	
 	/**
@@ -96,8 +108,8 @@ public final class CategoryTest {
 		
 		String currentDesc = c.getDescription();
 		
-		assertEquals(	"Constructor saves description correctly.", "b",
-						currentDesc);
+		this.now.checkThat(	"Constructor saves description correctly.",
+							currentDesc, is(equalTo("b")));
 	}
 	
 	/**
@@ -111,8 +123,8 @@ public final class CategoryTest {
 		c.setDescription("c");
 		String currentDesc = c.getDescription();
 		
-		assertEquals(	"setDescription changes description correctly.", "c",
-						currentDesc);
+		this.now.checkThat(	"setDescription changes description correctly.",
+							currentDesc, is(equalTo("c")));
 	}
 	
 	/**
@@ -124,7 +136,8 @@ public final class CategoryTest {
 		
 		String currentName = c.getName();
 		
-		assertEquals("Constructor saves name correctly.", "a", currentName);
+		this.now.checkThat(	"Constructor saves name correctly.", currentName,
+							is(equalTo("a")));
 	}
 	
 	/**
@@ -137,7 +150,8 @@ public final class CategoryTest {
 		c.setName("c");
 		String currentName = c.getName();
 		
-		assertEquals("setName changes name correctly.", "c", currentName);
+		this.now.checkThat(	"setName changes name correctly.", currentName,
+							is(equalTo("c")));
 	}
 	
 	/**
@@ -150,8 +164,8 @@ public final class CategoryTest {
 		
 		String nameAndCount = c.getNameAndCount();
 		
-		assertEquals(	"getNameAndCount returns correctly without any questions.",
-						"a (0)", nameAndCount);
+		this.now.checkThat(	"getNameAndCount returns correctly without any questions.",
+							nameAndCount, is(equalTo("a (0)")));
 	}
 	
 	/**
@@ -165,8 +179,8 @@ public final class CategoryTest {
 		
 		String nameAndCount = c.getNameAndCount();
 		
-		assertEquals(	"getNameAndCount returns correctly without any questions.",
-						"a (1)", nameAndCount);
+		this.now.checkThat(	"getNameAndCount returns correctly without any questions.",
+							nameAndCount, is(equalTo("a (1)")));
 	}
 	
 	/**
@@ -180,8 +194,8 @@ public final class CategoryTest {
 		c.setName("c");
 		String nameAndCount = c.getNameAndCount();
 		
-		assertEquals(	"getNameAndCount returns correctly without any questions.",
-						"c (0)", nameAndCount);
+		this.now.checkThat(	"getNameAndCount returns correctly without any questions.",
+							nameAndCount, is(equalTo("c (0)")));
 	}
 	
 	/**
@@ -197,8 +211,8 @@ public final class CategoryTest {
 		c.removeQuestion(q);
 		List<Question<?>> catList = c.getQuestions();
 		
-		assertEquals(	"removeQuestions correctly removes the specified question.",
-						list, catList);
+		this.now.checkThat(	"removeQuestions correctly removes the specified question.",
+							catList, is(equalTo(list)));
 	}
 	
 	/**
@@ -210,7 +224,7 @@ public final class CategoryTest {
 		
 		//
 		
-		assertEquals("Category is equal to itself.", c, c);
+		this.now.checkThat("Category is equal to itself.", c, is(equalTo(c)));
 	}
 	
 	/**
@@ -224,8 +238,8 @@ public final class CategoryTest {
 		
 		//
 		
-		assertEquals(	"Category is equal to an exact twin version without questions.",
-						c1, c2);
+		this.now.checkThat(	"Category is equal to an exact twin version without questions.",
+							c1, is(equalTo(c2)));
 	}
 	
 	/**
@@ -239,7 +253,8 @@ public final class CategoryTest {
 		
 		//
 		
-		assertEquals(	"equals does not care about questions.", c1, c2);
+		this.now.checkThat(	"equals does not care about questions.", c1,
+							is(equalTo(c2)));
 	}
 	
 	/**
@@ -251,7 +266,8 @@ public final class CategoryTest {
 		
 		//
 		
-		assertNotEquals("Category is not equal to null.", c, null);
+		this.now.checkThat(	"Category is not equal to null.", c,
+							is(not(equalTo(null))));
 	}
 	
 	/**
@@ -264,7 +280,8 @@ public final class CategoryTest {
 		
 		//
 		
-		assertNotEquals("Category is not equal to a general Object.", c, obj);
+		this.now.checkThat(	"Category is not equal to a general Object.", c,
+							is(not(equalTo(obj))));
 	}
 	
 	/**
@@ -277,8 +294,8 @@ public final class CategoryTest {
 		
 		//
 		
-		assertNotEquals("Category is not equal to a version with different name.",
-						c1, c2);
+		this.now.checkThat(	"Category is not equal to a version with different name.",
+							c1, is(not(equalTo(c2))));
 	}
 	
 	/**
@@ -291,8 +308,8 @@ public final class CategoryTest {
 		
 		//
 		
-		assertNotEquals("Category is not equal to a version with different description.",
-						c1, c2);
+		this.now.checkThat(	"Category is not equal to a version with different description.",
+							c1, is(not(equalTo(c2))));
 	}
 	
 	/**
@@ -305,8 +322,8 @@ public final class CategoryTest {
 		int hash_1 = c.hashCode();
 		int hash_2 = c.hashCode();
 		
-		assertEquals(	"Category has the same hashCode as itself.", hash_1,
-						hash_2);
+		this.now.checkThat(	"Category has the same hashCode as itself.", hash_1,
+							is(equalTo(hash_2)));
 	}
 	
 	/**
@@ -320,8 +337,8 @@ public final class CategoryTest {
 		int hash1 = c1.hashCode();
 		int hash2 = c2.hashCode();
 		
-		assertEquals(	"Category has the same hashCode as a twin version.", hash1,
-						hash2);
+		this.now.checkThat(	"Category has the same hashCode as a twin version.",
+							hash1, is(equalTo(hash2)));
 	}
 	
 	/**
@@ -336,6 +353,7 @@ public final class CategoryTest {
 		int hash1 = c1.hashCode();
 		int hash2 = c2.hashCode();
 		
-		assertEquals(	"hashCode does not care about questions.", hash1, hash2);
+		this.now.checkThat(	"hashCode does not care about questions.", hash1,
+							is(equalTo(hash2)));
 	}
 }
