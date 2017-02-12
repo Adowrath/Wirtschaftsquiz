@@ -13,7 +13,6 @@ import static org.powermock.api.mockito.PowerMockito.verifyNoMoreInteractions;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +31,7 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
@@ -54,30 +54,23 @@ public final class QuestionTest {
 	/**
 	 * Leert die Maps der Ladern und Dummy-Erstellern.
 	 * 
-	 * @throws NoSuchFieldException
-	 *         falls das Feld umbenannt wurde.
 	 * @throws SecurityException
 	 *         falls ein SecurityManager läuft, der den Zugriff
 	 *         verweigert. (sollte nicht auftreten)
-	 * @throws IllegalAccessException
-	 *         falls der Zugriff auf das Feld verweigert wird (wird er
-	 *         nicht, da erst {@link Field#setAccessible(boolean)
-	 *         Field.setAccessible(true)} aufgerufen wird.
 	 * @throws IllegalArgumentException
 	 *         falls das Objekt keine Instanz der Klasse
 	 *         {@link Question} wäre. (da es statische Felder sind,
 	 *         tritt dies nie auf)
 	 */
 	@Before
-	public void clearTypes() throws NoSuchFieldException, SecurityException,
-			IllegalArgumentException, IllegalAccessException {
-		Field f1 = Question.class.getDeclaredField("registeredLoaders");
-		f1.setAccessible(true);
-		((Map<?, ?>) f1.get(null)).clear();
+	public void clearTypes()
+			throws SecurityException, IllegalArgumentException {
+		Map<?, ?> rLoaders = Whitebox.getInternalState(	Question.class,
+														"registeredLoaders");
+		rLoaders.clear();
 		
-		Field f2 = Question.class.getDeclaredField("dummy");
-		f2.setAccessible(true);
-		((Map<?, ?>) f2.get(null)).clear();
+		Map<?, ?> dummys = Whitebox.getInternalState(Question.class, "dummy");
+		dummys.clear();
 	}
 	
 	/**
