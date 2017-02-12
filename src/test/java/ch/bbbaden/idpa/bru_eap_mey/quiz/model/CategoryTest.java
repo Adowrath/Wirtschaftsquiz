@@ -17,9 +17,15 @@ import org.junit.Test;
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 
-@SuppressWarnings({"static-method", "javadoc"})
+/**
+ * Die Tests für die Kategorien.
+ */
+@SuppressWarnings({"static-method"})
 public final class CategoryTest {
 	
+	/**
+	 * Überprüft den Varargs-Konstruktor ohne Argumente.
+	 */
 	@Test
 	public void testCategoryEmptyVarargs() {
 		List<Question<?>> list = Collections.emptyList();
@@ -31,6 +37,9 @@ public final class CategoryTest {
 						list, catList);
 	}
 	
+	/**
+	 * Überprüft den Varags-Konstruktor mit Argumenten.
+	 */
 	@Test
 	public void testCategoryVarargs() {
 		Question<?> q1 = mock(Question.class, CALLS_REAL_METHODS);
@@ -44,6 +53,9 @@ public final class CategoryTest {
 		assertEquals("Varargs constructor saves correctly.", origList, catList);
 	}
 	
+	/**
+	 * Überprüft den Listen-Konstruktor.
+	 */
 	@Test
 	public void testCategoryList() {
 		Question<?> q1 = mock(Question.class, CALLS_REAL_METHODS);
@@ -57,6 +69,9 @@ public final class CategoryTest {
 		assertEquals("Varargs constructor saves correctly.", origList, catList);
 	}
 	
+	/**
+	 * Überprüft den Stream-Konstruktor.
+	 */
 	@Test
 	public void testCategoryStream() {
 		Question<?> q1 = mock(Question.class, CALLS_REAL_METHODS);
@@ -71,6 +86,10 @@ public final class CategoryTest {
 		assertEquals("Varargs constructor saves correctly.", origList, catList);
 	}
 	
+	/**
+	 * Überprüft, dass der Konstruktor die Beschreibung richtig
+	 * speichert.
+	 */
 	@Test
 	public void testGetDescription() {
 		Category c = new Category("a", "b");
@@ -81,6 +100,10 @@ public final class CategoryTest {
 						currentDesc);
 	}
 	
+	/**
+	 * Überprüft, dass der Setter die Beschreibung richtig
+	 * überschreibt.
+	 */
 	@Test
 	public void testSetDescription() {
 		Category c = new Category("a", "b");
@@ -92,6 +115,9 @@ public final class CategoryTest {
 						currentDesc);
 	}
 	
+	/**
+	 * Überprüft, dass der Konstruktor den Namen richtig speichert.
+	 */
 	@Test
 	public void testGetName() {
 		Category c = new Category("a", "b");
@@ -101,6 +127,9 @@ public final class CategoryTest {
 		assertEquals("Constructor saves name correctly.", "a", currentName);
 	}
 	
+	/**
+	 * Überprüft, dass der Setter den Namen richtig überschreibt.
+	 */
 	@Test
 	public void testSetName() {
 		Category c = new Category("a", "b");
@@ -111,6 +140,10 @@ public final class CategoryTest {
 		assertEquals("setName changes name correctly.", "c", currentName);
 	}
 	
+	/**
+	 * Überprüft, dass die Anzeige von Name und Fragenzahl bei keinen
+	 * Fragen richtig funktioniert.
+	 */
 	@Test
 	public void testGetNameAndCountNoQuestions() {
 		Category c = new Category("a", "b");
@@ -121,6 +154,10 @@ public final class CategoryTest {
 						"a (0)", nameAndCount);
 	}
 	
+	/**
+	 * Überprüft, dass die Anzeige von Name und Fragenzahl bei einer
+	 * Frage richtig funktioniert.
+	 */
 	@Test
 	public void testGetNameAndCountWithQuestions() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
@@ -132,6 +169,10 @@ public final class CategoryTest {
 						"a (1)", nameAndCount);
 	}
 	
+	/**
+	 * Überprüft, dass die Anzeige von Name und Fragenzahl auch nach
+	 * Änderung des Namens funktioniert.
+	 */
 	@Test
 	public void testGetNameAndCountWithQuestionsAfterSetName() {
 		Category c = new Category("a", "b");
@@ -143,6 +184,10 @@ public final class CategoryTest {
 						"c (0)", nameAndCount);
 	}
 	
+	/**
+	 * Schaut, dass die Frage aus der Liste der registrierten Fragen
+	 * gelöscht wird.
+	 */
 	@Test
 	public void testRemoveQuestion() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
@@ -156,6 +201,9 @@ public final class CategoryTest {
 						list, catList);
 	}
 	
+	/**
+	 * Die Kategorie soll zu sich selbst gleich sein.
+	 */
 	@Test
 	public void testSelfreferentialEquals() {
 		Category c = new Category("ab", "abcd");
@@ -165,6 +213,10 @@ public final class CategoryTest {
 		assertEquals("Category is equal to itself.", c, c);
 	}
 	
+	/**
+	 * Die Grundfunktionalität der {@link Category#equals(Object)
+	 * equals}-Methode ist vorhanden.
+	 */
 	@Test
 	public void testEquals() {
 		Category c1 = new Category("ab", "abcd");
@@ -176,6 +228,23 @@ public final class CategoryTest {
 						c1, c2);
 	}
 	
+	/**
+	 * Die Fragen haben keine Auswirkung auf equals.
+	 */
+	@Test
+	public void testEqualsIndifferentOfQuestions() {
+		Category c1 = new Category(	"ab", "abcd",
+									mock(Question.class, CALLS_REAL_METHODS));
+		Category c2 = new Category("ab", "abcd");
+		
+		//
+		
+		assertEquals(	"equals does not care about questions.", c1, c2);
+	}
+	
+	/**
+	 * Eine Kategorie ist nicht gleich {@code null}.
+	 */
 	@Test
 	public void testEqualsFalseWithNull() {
 		Category c = new Category("ab", "abcd");
@@ -185,6 +254,9 @@ public final class CategoryTest {
 		assertNotEquals("Category is not equal to null.", c, null);
 	}
 	
+	/**
+	 * Eine Kategorie ist nicht gleich zu einem normalen Objekt.
+	 */
 	@Test
 	public void testEqualsFalseWithObject() {
 		Category c = new Category("ab", "abcd");
@@ -195,6 +267,9 @@ public final class CategoryTest {
 		assertNotEquals("Category is not equal to a general Object.", c, obj);
 	}
 	
+	/**
+	 * Der Name der Kategorie muss gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithName() {
 		Category c1 = new Category("ab", "abcd");
@@ -206,6 +281,9 @@ public final class CategoryTest {
 						c1, c2);
 	}
 	
+	/**
+	 * Die Beschreibung der Kategorie muss gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithDescription() {
 		Category c1 = new Category("ab", "abcd");
@@ -217,6 +295,9 @@ public final class CategoryTest {
 						c1, c2);
 	}
 	
+	/**
+	 * Der Hashcode ist deterministisch.
+	 */
 	@Test
 	public void testSelfreferentialHashCode() {
 		Category c = new Category("ab", "abcd");
@@ -228,6 +309,9 @@ public final class CategoryTest {
 						hash_2);
 	}
 	
+	/**
+	 * Bei inhaltlich gleichen Kategorien ist der Hashcode gleich.
+	 */
 	@Test
 	public void testHashCode() {
 		Category c1 = new Category("ab", "abcd");
@@ -240,5 +324,18 @@ public final class CategoryTest {
 						hash2);
 	}
 	
-	
+	/**
+	 * Die Fragen haben keine Auswirkung auf den Hashcode.
+	 */
+	@Test
+	public void testHashCodeIndifferentOfQuestions() {
+		Category c1 = new Category(	"ab", "abcd",
+									mock(Question.class, CALLS_REAL_METHODS));
+		Category c2 = new Category("ab", "abcd");
+		
+		int hash1 = c1.hashCode();
+		int hash2 = c2.hashCode();
+		
+		assertEquals(	"hashCode does not care about questions.", hash1, hash2);
+	}
 }

@@ -117,9 +117,11 @@ public final class Util {
 	/**
 	 * Gibt nicht abgefangene Fehlermeldungen auf den Error-Stream aus
 	 * und öffnet ein JOptionPane mit der Fehlermeldung.
-	 * <br>
+	 *
+	 * <p>
 	 * Sollte nicht direkt aufgerufen werden.
-	 * <br>
+	 * 
+	 * <p>
 	 * Zusammenklamüsert aus
 	 * <a href="http://stackoverflow.com/a/1149712/5236247">einer</a>
 	 * und einer <a href=
@@ -169,6 +171,7 @@ public final class Util {
 	 * Gibt ein gemischtes Array von Array-Indezes von 0 bis 3 zurück.
 	 * Verwendet ein Sortiernetzwerk.
 	 * 
+	 * <p>
 	 * <em>(Sortiernetzwerke beim mischen? Finde die Source leider
 	 * nicht mehr, aber es funktioniert einwandfrei)</em>
 	 * 
@@ -342,10 +345,12 @@ public final class Util {
 	 * "http://de.wikipedia.org/wiki/Levenshtein-Distanz">Levenshtein-Distanz</a>
 	 * ist ein Mass der Verschiedenheit zweier gegebenen
 	 * Zeichenketten.
-	 * <br>
+	 * 
+	 * <p>
 	 * Diese Verschiedenheit wird in <em>Schritten</em> gemessen, die
 	 * nötig sind, um eine Kette in eine andere umzuwandeln.
-	 * <br>
+	 * 
+	 * <p>
 	 * Diese Schritte sind unterteilt in:
 	 * <ul>
 	 * <li>Einfügen eines Zeichens (tor &rArr;

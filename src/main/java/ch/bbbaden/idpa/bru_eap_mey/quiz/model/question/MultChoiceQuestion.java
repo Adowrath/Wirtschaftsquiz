@@ -13,7 +13,8 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  * Eine Multiple Choice-Frage zeichnet sich dadurch aus, dass eine
  * Liste von Antwortmöglichkeiten gegeben wird, von denen nur eine
  * korrekt ist.
- * <br>
+ * 
+ * <p>
  * Hier besitzt jede Frage 4 Antwortmöglichkeiten.
  */
 public final class MultChoiceQuestion extends Question<Integer> {

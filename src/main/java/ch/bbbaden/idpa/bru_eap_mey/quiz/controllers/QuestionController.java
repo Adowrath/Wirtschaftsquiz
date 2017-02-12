@@ -44,7 +44,7 @@ public abstract class QuestionController<QuestionType extends Question<?>> {
 	
 	/**
 	 * Das Quizmodel wird hier für Rückmeldungen (bspw. Frage
-	 * korrekt/inkorrekt)
+	 * korrekt/inkorrekt) gespeichert.
 	 */
 	private QuizModel quizModel;
 	
@@ -89,8 +89,7 @@ public abstract class QuestionController<QuestionType extends Question<?>> {
 	
 	/**
 	 * Diese Methode wird aufgerufen, wenn man auf den
-	 * "Abbrechen"-Knopf
-	 * drückt.
+	 * "Abbrechen"-Knopf drückt.
 	 * 
 	 * @param event
 	 *        das Event für den Knopfdruck

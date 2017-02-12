@@ -32,6 +32,9 @@ public abstract class MainMenuController {
 	}
 	
 	/**
+	 * Gibt das Quizmodel zurück, welches für dieses Programm gültig
+	 * ist.
+	 * 
 	 * @return
 	 * 		das Quizmodel dieses Controllers
 	 */

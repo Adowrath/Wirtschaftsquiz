@@ -17,11 +17,17 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 
+/**
+ * Die Tests für die binären Fragen.
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Util.class})
-@SuppressWarnings({"static-method", "javadoc"})
+@SuppressWarnings({"static-method"})
 public final class BinaryQuestionTest {
 	
+	/**
+	 * Eine binäre Frage muss 2 Antworten haben.
+	 */
 	@Test
 	public void testGetAnswerCount() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "", "");
@@ -32,6 +38,9 @@ public final class BinaryQuestionTest {
 						2);
 	}
 	
+	/**
+	 * Konstruktor und Getter hantieren korrekt mit den Antworten.
+	 */
 	@Test
 	public void testGetAnswers() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "a", "b");
@@ -42,6 +51,9 @@ public final class BinaryQuestionTest {
 							new String[] {"a", "b"}, answers);
 	}
 	
+	/**
+	 * Der Setter hantiert korrekt mit den Antworten.
+	 */
 	@Test
 	public void testSetAnswers() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "a", "b");
@@ -53,6 +65,9 @@ public final class BinaryQuestionTest {
 							new String[] {"d", "e"}, answers);
 	}
 	
+	/**
+	 * Die richtigen Labels sind für die binäre Frage.
+	 */
 	@Test
 	public void testGetAnswerFieldLabels() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "", "");
@@ -63,6 +78,9 @@ public final class BinaryQuestionTest {
 				"Richtige Antwort", "Falsche Antwort"}, labels);
 	}
 	
+	/**
+	 * Der richtige Dateiname ist registriert.
+	 */
 	@Test
 	public void testGetFilename() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "", "");
@@ -73,6 +91,9 @@ public final class BinaryQuestionTest {
 						filename);
 	}
 	
+	/**
+	 * Die Speichermethode funktioniert korrekt.
+	 */
 	@Test
 	public void testSave() {
 		BinaryQuestion bq = new BinaryQuestion("q", null, "a", "b");
@@ -100,6 +121,9 @@ public final class BinaryQuestionTest {
 						saved.getChild("falseAnswer").getText());
 	}
 	
+	/**
+	 * {@code true} ist die akzeptierte Antwort.
+	 */
 	@Test
 	public void testCheck() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "", "");
@@ -109,6 +133,9 @@ public final class BinaryQuestionTest {
 		assertTrue("true is the accepted answer.", answer);
 	}
 	
+	/**
+	 * {@code false} ist die abgelehnte Antwort.
+	 */
 	@Test
 	public void testCheckWrong() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "", "");
@@ -118,7 +145,9 @@ public final class BinaryQuestionTest {
 		assertFalse("false is not the accepted answer.", answer);
 	}
 	
-	@SuppressWarnings("boxing")
+	/**
+	 * Die richtige Antwort ist {@code true}.
+	 */
 	@Test
 	public void testGetAnswer() {
 		BinaryQuestion bq = new BinaryQuestion("", null, "", "");
@@ -128,6 +157,9 @@ public final class BinaryQuestionTest {
 		assertTrue("true is the correct answer.", answer);
 	}
 	
+	/**
+	 * Binäre Frage ist gleich zu sich selbst.
+	 */
 	@Test
 	public void testSelfreferentialEquals() {
 		BinaryQuestion bq = new BinaryQuestion("ab", null, "abcd", "abcdef");
@@ -137,6 +169,9 @@ public final class BinaryQuestionTest {
 		assertEquals("Binary Question is equal to itself.", bq, bq);
 	}
 	
+	/**
+	 * Binäre Frage ist gleich zu einer Kopie.
+	 */
 	@Test
 	public void testEquals() {
 		BinaryQuestion bq1 = new BinaryQuestion("ab", null, "abcd", "abcdef");
@@ -148,6 +183,9 @@ public final class BinaryQuestionTest {
 						bq2);
 	}
 	
+	/**
+	 * Binäre Frage ist ungleich {@code null}.
+	 */
 	@Test
 	public void testEqualsFalseWithNull() {
 		BinaryQuestion bq = new BinaryQuestion("ab", null, "abcd", "abcdef");
@@ -157,6 +195,9 @@ public final class BinaryQuestionTest {
 		assertNotEquals("Binary Question is not equal to null.", bq, null);
 	}
 	
+	/**
+	 * Binäre Frage ist ungleich einem generischen Objekt.
+	 */
 	@Test
 	public void testEqualsFalseWithObject() {
 		BinaryQuestion bq = new BinaryQuestion("ab", null, "abcd", "abcdef");
@@ -168,6 +209,9 @@ public final class BinaryQuestionTest {
 						obj);
 	}
 	
+	/**
+	 * Fragetext muss gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithQuestion() {
 		BinaryQuestion bq1 = new BinaryQuestion("ab", null, "abcd", "abcdef");
@@ -179,6 +223,9 @@ public final class BinaryQuestionTest {
 						bq1, bq2);
 	}
 	
+	/**
+	 * Wahre Antwort muss gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithTrueAnswer() {
 		BinaryQuestion bq1 = new BinaryQuestion("ab", null, "abcd", "abcdef");
@@ -190,6 +237,9 @@ public final class BinaryQuestionTest {
 						bq1, bq2);
 	}
 	
+	/**
+	 * Falsche Antwort muss gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithFalseAnswer() {
 		BinaryQuestion bq1 = new BinaryQuestion("ab", null, "abcd", "abcdef");
@@ -201,6 +251,9 @@ public final class BinaryQuestionTest {
 						bq1, bq2);
 	}
 	
+	/**
+	 * HashCode ist deterministisch.
+	 */
 	@Test
 	public void testSelfreferentialHashCode() {
 		BinaryQuestion bq = new BinaryQuestion("ab", null, "abcd", "abcdef");
@@ -212,6 +265,9 @@ public final class BinaryQuestionTest {
 						hash_2);
 	}
 	
+	/**
+	 * HashCode ist gleich bei Kopien.
+	 */
 	@Test
 	public void testHashCode() {
 		BinaryQuestion bq1 = new BinaryQuestion("ab", null, "abcd", "abcdef");
@@ -224,6 +280,9 @@ public final class BinaryQuestionTest {
 						hash1, hash2);
 	}
 	
+	/**
+	 * Ladevorgang funktioniert korrekt.
+	 */
 	@Test
 	public void testLoad() {
 		BinaryQuestion bq = new BinaryQuestion("q", null, "a", "b");
@@ -237,6 +296,9 @@ public final class BinaryQuestionTest {
 		assertEquals("Binary Quesiton loads correctly.", bq, loaded);
 	}
 	
+	/**
+	 * Text ist notwendig.
+	 */
 	@Test
 	public void testLoadNoText() {
 		mockStatic(Util.class);
@@ -251,6 +313,9 @@ public final class BinaryQuestionTest {
 		assertNull("Binary Quesiton does not load with no text.", loaded);
 	}
 	
+	/**
+	 * Wahre Antwort ist notwendig.
+	 */
 	@Test
 	public void testLoadNoTrue() {
 		mockStatic(Util.class);
@@ -266,6 +331,9 @@ public final class BinaryQuestionTest {
 					loaded);
 	}
 	
+	/**
+	 * Falsche Antwort ist notwendig.
+	 */
 	@Test
 	public void testLoadNoFalse() {
 		mockStatic(Util.class);
@@ -281,6 +349,9 @@ public final class BinaryQuestionTest {
 					loaded);
 	}
 	
+	/**
+	 * Dummy funktioniert.
+	 */
 	@Test
 	public void testGetDummy() {
 		BinaryQuestion bq = BinaryQuestion.getDummy();

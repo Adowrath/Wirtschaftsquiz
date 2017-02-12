@@ -18,11 +18,17 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 
+/**
+ * Die Tests für die {@link FreehandQuestion}-Klasse.
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Util.class})
-@SuppressWarnings({"static-method", "javadoc"})
+@SuppressWarnings({"static-method"})
 public final class FreehandQuestionTest {
 	
+	/**
+	 * Eine Freihandfrage soll 1 Antwort haben.
+	 */
 	@Test
 	public void testGetAnswerCount() {
 		FreehandQuestion bq = new FreehandQuestion("", null, "");
@@ -33,6 +39,9 @@ public final class FreehandQuestionTest {
 						1);
 	}
 	
+	/**
+	 * Der Konstruktor setzt die Antworten korrekt.
+	 */
 	@Test
 	public void testGetAnswers() {
 		FreehandQuestion bq = new FreehandQuestion("", null, "a");
@@ -43,6 +52,9 @@ public final class FreehandQuestionTest {
 							answers);
 	}
 	
+	/**
+	 * Der Setter ändert die Antworten korrekt.
+	 */
 	@Test
 	public void testSetAnswers() {
 		FreehandQuestion bq = new FreehandQuestion("", null, "a");
@@ -54,6 +66,9 @@ public final class FreehandQuestionTest {
 							answers);
 	}
 	
+	/**
+	 * Die Antwortfeld-Labels sind korrekt.
+	 */
 	@Test
 	public void testGetAnswerFieldLabels() {
 		FreehandQuestion bq = new FreehandQuestion("", null, "");
@@ -64,6 +79,9 @@ public final class FreehandQuestionTest {
 							new String[] {"Antwort"}, labels);
 	}
 	
+	/**
+	 * Der Dateiname der FXML-Datei ist korrekt.
+	 */
 	@Test
 	public void testGetFilename() {
 		FreehandQuestion bq = new FreehandQuestion("", null, "");
@@ -74,6 +92,9 @@ public final class FreehandQuestionTest {
 						filename);
 	}
 	
+	/**
+	 * Die Speichermethode funktioniert richtig.
+	 */
 	@Test
 	public void testSave() {
 		FreehandQuestion bq = new FreehandQuestion("q", null, "a");
@@ -97,6 +118,10 @@ public final class FreehandQuestionTest {
 						saved.getChild("answer").getText());
 	}
 	
+	/**
+	 * Die als korrekt markierende Antwort des Levenshtein-Algorithmus
+	 * wird als solche akzeptiert.
+	 */
 	@SuppressWarnings("boxing")
 	@Test
 	public void testCheck() {
@@ -112,6 +137,10 @@ public final class FreehandQuestionTest {
 		assertTrue("Correct answer is accepted.", answer);
 	}
 	
+	/**
+	 * Die als falsch markierende Antwort des Levenshtein-Algorithmus
+	 * wird als solche akzeptiert.
+	 */
 	@SuppressWarnings("boxing")
 	@Test
 	public void testCheckWrong() {
@@ -127,6 +156,9 @@ public final class FreehandQuestionTest {
 		assertFalse("Incorrect answer is accepted.", answer);
 	}
 	
+	/**
+	 * Der Getter für die Antwort gibt die Antwort zurück.
+	 */
 	@Test
 	public void testGetAnswer() {
 		FreehandQuestion bq = new FreehandQuestion("", null, "answer");
@@ -136,6 +168,9 @@ public final class FreehandQuestionTest {
 		assertEquals("Correct answer is returned.", "answer", answer);
 	}
 	
+	/**
+	 * Eine Frage ist zu sich selbst gleich.
+	 */
 	@Test
 	public void testSelfreferentialEquals() {
 		FreehandQuestion bq = new FreehandQuestion("ab", null, "abcd");
@@ -145,6 +180,10 @@ public final class FreehandQuestionTest {
 		assertEquals("Freehand Question is equal to itself.", bq, bq);
 	}
 	
+	/**
+	 * Zwei inhaltlich gleiche Fragen sind auch laut {@code equals}
+	 * gleich.
+	 */
 	@Test
 	public void testEquals() {
 		FreehandQuestion bq1 = new FreehandQuestion("ab", null, "abcd");
@@ -156,6 +195,9 @@ public final class FreehandQuestionTest {
 						bq1, bq2);
 	}
 	
+	/**
+	 * Eine Frage ist ungleich {@code null}.
+	 */
 	@Test
 	public void testEqualsFalseWithNull() {
 		FreehandQuestion bq = new FreehandQuestion("ab", null, "abcd");
@@ -165,6 +207,9 @@ public final class FreehandQuestionTest {
 		assertNotEquals("Freehand Question is not equal to null.", bq, null);
 	}
 	
+	/**
+	 * Eine Frage ist ungleich einem normalen Objekt.
+	 */
 	@Test
 	public void testEqualsFalseWithObject() {
 		FreehandQuestion bq = new FreehandQuestion("ab", null, "abcd");
@@ -176,6 +221,9 @@ public final class FreehandQuestionTest {
 						bq, obj);
 	}
 	
+	/**
+	 * Der Fragetext muss gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithQuestion() {
 		FreehandQuestion bq1 = new FreehandQuestion("ab", null, "abcd");
@@ -187,6 +235,9 @@ public final class FreehandQuestionTest {
 						bq1, bq2);
 	}
 	
+	/**
+	 * Die Antwort muss gleich sein.
+	 */
 	@Test
 	public void testEqualsFalseWithAnswer() {
 		FreehandQuestion bq1 = new FreehandQuestion("ab", null, "abcd");
@@ -198,6 +249,9 @@ public final class FreehandQuestionTest {
 						bq1, bq2);
 	}
 	
+	/**
+	 * Der Hashcode ist deterministisch.
+	 */
 	@Test
 	public void testSelfreferentialHashCode() {
 		FreehandQuestion bq = new FreehandQuestion("ab", null, "abcd");
@@ -209,6 +263,9 @@ public final class FreehandQuestionTest {
 						hash_1, hash_2);
 	}
 	
+	/**
+	 * Inhaltlich gleiche Fragen haben denselben Hashcode.
+	 */
 	@Test
 	public void testHashCode() {
 		FreehandQuestion bq1 = new FreehandQuestion("ab", null, "abcd");
@@ -221,6 +278,9 @@ public final class FreehandQuestionTest {
 						hash1, hash2);
 	}
 	
+	/**
+	 * Die Ladefunktion funktioniert.
+	 */
 	@Test
 	public void testLoad() {
 		FreehandQuestion bq = new FreehandQuestion("q", null, "a");
@@ -233,6 +293,9 @@ public final class FreehandQuestionTest {
 		assertEquals("Freehand Quesiton loads correctly.", bq, loaded);
 	}
 	
+	/**
+	 * Der Fragetext wird benötigt.
+	 */
 	@Test
 	public void testLoadNoText() {
 		mockStatic(Util.class);
@@ -247,6 +310,9 @@ public final class FreehandQuestionTest {
 		assertNull("Freehand Quesiton does not load with no text.", loaded);
 	}
 	
+	/**
+	 * Die Antwort wird benötigt.
+	 */
 	@Test
 	public void testLoadNoAnswer() {
 		mockStatic(Util.class);
@@ -260,6 +326,9 @@ public final class FreehandQuestionTest {
 		assertNull("Freehand Quesiton does not load with no answer.", loaded);
 	}
 	
+	/**
+	 * Der Dummy funktioniert.
+	 */
 	@Test
 	public void testGetDummy() {
 		FreehandQuestion bq = FreehandQuestion.getDummy();

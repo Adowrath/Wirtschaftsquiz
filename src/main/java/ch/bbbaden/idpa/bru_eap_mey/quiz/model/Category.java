@@ -129,6 +129,9 @@ public final class Category {
 	}
 	
 	/**
+	 * Gibt eine Ansicht der Fragen, die zu dieser Kategorie gehören,
+	 * zurück.
+	 * 
 	 * @return
 	 * 		alle Fragen dieser Kategorie in einer unmodifizierbaren
 	 *         Ansicht
@@ -153,6 +156,12 @@ public final class Category {
 	 * Entfernt die angegebene Frage von dieser Kategorie. Nur beim
 	 * Löschen direkt benutzen, bei Änderung der Kategorie
 	 * {@link Question#changeCategory(Category)} verwenden.
+	 * 
+	 * <h2>Warnung!</h2>
+	 * 
+	 * Diese Methode, wenn sie direkt aufgerufen wird, hinterlässt die
+	 * Frage in einem inkonsisten Zustand. Sie verweist immer noch auf
+	 * diese Kategorie, die Kategorie aber nicht mehr auf die Frage!
 	 * 
 	 * @param question
 	 *        die zu entfernende Frage

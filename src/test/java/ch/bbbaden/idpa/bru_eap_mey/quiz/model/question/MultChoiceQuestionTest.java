@@ -40,7 +40,7 @@ public final class MultChoiceQuestionTest {
 	}
 	
 	/**
-	 * Schaut dass die Antworten richtig gespeichert werden.
+	 * Schaut, dass die Antworten richtig gespeichert werden.
 	 */
 	@Test
 	public void testGetAnswers() {
@@ -165,7 +165,7 @@ public final class MultChoiceQuestionTest {
 	}
 	
 	/**
-	 * Schaut, dass die richtige Antwort richtig ist. (:derp:)
+	 * Schaut, dass 0 die richtige Antwort ist.
 	 */
 	@Test
 	public void testGetAnswer() {
@@ -212,7 +212,7 @@ public final class MultChoiceQuestionTest {
 	}
 	
 	/**
-	 * Keine Frage ist gleich null.
+	 * Keine Frage ist gleich {@code null}.
 	 */
 	@Test
 	public void testEqualsFalseWithNull() {
@@ -325,7 +325,6 @@ public final class MultChoiceQuestionTest {
 	/**
 	 * Dritte falsche Antwort muss gleich sein.
 	 */
-	
 	@Test
 	public void testEqualsFalseWithWrongAnswer3() {
 		MultChoiceQuestion mcq1 = new MultChoiceQuestion(	"ab", null, "abcd",
@@ -346,7 +345,6 @@ public final class MultChoiceQuestionTest {
 	/**
 	 * Der Hashcode wird gleich berechnet.
 	 */
-	
 	@Test
 	public void testSelfreferentialHashCode() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("ab", null, "abcd",
@@ -363,7 +361,6 @@ public final class MultChoiceQuestionTest {
 	/**
 	 * Hashcode wird korrekt zwischen zwei Fragen berechnet.
 	 */
-	
 	@Test
 	public void testHashCode() {
 		MultChoiceQuestion mcq1 = new MultChoiceQuestion(	"ab", null, "abcd",
@@ -385,7 +382,6 @@ public final class MultChoiceQuestionTest {
 	/**
 	 * Prüft, ob die Ladefunktion funktioniert.
 	 */
-	
 	@Test
 	public void testLoad() {
 		MultChoiceQuestion mcq = new MultChoiceQuestion("q", null, "a", "b",
@@ -405,7 +401,6 @@ public final class MultChoiceQuestionTest {
 	/**
 	 * Prüft die Fehlermeldung bei fehlendem Text.
 	 */
-	
 	@Test
 	public void testLoadNoText() {
 		mockStatic(Util.class);
@@ -426,7 +421,6 @@ public final class MultChoiceQuestionTest {
 	/**
 	 * Prüft die Fehlermeldung bei fehlender korrekter Antwort.
 	 */
-	
 	@Test
 	public void testLoadNoCorrectAnswer() {
 		mockStatic(Util.class);
@@ -447,7 +441,6 @@ public final class MultChoiceQuestionTest {
 	/**
 	 * Prüft die Fehlermeldung bei fehlender erster falscher Antwort.
 	 */
-	
 	@Test
 	public void testLoadNoWrongAnswer1() {
 		mockStatic(Util.class);
@@ -468,7 +461,6 @@ public final class MultChoiceQuestionTest {
 	/**
 	 * Prüft die Fehlermeldung bei fehlender zweiter falscher Antwort.
 	 */
-	
 	@Test
 	public void testLoadNoWrongAnswer2() {
 		mockStatic(Util.class);

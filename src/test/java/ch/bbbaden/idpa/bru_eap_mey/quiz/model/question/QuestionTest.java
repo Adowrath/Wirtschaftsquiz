@@ -29,11 +29,31 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
+/**
+ * Normale Tests für die Question-Klasse.
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Util.class, Category.class})
-@SuppressWarnings({"static-method", "javadoc"})
+@SuppressWarnings({"static-method"})
 public final class QuestionTest {
 	
+	/**
+	 * Leert die Maps der Ladern und Dummy-Erstellern.
+	 * 
+	 * @throws NoSuchFieldException
+	 *         falls das Feld umbenannt wurde.
+	 * @throws SecurityException
+	 *         falls ein SecurityManager läuft, der den Zugriff
+	 *         verweigert. (sollte nicht auftreten)
+	 * @throws IllegalAccessException
+	 *         falls der Zugriff auf das Feld verweigert wird (wird er
+	 *         nicht, da erst {@link Field#setAccessible(boolean)
+	 *         Field.setAccessible(true)} aufgerufen wird.
+	 * @throws IllegalArgumentException
+	 *         falls das Objekt keine Instanz der Klasse
+	 *         {@link Question} wäre. (da es statische Felder sind,
+	 *         tritt dies nie auf)
+	 */
 	@Before
 	public void clearTypes() throws IllegalArgumentException,
 			IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -46,6 +66,9 @@ public final class QuestionTest {
 		((Map<?, ?>) f2.get(null)).clear();
 	}
 	
+	/**
+	 * Prüft, dass die Dummy-Funktion aufgerufen wurde.
+	 */
 	@Test
 	public void testGetDummy() {
 		Question.register(	"type", e -> null,
@@ -56,6 +79,10 @@ public final class QuestionTest {
 		assertNotNull("getDummy should return a non-null object.", q);
 	}
 	
+	/**
+	 * Wirft einen Fehler bei unbekanntem/nicht registriertem
+	 * Fragetyp.
+	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetDummyUnregistered() {
 		//
@@ -65,6 +92,9 @@ public final class QuestionTest {
 		fail("getDummy should throw IllegalArgumentException because type is not registered.");
 	}
 	
+	/**
+	 * Ein Fragetyp soll nicht doppelt registriert werden können.
+	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testRegisterDouble() {
 		//
@@ -77,6 +107,9 @@ public final class QuestionTest {
 		fail("register should throw IllegalArgumentException because the type is being registered twice.");
 	}
 	
+	/**
+	 * Normalerweise sind keine Typen registriert.
+	 */
 	@Test
 	public void testGetTypesEmpty() {
 		//
@@ -88,6 +121,9 @@ public final class QuestionTest {
 						expected, types);
 	}
 	
+	/**
+	 * Die registrierten Typen werden korrekt befüllt.
+	 */
 	@Test
 	public void testGetTypes() {
 		Question.register(	"type", e -> null,
@@ -100,6 +136,10 @@ public final class QuestionTest {
 						expected, types);
 	}
 	
+	/**
+	 * Überprüft, dass der Ladevorgang von einem {@link Element}
+	 * richtig funktioniert.
+	 */
 	@Test
 	public void testLoadFromElement() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
@@ -113,6 +153,10 @@ public final class QuestionTest {
 						loaded);
 	}
 	
+	/**
+	 * Überprüft, dass der Fehlerdialog angezeigt wird, wenn das
+	 * Element keinen Typ hat.
+	 */
 	@Test
 	public void testLoadFromElementNoText() {
 		mockStatic(Util.class);
@@ -126,6 +170,10 @@ public final class QuestionTest {
 		assertNull("loadFromElement complains if type was not found.", loaded);
 	}
 	
+	/**
+	 * Überprüft, dass der Fehlerdialog angezeigt wird, wenn das
+	 * Element einen unbekannten Typ hat.
+	 */
 	@Test
 	public void testLoadFromElementUnknownType() {
 		mockStatic(Util.class);
@@ -139,6 +187,10 @@ public final class QuestionTest {
 					loaded);
 	}
 	
+	/**
+	 * Überprüft, dass ein Kategorienwechsel die korrekten Methoden
+	 * aufruft.
+	 */
 	@Test
 	public void testChangeCategoryTwice() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
@@ -157,6 +209,9 @@ public final class QuestionTest {
 		assertTrue("Nothing failed.", true);
 	}
 	
+	/**
+	 * Testet den normalen Getter.
+	 */
 	@Test
 	public void testGetCategory() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
@@ -168,6 +223,9 @@ public final class QuestionTest {
 		assertEquals("getCategory works correctly.", c, assigned);
 	}
 	
+	/**
+	 * Testet, dass standardmässig keine Kategorie existiert.
+	 */
 	@Test
 	public void testGetCategoryNotInitialized() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
@@ -177,6 +235,9 @@ public final class QuestionTest {
 		assertNull("There is no default category.", c);
 	}
 	
+	/**
+	 * Überprüft, dass der Setter die Frage richtig ändert.
+	 */
 	@Test
 	public void testSetGetQuestion() {
 		Question<?> q = mock(Question.class, CALLS_REAL_METHODS);
