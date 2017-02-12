@@ -181,7 +181,7 @@ public final class Category {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		return this == obj || obj != null && obj instanceof Category
+		return this == obj || obj instanceof Category
 				
 				&& this.description.equals(((Category) obj).description)
 				

@@ -137,7 +137,7 @@ public final class MultChoiceQuestion extends Question<Integer> {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		return this == obj || obj != null && obj instanceof MultChoiceQuestion
+		return this == obj || obj instanceof MultChoiceQuestion
 				
 				&& this.correctAnswer
 						.equals(((MultChoiceQuestion) obj).correctAnswer)

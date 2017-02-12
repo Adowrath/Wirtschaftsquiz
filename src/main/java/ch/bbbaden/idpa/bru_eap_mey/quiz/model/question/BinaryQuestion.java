@@ -112,7 +112,7 @@ public final class BinaryQuestion extends Question<Boolean> {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		return this == obj || obj != null && obj instanceof BinaryQuestion
+		return this == obj || obj instanceof BinaryQuestion
 				
 				&& this.correctAnswer
 						.equals(((BinaryQuestion) obj).correctAnswer)

@@ -100,7 +100,7 @@ public final class FreehandQuestion extends Question<String> {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		return this == obj || obj != null && obj instanceof FreehandQuestion
+		return this == obj || obj instanceof FreehandQuestion
 				
 				&& this.answer.equals(((FreehandQuestion) obj).answer)
 				
