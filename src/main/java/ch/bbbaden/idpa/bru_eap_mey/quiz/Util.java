@@ -14,6 +14,7 @@ import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -58,6 +59,17 @@ public final class Util {
 			+ "Fortfahren?";
 	
 	/**
+	 * Der Fenstertitel bei einer Fehlermeldung.
+	 */
+	public static final String ERROR_IN_THREAD = "Error in Thread \"%s\"";
+	
+	/**
+	 * Text bei unbekannter Fehlermeldung für
+	 * {@link #showUncaughtError(Thread, Throwable)}.
+	 */
+	public static final String UNKNOWN_ERROR_MESSAGE = "Ein unbekannter Fehler ist aufgetreten.";
+	
+	/**
 	 * Der Standardinhalt für eine leere XML-Datei.
 	 */
 	private static final String DEFAULT_TEXT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -74,7 +86,7 @@ public final class Util {
 	 * Don't instantiate. It does not help you!
 	 */
 	private Util() {
-		throw new AssertionError("Don't. You don't need it.");
+		throw new IllegalStateException("Don't. You don't need it.");
 	}
 	
 	/**
@@ -102,15 +114,15 @@ public final class Util {
 		JScrollPane errorPane = new JScrollPane(errorArea);
 		errorPane.setPreferredSize(new Dimension(480, 320));
 		
-		JLabel errorMessage = new JLabel(message, SwingConstants.CENTER);
+		JLabel errorMessage = new JLabel(	decorateMessageForDisplay(message),
+											SwingConstants.CENTER);
 		
 		JPanel jp = new JPanel(new BorderLayout(0, 10));
 		jp.add(errorMessage, BorderLayout.PAGE_START);
 		jp.add(errorPane, BorderLayout.CENTER);
 		
 		JOptionPane.showMessageDialog(	null, jp,
-										String.format(	"Error in Thread \"%s\"",
-														t),
+										String.format(ERROR_IN_THREAD, t),
 										JOptionPane.ERROR_MESSAGE);
 	}
 	
@@ -163,8 +175,21 @@ public final class Util {
 				break;
 			}
 		} while(thr != null);
-		return s == null ? "Ein unbekannter Fehler ist aufgetreten."
-				: ("<html>" + s).replaceAll("\n", "<br>");
+		return s == null || s.trim().isEmpty() ? UNKNOWN_ERROR_MESSAGE : s;
+	}
+	
+	/**
+	 * Dekoriert einen String für die passende Ausgabe der
+	 * JOptionPane. Ersetzt Zeilenumbrüche mit {@literal <br>
+	 * }.
+	 * 
+	 * @param s
+	 *        der zu dekorierende String.
+	 * @return
+	 * 		der dekorierte String.
+	 */
+	private static String decorateMessageForDisplay(String s) {
+		return "<html>" + s.replaceAll("\n", "<br>");
 	}
 	
 	/**
@@ -175,16 +200,19 @@ public final class Util {
 	 * <em>(Sortiernetzwerke beim mischen? Finde die Source leider
 	 * nicht mehr, aber es funktioniert einwandfrei)</em>
 	 * 
+	 * @param r
+	 *        der Zufallsgenerator, welcher hierfür benutzt werden
+	 *        soll.
 	 * @return
 	 * 		ein gemischtes Array von 0 bis 3
 	 */
-	public static int[] randomShuffleOf4() {
+	public static int[] randomShuffleOf4(Random r) {
 		int[] nums = new int[4];
 		for(int i = 0; i < 4; ++i) {
-			int value = (int) (Math.random() * 1_000_000);
+			int value = (int) (r.nextDouble() * 1_000_000);
 			for(int j = 0; j < i; ++j) {
 				if(value == nums[j]) {
-					value = (int) (Math.random() * 1_000_000);
+					value = (int) (r.nextDouble() * 1_000_000);
 					j--;
 				}
 			}
@@ -265,7 +293,8 @@ public final class Util {
 		List<@Nullable Element> cats = doc.getRootElement()
 				.getChildren("category");
 		categoryList.addAll(cats.stream().map(element -> {
-			assert element != null;
+			if(element == null)
+				return null;
 			
 			Element nameElement = element.getChild("name");
 			Element descElement = element.getChild("description");
@@ -286,7 +315,8 @@ public final class Util {
 			List<Question<?>> questions = new LinkedList<>();
 			
 			element.getChildren("question").forEach(el -> {
-				assert el != null;
+				if(el == null)
+					return;
 				
 				Question<?> loadedQuestion = Question.loadFromElement(el);
 				

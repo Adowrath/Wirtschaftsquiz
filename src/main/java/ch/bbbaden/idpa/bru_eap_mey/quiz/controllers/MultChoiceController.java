@@ -6,6 +6,9 @@ import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_ARGUMENT;
 import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_BOUND;
 
 
+import java.util.Random;
+
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -64,7 +67,7 @@ public final class MultChoiceController extends QuestionController<MultChoiceQue
 	@Override
 	public void setQuestion(MultChoiceQuestion question) {
 		String[] qAnswers = question.getAnswers();
-		this.answers = Util.randomShuffleOf4();
+		this.answers = Util.randomShuffleOf4(new Random());
 		
 		this.radioButton1.setText(qAnswers[this.answers[0]]);
 		this.radioButton2.setText(qAnswers[this.answers[1]]);
