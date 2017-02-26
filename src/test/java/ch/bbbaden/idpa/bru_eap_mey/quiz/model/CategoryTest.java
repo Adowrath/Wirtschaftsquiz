@@ -75,7 +75,7 @@ public final class CategoryTest {
 		Category c = new Category("a", "b", origList);
 		List<Question<?>> catList = c.getQuestions();
 		
-		this.now.checkThat(	"Varargs constructor saves correctly.", catList,
+		this.now.checkThat(	"List constructor saves correctly.", catList,
 							is(equalTo(origList)));
 	}
 	
@@ -93,7 +93,7 @@ public final class CategoryTest {
 		Category c = new Category("a", "b", stream);
 		List<Question<?>> catList = c.getQuestions();
 		
-		this.now.checkThat(	"Varargs constructor saves correctly.", catList,
+		this.now.checkThat(	"Stream constructor saves correctly.", catList,
 							is(equalTo(origList)));
 	}
 	

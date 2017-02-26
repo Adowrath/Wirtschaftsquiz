@@ -2,7 +2,6 @@ package ch.bbbaden.idpa.bru_eap_mey.quiz;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
@@ -66,7 +65,7 @@ public final class UtilTest {
 		
 		Whitebox.invokeConstructor(Util.class);
 		
-		fail("This should have failed fail!");
+		//
 	}
 	
 	/**
