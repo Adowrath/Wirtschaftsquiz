@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.jdom2.JDOMException;
 
 
 import ch.bbbaden.idpa.bru_eap_mey.quiz.MainframeControl;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.Util;
 import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
+import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,7 +26,7 @@ import javafx.util.Duration;
 /**
  * Das Hauptmodel für das gesamte Wirtschaftsquiz.
  */
-public class QuizModel {
+public final class QuizModel {
 	
 	/**
 	 * Eine Liste der Kategorien.
@@ -48,16 +48,37 @@ public class QuizModel {
 	/**
 	 * Die Stage der Applikation.
 	 */
-	private @Nullable Stage stage;
+	private final Stage stage;
 	
 	/**
-	 * Setzt die Stage.
+	 * Der Delay, der für die Übergänge zwischen den einzelnen Fragen
+	 * verwendet wird.
+	 */
+	private final Animation delay;
+	
+	/**
+	 * Der Konstruktor.
 	 * 
 	 * @param st
-	 *        die Stage
+	 *        die Stage, welche von dem Model kontrolliert wird.
 	 */
-	public void setStage(Stage st) {
+	public QuizModel(Stage st) {
 		this.stage = st;
+		this.delay = new PauseTransition(Duration.seconds(5));
+		this.delay.setOnFinished(event -> {
+			try {
+				if(this.currentQuestions.isEmpty()) {
+					this.openMainPage();
+				} else {
+					this.getStage().setScene(MainframeControl
+							.loadQuestion(	this,
+											this.currentQuestions.getFirst()));
+				}
+			} catch(IOException e) {
+				Util.showUncaughtErrorWithMessage(Thread
+						.currentThread(), e, "FXML der Frage konnte nicht geladen werden.");
+			}
+		});
 	}
 	
 	/**
@@ -67,7 +88,6 @@ public class QuizModel {
 	 * 		die Stage
 	 */
 	public Stage getStage() {
-		assert this.stage != null;
 		return this.stage;
 	}
 	
@@ -99,8 +119,8 @@ public class QuizModel {
 		} catch(ClassNotFoundException e) {
 			Util.showUncaughtErrorWithMessage(Thread
 					.currentThread(), e, "Die Klasse " + className
-							+ " wurde nicht gefunden. Spielen mit diesem "
-							+ "Fragetyp wird nicht möglich sein.");
+							+ " wurde nicht gefunden. Spielen mit diesem"
+							+ " Fragetyp wird nicht möglich sein.");
 		}
 	}
 	
@@ -138,12 +158,14 @@ public class QuizModel {
 			this.availableQuestions.clear();
 			try {
 				Util.loadData(	file.toURI(), this.availableCategories,
-								// TODO Figure out some better way to
-								// handle the exceptions
 								this.availableQuestions);
-			} catch(IOException | JDOMException e) {
+			} catch(IOException e) {
 				Util.showUncaughtErrorWithMessage(Thread
-						.currentThread(), e, "Ein Fehler ist beim Lesen der Daten aufgetreten.");
+						.currentThread(), e, "Ein Fehler ist beim Lesen der Datei aufgetreten.");
+			} catch(JDOMException e) {
+				Util.showUncaughtErrorWithMessage(Thread
+						.currentThread(), e, "Die XML-Datei\"" + file.getName()
+								+ "\" ist falsch formattiert.");
 			}
 			return true;
 		}
@@ -213,30 +235,16 @@ public class QuizModel {
 	 * @return
 	 * 		die momentane Frage
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> Question<T> testAnswer(T t) {
 		try {
+			@SuppressWarnings("unchecked")
 			Question<T> question = (Question<T>) this.currentQuestions
 					.removeFirst();
 			if(!question.check(t)) {
 				this.currentQuestions.addLast(question);
 			}
-			PauseTransition delay = new PauseTransition(Duration.seconds(5));
-			delay.setOnFinished(event -> {
-				try {
-					if(this.currentQuestions.isEmpty()) {
-						this.openMainPage();
-					} else {
-						this.getStage().setScene(MainframeControl
-								.loadQuestion(this, this.currentQuestions
-										.getFirst()));
-					}
-				} catch(IOException e) {
-					Util.showUncaughtErrorWithMessage(Thread
-							.currentThread(), e, "FXML der Frage konnte nicht geladen werden.");
-				}
-			});
-			delay.play();
+			
+			this.delay.playFromStart();
 			
 			return question;
 		} catch(ClassCastException e) {
@@ -249,6 +257,7 @@ public class QuizModel {
 	 * Bricht eine Runde ab.
 	 */
 	public void cancelRound() {
+		this.delay.stop();
 		this.currentQuestions.clear();
 		try {
 			this.openMainPage();

@@ -18,7 +18,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  * Ein Beispiel: "Alle Pudel sind Hunde." Die Antwort ist hierbei
  * <em>Wahr</em>.
  */
-public class BinaryQuestion extends Question<Boolean> {
+public final class BinaryQuestion extends Question<Boolean> {
 	
 	static {
 		Question.register(	"binary", BinaryQuestion::load,
@@ -112,7 +112,7 @@ public class BinaryQuestion extends Question<Boolean> {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		return this == obj || obj != null && obj instanceof BinaryQuestion
+		return this == obj || obj instanceof BinaryQuestion
 				
 				&& this.correctAnswer
 						.equals(((BinaryQuestion) obj).correctAnswer)

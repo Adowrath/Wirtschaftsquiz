@@ -13,6 +13,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -41,7 +43,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 /**
  * Eine Reihe verschiedener Utility Methoden.
  */
-public class Util {
+public final class Util {
 	
 	/**
 	 * Der Titel für das Fehlerfenster beim Lesen einer Frage.
@@ -57,6 +59,17 @@ public class Util {
 			+ "Fortfahren?";
 	
 	/**
+	 * Der Fenstertitel bei einer Fehlermeldung.
+	 */
+	public static final String ERROR_IN_THREAD = "Error in Thread \"%s\"";
+	
+	/**
+	 * Text bei unbekannter Fehlermeldung für
+	 * {@link #showUncaughtError(Thread, Throwable)}.
+	 */
+	public static final String UNKNOWN_ERROR_MESSAGE = "Ein unbekannter Fehler ist aufgetreten.";
+	
+	/**
 	 * Der Standardinhalt für eine leere XML-Datei.
 	 */
 	private static final String DEFAULT_TEXT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -70,9 +83,11 @@ public class Util {
 	private static final Logger logger = Logger.getLogger("Util");
 	
 	/**
-	 * Don't instantiate! It does not help you!
+	 * Don't instantiate. It does not help you!
 	 */
-	private Util() { /* */ }
+	private Util() {
+		throw new IllegalStateException("Don't. You don't need it.");
+	}
 	
 	/**
 	 * Eine erweiterte Methode von
@@ -96,33 +111,29 @@ public class Util {
 		logger.log(Level.SEVERE, stackTrace);
 		
 		JTextArea errorArea = new JTextArea(stackTrace);
-		JScrollPane errorPane = new JScrollPane(errorArea) {
-			
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public Dimension getPreferredSize() {
-				return new Dimension(480, 320);
-			}
-		};
-		JLabel errorMessage = new JLabel(message, SwingConstants.CENTER);
+		JScrollPane errorPane = new JScrollPane(errorArea);
+		errorPane.setPreferredSize(new Dimension(480, 320));
+		
+		JLabel errorMessage = new JLabel(	decorateMessageForDisplay(message),
+											SwingConstants.CENTER);
 		
 		JPanel jp = new JPanel(new BorderLayout(0, 10));
 		jp.add(errorMessage, BorderLayout.PAGE_START);
 		jp.add(errorPane, BorderLayout.CENTER);
 		
 		JOptionPane.showMessageDialog(	null, jp,
-										String.format(	"Error in Thread \"%s\"",
-														t),
+										String.format(ERROR_IN_THREAD, t),
 										JOptionPane.ERROR_MESSAGE);
 	}
 	
 	/**
 	 * Gibt nicht abgefangene Fehlermeldungen auf den Error-Stream aus
 	 * und öffnet ein JOptionPane mit der Fehlermeldung.
-	 * <br>
+	 *
+	 * <p>
 	 * Sollte nicht direkt aufgerufen werden.
-	 * <br>
+	 * 
+	 * <p>
 	 * Zusammenklamüsert aus
 	 * <a href="http://stackoverflow.com/a/1149712/5236247">einer</a>
 	 * und einer <a href=
@@ -147,45 +158,61 @@ public class Util {
 	 * 		die Nachricht, wenn eine gefunden wurde. Ansonsten
 	 *         die allerletzte Message.
 	 */
-	@SuppressWarnings("all")
-	private static String fuzzyFindMessage(@Nullable Throwable t) {
-		if(t == null)
-			return "Kein Fehler";
+	private static String fuzzyFindMessage(Throwable t) {
+		@Nullable
+		Throwable thr = t;
 		String s = "";
 		do {
 			try {
-				s = t.getMessage();
+				s = thr.getMessage();
 				if(s != null && !s.isEmpty()) {
 					s = s.trim();
 					Class.forName(s, false, null);
 				}
-				t = t.getCause();
+				thr = thr.getCause();
 			} catch(ClassNotFoundException e) {
 				e.getClass(); // Einfach damit Eclipse nicht meckert.
 				break;
 			}
-		} while(t != null);
-		return s == null ? "Ein unbekannter Fehler ist aufgetreten."
-				: ("<html>" + s).replaceAll("\n", "<br>");
+		} while(thr != null);
+		return s == null || s.trim().isEmpty() ? UNKNOWN_ERROR_MESSAGE : s;
+	}
+	
+	/**
+	 * Dekoriert einen String für die passende Ausgabe der
+	 * JOptionPane. Ersetzt Zeilenumbrüche mit {@literal <br>
+	 * }.
+	 * 
+	 * @param s
+	 *        der zu dekorierende String.
+	 * @return
+	 * 		der dekorierte String.
+	 */
+	private static String decorateMessageForDisplay(String s) {
+		return "<html>" + s.replaceAll("\n", "<br>");
 	}
 	
 	/**
 	 * Gibt ein gemischtes Array von Array-Indezes von 0 bis 3 zurück.
 	 * Verwendet ein Sortiernetzwerk.
 	 * 
+	 * <p>
 	 * <em>(Sortiernetzwerke beim mischen? Finde die Source leider
 	 * nicht mehr, aber es funktioniert einwandfrei)</em>
 	 * 
+	 * @param r
+	 *        der Zufallsgenerator, welcher hierfür benutzt werden
+	 *        soll.
 	 * @return
 	 * 		ein gemischtes Array von 0 bis 3
 	 */
-	public static int[] randomShuffleOf4() {
+	public static int[] randomShuffleOf4(Random r) {
 		int[] nums = new int[4];
 		for(int i = 0; i < 4; ++i) {
-			int value = (int) (Math.random() * 1_000_000);
+			int value = (int) (r.nextDouble() * 1_000_000);
 			for(int j = 0; j < i; ++j) {
 				if(value == nums[j]) {
-					value = (int) (Math.random() * 1_000_000);
+					value = (int) (r.nextDouble() * 1_000_000);
 					j--;
 				}
 			}
@@ -266,7 +293,8 @@ public class Util {
 		List<@Nullable Element> cats = doc.getRootElement()
 				.getChildren("category");
 		categoryList.addAll(cats.stream().map(element -> {
-			assert element != null;
+			if(element == null)
+				return null;
 			
 			Element nameElement = element.getChild("name");
 			Element descElement = element.getChild("description");
@@ -287,7 +315,8 @@ public class Util {
 			List<Question<?>> questions = new LinkedList<>();
 			
 			element.getChildren("question").forEach(el -> {
-				assert el != null;
+				if(el == null)
+					return;
 				
 				Question<?> loadedQuestion = Question.loadFromElement(el);
 				
@@ -302,7 +331,7 @@ public class Util {
 								descElement.getText().replaceAll(	"[^ \\S]+",
 																	" "),
 								questions);
-		}).filter(c -> c != null).collect(Collectors.toList()));
+		}).filter(Objects::nonNull).collect(Collectors.toList()));
 		
 		questionList.addAll(categoryList.stream().map(Category::getQuestions)
 				.flatMap(List::stream).collect(Collectors.toList()));
@@ -346,10 +375,12 @@ public class Util {
 	 * "http://de.wikipedia.org/wiki/Levenshtein-Distanz">Levenshtein-Distanz</a>
 	 * ist ein Mass der Verschiedenheit zweier gegebenen
 	 * Zeichenketten.
-	 * <br>
+	 * 
+	 * <p>
 	 * Diese Verschiedenheit wird in <em>Schritten</em> gemessen, die
 	 * nötig sind, um eine Kette in eine andere umzuwandeln.
-	 * <br>
+	 * 
+	 * <p>
 	 * Diese Schritte sind unterteilt in:
 	 * <ul>
 	 * <li>Einfügen eines Zeichens (tor &rArr;

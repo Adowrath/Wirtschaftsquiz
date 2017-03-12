@@ -13,10 +13,11 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  * Eine Multiple Choice-Frage zeichnet sich dadurch aus, dass eine
  * Liste von Antwortmöglichkeiten gegeben wird, von denen nur eine
  * korrekt ist.
- * <br>
+ * 
+ * <p>
  * Hier besitzt jede Frage 4 Antwortmöglichkeiten.
  */
-public class MultChoiceQuestion extends Question<Integer> {
+public final class MultChoiceQuestion extends Question<Integer> {
 	
 	static {
 		Question.register(	"multipleChoice", MultChoiceQuestion::load,
@@ -136,7 +137,7 @@ public class MultChoiceQuestion extends Question<Integer> {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		return this == obj || obj != null && obj instanceof MultChoiceQuestion
+		return this == obj || obj instanceof MultChoiceQuestion
 				
 				&& this.correctAnswer
 						.equals(((MultChoiceQuestion) obj).correctAnswer)

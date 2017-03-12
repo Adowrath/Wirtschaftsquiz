@@ -35,7 +35,7 @@ import javafx.util.StringConverter;
  * Der Controller für die Übersicht der Fragen.
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class QuestionEditController extends MainMenuController {
+public final class QuestionEditController extends MainMenuController {
 	
 	/**
 	 * Die Liste aller Fragen.
@@ -106,7 +106,9 @@ public class QuestionEditController extends MainMenuController {
 	 * entsprechenden Listenern und CellFactories.
 	 */
 	public void initialize() {
-		this.catBox.setCellFactory(cell -> new CategoryListCell());
+		this.catBox
+				.setCellFactory(cell -> new CustomListCell<>(	Category::getNameAndCount,
+																Category::getDescription));
 		this.catBox.setConverter(new StringConverter<Category>() {
 			
 			@Override
@@ -120,7 +122,8 @@ public class QuestionEditController extends MainMenuController {
 			}
 		});
 		
-		this.queList.setCellFactory(cell -> new QuestionListCell());
+		this.queList
+				.setCellFactory(cell -> new CustomListCell<>(Question::getQuestion));
 		this.queList.getSelectionModel().selectedItemProperty()
 				.addListener(this::newSelection);
 		
@@ -173,9 +176,7 @@ public class QuestionEditController extends MainMenuController {
 		this.catBox.getSelectionModel().clearSelection();
 		if(newValue != null) {
 			this.catBox.getSelectionModel().select(newValue.getCategory());
-		}
-		
-		if(newValue != null) {
+			
 			String[] labelTexts = newValue.getAnswerFieldLabels();
 			String[] answers = newValue.getAnswers();
 			int size = newValue.getAnswerCount();
@@ -215,38 +216,36 @@ public class QuestionEditController extends MainMenuController {
 	 * Speichert eine Frage anhand der momentanen Angaben.
 	 */
 	public void saveQuestion() {
+		Category category = this.catBox.getSelectionModel().getSelectedItem();
+		String quesText = this.textField.getText();
+		if(quesText == null || quesText.isEmpty() || category == null)
+			return;
+		
 		@NonNull
 		String[] answers = Stream.of(this.otherTextFields).map(tf -> {
 			String s = tf.getText();
 			return s == null ? "" : s;
 		}).toArray(i -> new @NonNull String[i]);
-
-		Category category = this.catBox.getSelectionModel().getSelectedItem();
-		String quesText = this.textField.getText();
-		if(quesText == null || quesText.isEmpty() || category == null)
-			return;
+		
 		for(String a : answers) {
 			if(a.isEmpty())
 				return;
 		}
-
+		
 		Question<?> q = this.queList.getSelectionModel().getSelectedItem();
 		if(q == null) {
 			q = this.tempQues;
 			if(q == null)
 				throw new IllegalStateException("No question selected on save but the temporary question is null as well.");
-			
-			q.setQuestion(quesText);
-			q.changeCategory(category);
-			q.setAnswers(answers);
-			
+		}
+		
+		q.setQuestion(quesText);
+		q.changeCategory(category);
+		q.setAnswers(answers);
+		
+		if(q == this.tempQues) {
 			this.getModel().getQuestions().add(q);
-			
 		} else {
-			q.setQuestion(quesText);
-			q.changeCategory(category);
-			q.setAnswers(answers);
-			
 			this.getModel().getQuestions()
 					.set(	this.queList.getSelectionModel().getSelectedIndex(),
 							q);
@@ -272,7 +271,10 @@ public class QuestionEditController extends MainMenuController {
 	public void deleteQuestion() {
 		Question<?> q = this.queList.getSelectionModel().getSelectedItem();
 		if(q != null) {
-			q.getCategory().removeQuestion(q);
+			Category c = q.getCategory();
+			if(c != null) {
+				c.removeQuestion(q);
+			}
 			this.getModel().getQuestions().remove(q);
 			this.clearFields();
 		}

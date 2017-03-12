@@ -18,7 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
@@ -27,7 +26,7 @@ import javafx.scene.text.Text;
  * @see FreehandQuestion
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class FreehandController extends QuestionController<FreehandQuestion> {
+public final class FreehandController extends QuestionController<FreehandQuestion> {
 	
 	/**
 	 * Der Text der Frage.
@@ -85,14 +84,17 @@ public class FreehandController extends QuestionController<FreehandQuestion> {
 	public void accept(ActionEvent event) {
 		String answerEntered = this.eingabe.getText();
 		if(answerEntered != null && !answerEntered.isEmpty()) {
+			
+			this.continueButton.setDisable(true);
+			
 			Question<String> question = this.getModel()
 					.testAnswer(answerEntered);
 			
 			this.antwortLabel.setText(question.getAnswer());
 			if(question.check(answerEntered)) {
-				this.antwortLabel.setTextFill(Color.GREEN);
+				this.antwortLabel.pseudoClassStateChanged(correctAnswer, true);
 			} else {
-				this.antwortLabel.setTextFill(Color.RED);
+				this.antwortLabel.pseudoClassStateChanged(wrongAnswer, true);
 			}
 		}
 	}

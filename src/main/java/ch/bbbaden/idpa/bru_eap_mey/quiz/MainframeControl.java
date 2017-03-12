@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 /**
  * Die Hauptklasse des Wirtschaftsquizes.
  */
-public class MainframeControl extends Application {
+public final class MainframeControl extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws IOException {
@@ -27,9 +27,9 @@ public class MainframeControl extends Application {
 				.getResource("main.fxml"));
 		Region root = loader.<Region> load();
 		
-		QuizModel qm = new QuizModel();
+		QuizModel qm = new QuizModel(primaryStage);
 		qm.loadData();
-		qm.setStage(primaryStage);
+		
 		MainController con = loader.getController();
 		con.setModel(qm);
 		

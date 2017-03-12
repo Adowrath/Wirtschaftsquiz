@@ -17,11 +17,11 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
 
 /**
  * Die Standardklasse für alle Fragen.
- * <br>
+ * 
+ * <p>
  * Jede Sub-Klasse muss sich statisch bei
  * {@link #register(String, Function, Supplier)} registrieren,
- * ansonsten
- * funktioniert der Ladevorgang nicht!
+ * ansonsten funktioniert der Ladevorgang nicht!
  * 
  * @param <AnswerType>
  *        der Datentyp der Antwort
@@ -95,7 +95,9 @@ public abstract class Question<AnswerType> {
 	
 	/**
 	 * Wird für die Bearbeitungs-GUI verwendet und gibt die Anzahl an
-	 * änderbaren Antworten an.<br>
+	 * änderbaren Antworten an.
+	 * 
+	 * <p>
 	 * <strong>Muss</strong> mit der Länge von {@link #getAnswers()},
 	 * {@link #getAnswerFieldLabels()} und der Länge der akzeptierten
 	 * Parameter für {@link #setAnswers(String...)} übereinstimmen!
@@ -161,8 +163,7 @@ public abstract class Question<AnswerType> {
 	 * @return
 	 * 		die Kategorie
 	 */
-	public final Category getCategory() {
-		assert this.category != null;
+	public final @Nullable Category getCategory() {
 		return this.category;
 	}
 	

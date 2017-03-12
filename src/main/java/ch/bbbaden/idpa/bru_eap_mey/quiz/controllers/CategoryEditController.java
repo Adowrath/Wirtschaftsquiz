@@ -21,7 +21,7 @@ import javafx.scene.control.TextField;
  * Der Controller für die Übersicht der Kategorien.
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class CategoryEditController extends MainMenuController {
+public final class CategoryEditController extends MainMenuController {
 	
 	/**
 	 * Die Liste aller Kategorien.
@@ -46,7 +46,9 @@ public class CategoryEditController extends MainMenuController {
 	 * entsprechenden Listenern und CellFactories.
 	 */
 	public void initialize() {
-		this.catList.setCellFactory(cell -> new CategoryListCell());
+		this.catList
+				.setCellFactory(cell -> new CustomListCell<>(	Category::getNameAndCount,
+																Category::getDescription));
 		this.catList.getSelectionModel().selectedItemProperty()
 				.addListener(this::newSelection);
 	}

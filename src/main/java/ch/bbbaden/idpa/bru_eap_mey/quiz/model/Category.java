@@ -19,7 +19,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
  * 
  * @see Question
  */
-public class Category {
+public final class Category {
 	
 	/**
 	 * Der Name dieser Kategorie.
@@ -129,6 +129,9 @@ public class Category {
 	}
 	
 	/**
+	 * Gibt eine Ansicht der Fragen, die zu dieser Kategorie gehören,
+	 * zurück.
+	 * 
 	 * @return
 	 * 		alle Fragen dieser Kategorie in einer unmodifizierbaren
 	 *         Ansicht
@@ -154,6 +157,12 @@ public class Category {
 	 * Löschen direkt benutzen, bei Änderung der Kategorie
 	 * {@link Question#changeCategory(Category)} verwenden.
 	 * 
+	 * <h2>Warnung!</h2>
+	 * 
+	 * Diese Methode, wenn sie direkt aufgerufen wird, hinterlässt die
+	 * Frage in einem inkonsisten Zustand. Sie verweist immer noch auf
+	 * diese Kategorie, die Kategorie aber nicht mehr auf die Frage!
+	 * 
 	 * @param question
 	 *        die zu entfernende Frage
 	 */
@@ -172,7 +181,7 @@ public class Category {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		return this == obj || obj != null && obj instanceof Category
+		return this == obj || obj instanceof Category
 				
 				&& this.description.equals(((Category) obj).description)
 				

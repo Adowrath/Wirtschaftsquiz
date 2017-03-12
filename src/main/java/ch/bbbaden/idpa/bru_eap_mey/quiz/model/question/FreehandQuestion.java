@@ -19,7 +19,7 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.Category;
  * {@link Util#levenshteinDistance(CharSequence, CharSequence)
  * Levenshtein-Algorithmus} überprüft.
  */
-public class FreehandQuestion extends Question<String> {
+public final class FreehandQuestion extends Question<String> {
 	
 	static {
 		Question.register(	"freehand", FreehandQuestion::load,
@@ -100,7 +100,7 @@ public class FreehandQuestion extends Question<String> {
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		return this == obj || obj != null && obj instanceof FreehandQuestion
+		return this == obj || obj instanceof FreehandQuestion
 				
 				&& this.answer.equals(((FreehandQuestion) obj).answer)
 				

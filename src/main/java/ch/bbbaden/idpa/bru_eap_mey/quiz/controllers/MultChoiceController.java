@@ -6,6 +6,9 @@ import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_ARGUMENT;
 import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_BOUND;
 
 
+import java.util.Random;
+
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -16,7 +19,6 @@ import ch.bbbaden.idpa.bru_eap_mey.quiz.model.question.Question;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
@@ -25,7 +27,7 @@ import javafx.scene.text.Text;
  * @see MultChoiceQuestion
  */
 @NonNullByDefault({PARAMETER, RETURN_TYPE, TYPE_BOUND, TYPE_ARGUMENT})
-public class MultChoiceController extends QuestionController<MultChoiceQuestion> {
+public final class MultChoiceController extends QuestionController<MultChoiceQuestion> {
 	
 	/**
 	 * Der Text der Frage.
@@ -65,7 +67,7 @@ public class MultChoiceController extends QuestionController<MultChoiceQuestion>
 	@Override
 	public void setQuestion(MultChoiceQuestion question) {
 		String[] qAnswers = question.getAnswers();
-		this.answers = Util.randomShuffleOf4();
+		this.answers = Util.randomShuffleOf4(new Random());
 		
 		this.radioButton1.setText(qAnswers[this.answers[0]]);
 		this.radioButton2.setText(qAnswers[this.answers[1]]);
@@ -80,6 +82,8 @@ public class MultChoiceController extends QuestionController<MultChoiceQuestion>
 		if(selection == -1)
 			return;
 		
+		this.continueButton.setDisable(true);
+		
 		RadioButton current = this.getButtonForIndex(selection);
 		assert current != null : "A valid index was selected, so "
 				+ "a valid RadioButton should be returned.";
@@ -89,17 +93,18 @@ public class MultChoiceController extends QuestionController<MultChoiceQuestion>
 		
 		if(question.check(chosen)) {
 			
-			current.setTextFill(Color.GREEN);
+			current.pseudoClassStateChanged(correctAnswer, true);
 			
 		} else {
 			
-			current.setTextFill(Color.RED);
+			current.pseudoClassStateChanged(wrongAnswer, true);
+			
 			int correct = question.getAnswer().intValue();
 			RadioButton correctButton = this.getButtonForAnswer(correct);
 			assert correctButton != null : "The answer should be "
 					+ "\"linked\" to a valid button.";
 			
-			correctButton.setTextFill(Color.GREEN);
+			correctButton.pseudoClassStateChanged(correctAnswer, true);
 		}
 	}
 	
